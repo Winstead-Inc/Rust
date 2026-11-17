@@ -7,7 +7,8 @@ use core::hash::{Hash, Hasher};
 use itertools::Itertools;
 
 use rustc_ast::ast::{self, UseTreeKind};
-use rustc_span::{
+use rustc_span::
+{
     BytePos, DUMMY_SP, Span,
     symbol::{self, sym},
 };
@@ -354,8 +355,24 @@ impl UseTree
     pub(crate) fn rewrite_top_level(&self, context: &RewriteContext<'_>, shape: Shape) -> RewriteResult
     {
         let vis = self.visibility.as_ref().map_or(Cow::from(""), |vis| { crate::utils::format_visibility(context, vis) });
-        let use_str =
-            self.rewrite_result(context, shape.offset_left(vis.len(), self.span())?).map(|s| if s.is_empty() { s } else { format!("{}use {};", vis, s) })?;
+        let use_str = self.rewrite_result(context, shape.offset_left(vis.len(), self.span())?).map
+        (
+            |s|
+        {
+            if s.is_empty()
+            {
+                s
+            }
+            else if s.starts_with('\n')
+            {
+                format!("{}use{};", vis, s)
+            }
+            else
+            {
+                format!("{}use {};", vis, s)
+            }
+        }
+        )?;
         match self.attrs
         {
             Some(ref attrs) if !attrs.is_empty() =>

@@ -1,7 +1,7 @@
 // rustfmt-imports_granularity: One
 
 pub use foo::{x, x as x2, y};
-use 
+use
 {
     bar::
     {

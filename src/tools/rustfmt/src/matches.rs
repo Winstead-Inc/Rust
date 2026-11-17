@@ -15,7 +15,8 @@ use crate::rewrite::{Rewrite, RewriteContext, RewriteError, RewriteErrorExt, Rew
 use crate::shape::Shape;
 use crate::source_map::SpanUtils;
 use crate::spanned::Spanned;
-use crate::utils::{
+use crate::utils::
+{
     contains_skip, extra_offset, first_line_width, inner_attributes, last_line_extendable, mk_sp, semicolon_for_expr, trimmed_last_line_width,
     unicode_str_width,
 };

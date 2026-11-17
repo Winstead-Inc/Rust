@@ -35,7 +35,8 @@ use crate::rewrite::{MacroErrorKind, Rewrite, RewriteContext, RewriteError, Rewr
 use crate::shape::{Indent, Shape};
 use crate::source_map::SpanUtils;
 use crate::spanned::Spanned;
-use crate::utils::{
+use crate::utils::
+{
     NodeIdExt, filtered_str_fits, indent_next_line, is_empty_line, mk_sp, remove_trailing_white_spaces, rewrite_ident, trim_left_preserve_layout,
 };
 use crate::visitor::FmtVisitor;

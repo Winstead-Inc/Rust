@@ -9,12 +9,14 @@ use tracing::debug;
 
 use crate::chains::rewrite_chain;
 use crate::closures;
-use crate::comment::{
+use crate::comment::
+{
     CharClasses, FindUncommented, combine_strs_with_missing_comments, contains_comment, recover_comment_removed, rewrite_comment, rewrite_missing_comment,
 };
 use crate::config::{Config, ControlBraceStyle, HexLiteralCase, IndentStyle, StyleEdition};
 use crate::config::{FloatLiteralTrailingZero, lists::*};
-use crate::lists::{
+use crate::lists::
+{
     ListFormatting, Separator, definitive_tactic, itemize_list, shape_for_tactic, struct_lit_formatting, struct_lit_shape, struct_lit_tactic, write_list,
 };
 use crate::macros::{MacroPosition, rewrite_macro};
@@ -29,7 +31,8 @@ use crate::spanned::Spanned;
 use crate::stmt;
 use crate::string::{StringFormat, rewrite_string};
 use crate::types::{PathContext, rewrite_path};
-use crate::utils::{
+use crate::utils::
+{
     colon_spaces, contains_skip, count_newlines, filtered_str_fits, first_line_ends_with, inner_attributes, last_line_extendable, last_line_width, mk_sp,
     outer_attributes, semicolon_for_expr, unicode_str_width, wrap_str,
 };

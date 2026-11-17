@@ -7,7 +7,8 @@ use rustc_errors::annotate_snippet_emitter_writer::AnnotateSnippetEmitter;
 use rustc_errors::emitter::{DynEmitter, Emitter, SilentEmitter, stderr_destination};
 use rustc_errors::{ColorConfig, Diag, DiagCtxt, DiagInner, Level as DiagnosticLevel};
 use rustc_session::parse::ParseSess as RawParseSess;
-use rustc_span::{
+use rustc_span::
+{
     BytePos, Span,
     source_map::{FilePathMapping, SourceMap},
     symbol,

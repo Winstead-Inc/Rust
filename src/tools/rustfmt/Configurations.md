@@ -1517,13 +1517,15 @@ use foo::{aaaaaaaaaaaaaaaaaa, bbbbbbbbbbbbbbbbbb, cccccccccccccccccc, dddddddddd
 #### `"Vertical"`:
 
 ```rust
-use foo::{
+use foo::
+{
     xxx,
     yyy,
     zzz,
 };
 
-use foo::{
+use foo::
+{
     aaa,
     bbb,
     ccc,
@@ -2027,7 +2029,8 @@ use qux::{h, i};
 Merge imports from the same crate into a single `use` statement. Conversely, imports from different crates are split into separate statements.
 
 ```rust
-use foo::{
+use foo::
+{
     a, b,
     b::{f, g},
     c,
@@ -2069,8 +2072,10 @@ Merge all imports into a single `use` statement as long as they have the same vi
 
 ```rust
 pub use foo::{x, y};
-use {
-    bar::{
+use
+{
+    bar::
+    {
         a,
         b::{self, f, g},
         c,

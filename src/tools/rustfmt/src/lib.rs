@@ -59,10 +59,12 @@ mod utils;
 macro_rules! static_regex
 {
     ($re: literal) =>
-    {{
+    {
+    {
         static RE: ::std::sync::OnceLock<::regex::Regex> = ::std::sync::OnceLock::new();
         RE.get_or_init(|| ::regex::Regex::new($re).unwrap())
-    }};
+    }
+    };
 }
 
 mod attr;
@@ -314,37 +316,37 @@ fn format_snippet(snippet: &str, config: &Config, is_macro_def: bool) -> Option<
     panic::catch_unwind
     (
         ||
+    {
+        let mut out: Vec<u8> = Vec::with_capacity(snippet.len() * 2);
+        config.set().emit_mode(config::EmitMode::Stdout);
+        config.set().verbose(Verbosity::Quiet);
+        config.set().show_parse_errors(false);
+        if is_macro_def
         {
-            let mut out: Vec<u8> = Vec::with_capacity(snippet.len() * 2);
-            config.set().emit_mode(config::EmitMode::Stdout);
-            config.set().verbose(Verbosity::Quiet);
-            config.set().show_parse_errors(false);
-            if is_macro_def
-            {
-                config.set().error_on_unformatted(true);
-            }
-
-            let (formatting_error, result) = {
-                let input = Input::Text(snippet.into());
-                let mut session = Session::new(config, Some(&mut out));
-                let result = session.format_input_inner(input, is_macro_def);
-                (
-                    session.errors.has_macro_format_failure
-                        || session.out.as_ref().unwrap().is_empty() && !snippet.is_empty()
-                        || result.is_err()
-                        || (is_macro_def && session.has_unformatted_code_errors()),
-                    result,
-                )
-            };
-            if formatting_error
-            {
-                None
-            }
-            else
-            {
-                String::from_utf8(out).ok().map(|snippet| FormattedSnippet { snippet, non_formatted_ranges: result.unwrap().non_formatted_ranges })
-            }
+            config.set().error_on_unformatted(true);
         }
+
+        let (formatting_error, result) = {
+            let input = Input::Text(snippet.into());
+            let mut session = Session::new(config, Some(&mut out));
+            let result = session.format_input_inner(input, is_macro_def);
+            (
+                session.errors.has_macro_format_failure
+                    || session.out.as_ref().unwrap().is_empty() && !snippet.is_empty()
+                    || result.is_err()
+                    || (is_macro_def && session.has_unformatted_code_errors()),
+                result,
+            )
+        };
+        if formatting_error
+        {
+            None
+        }
+        else
+        {
+            String::from_utf8(out).ok().map(|snippet| FormattedSnippet { snippet, non_formatted_ranges: result.unwrap().non_formatted_ranges })
+        }
+    }
     )
     // Discard panics encountered while formatting the snippet
     // The ? operator is needed to remove the extra Option

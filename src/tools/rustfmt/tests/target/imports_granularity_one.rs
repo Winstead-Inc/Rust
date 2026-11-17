@@ -1,6 +1,6 @@
 // rustfmt-imports_granularity: One
 
-use 
+use
 {
     a::
     {
@@ -11,7 +11,7 @@ use
     b,
 };
 
-use 
+use
 {
     a::{self as x, aa, ab},
     b::ba,
@@ -36,18 +36,18 @@ use b::
     bc::bca::{bcaa, bcab},
 };
 
-pub use 
+pub use
 {
     a::{aa, ae},
     b::{bb, bc::bca},
 };
-use 
+use
 {
     a::{ab, ac, ad},
     b::ba,
 };
 
-use 
+use
 {
     a::
     {
@@ -62,19 +62,19 @@ use
     },
 };
 
-use 
+use
 {
     crate::{a, b::ba},
     c::ca,
 };
 
-use 
+use
 {
     super::{a, b::ba},
     c::ca,
 };
 
-use 
+use
 {
     super::b,
     crate::a,

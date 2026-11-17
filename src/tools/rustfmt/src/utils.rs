@@ -1,7 +1,8 @@
 use std::borrow::Cow;
 
 use rustc_ast::YieldKind;
-use rustc_ast::ast::{
+use rustc_ast::ast::
+{
     self, Attribute, ImplRestriction, MetaItem, MetaItemInner, MetaItemKind, MutRestriction, NodeId, Path, RestrictionKind, Visibility, VisibilityKind,
 };
 use rustc_ast_pretty::pprust;

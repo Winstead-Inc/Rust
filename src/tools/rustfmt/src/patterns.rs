@@ -5,7 +5,8 @@ use crate::comment::{FindUncommented, combine_strs_with_missing_comments};
 use crate::config::lists::*;
 use crate::config::{IndentStyle, StyleEdition};
 use crate::expr::{can_be_overflowed_expr, rewrite_unary_prefix, wrap_struct_field};
-use crate::lists::{
+use crate::lists::
+{
     ListFormatting, ListItem, Separator, definitive_tactic, itemize_list, shape_for_tactic, struct_lit_formatting, struct_lit_shape, struct_lit_tactic,
     write_list,
 };

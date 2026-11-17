@@ -10,13 +10,15 @@ use rustc_span::{BytePos, DUMMY_SP, Ident, Span, symbol};
 use tracing::debug;
 
 use crate::attr::filter_inline_attrs;
-use crate::comment::{
+use crate::comment::
+{
     FindUncommented, combine_strs_with_missing_comments, contains_comment, is_last_comment_block, recover_comment_removed, recover_missing_comment_in_span,
     rewrite_missing_comment,
 };
 use crate::config::lists::*;
 use crate::config::{BraceStyle, Config, IndentStyle, StyleEdition};
-use crate::expr::{
+use crate::expr::
+{
     RhsAssignKind, RhsTactics, extract_comment, is_empty_block, is_simple_block_stmt, rewrite_assign_rhs, rewrite_assign_rhs_with,
     rewrite_assign_rhs_with_comments, rewrite_let_else_block,
 };

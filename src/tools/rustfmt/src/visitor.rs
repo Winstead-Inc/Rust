@@ -10,7 +10,8 @@ use crate::attr::*;
 use crate::comment::{CodeCharKind, CommentCodeSlices, contains_comment, recover_comment_removed, rewrite_comment};
 use crate::config::{BraceStyle, Config, MacroSelector, StyleEdition};
 use crate::coverage::transform_missing_snippet;
-use crate::items::{
+use crate::items::
+{
     FnBraceStyle, FnSig, ItemVisitorKind, StaticParts, StructParts, format_impl, format_trait, format_trait_alias, is_mod_decl, is_use_item,
     rewrite_extern_crate, rewrite_type_alias,
 };
@@ -23,7 +24,8 @@ use crate::skip::{SkipContext, is_skip_attr};
 use crate::source_map::{LineRangeUtils, SpanUtils};
 use crate::spanned::Spanned;
 use crate::stmt::Stmt;
-use crate::utils::{
+use crate::utils::
+{
     self, contains_skip, count_newlines, depr_skip_annotation, format_safety, inner_attributes, last_line_width, mk_sp, ptr_vec_to_ref_vec, rewrite_ident,
     starts_with_newline,
 };

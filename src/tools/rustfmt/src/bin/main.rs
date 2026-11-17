@@ -17,7 +17,8 @@ use std::str::FromStr;
 
 use getopts::{Matches, Options};
 
-use crate::rustfmt::{
+use crate::rustfmt::
+{
     CliOptions, Color, Config, Edition, EmitMode, FileLines, FileName, FormatReportFormatterBuilder, Input, Session, StyleEdition, Verbosity, Version,
     load_config,
 };

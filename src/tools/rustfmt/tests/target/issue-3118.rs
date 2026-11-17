@@ -1,4 +1,5 @@
-use {
+use
+{
     crate::foo::bar,
     bytes::{Buf, BufMut},
     std::io,
