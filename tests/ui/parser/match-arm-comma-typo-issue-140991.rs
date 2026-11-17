@@ -1,0 +1,25 @@
+//@ run-rustfix
+
+pub enum Foo { X, Y }
+
+pub fn typo1(foo: Foo) -> Foo
+{
+    use Foo:: * ;
+    match foo
+    {
+        X => Y.
+        Y => X, //~ ERROR expected one of
+    }
+}
+
+pub fn typo2(foo: Foo) -> Foo
+{
+    use Foo:: * ;
+    match foo
+    {
+        X => Y /
+        Y => X, //~ ERROR expected one of
+    }
+}
+
+fn main() {}

@@ -1,0 +1,10 @@
+//@ check-pass
+
+struct Résumé;
+// ['LATIN SMALL LETTER E WITH ACUTE']
+
+fn main()
+{
+    let _ = Re ́ sume ́ ;
+    // ['LATIN SMALL LETTER E', 'COMBINING ACUTE ACCENT']
+}

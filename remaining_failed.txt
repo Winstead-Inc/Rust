@@ -1,0 +1,60 @@
+File: .\src\tools\rust-analyzer\crates\parser\test_data\lexer\err\unclosed_byte_with_slash.rs
+Language: rs
+Reason: Requires formatting
+
+File: .\tests\ui\codemap_tests\tab_2.rs
+Language: rs
+Reason: Requires formatting
+
+File: .\tests\ui\malformed\issue-107423-unused-delim-only-one-no-pair.rs
+Language: rs
+Reason: Requires formatting
+
+File: .\tests\ui\parser\byte-string-literals.rs
+Language: rs
+Reason: Requires formatting
+
+File: .\tests\ui\parser\issues\issue-83639.rs
+Language: rs
+Reason: Requires formatting
+
+File: .\tests\ui\parser\mismatched-delimiter-corner-case-issue-127868.rs
+Language: rs
+Reason: Requires formatting
+
+File: .\tests\ui\parser\parser-ice-ed2021-await-105210.rs
+Language: rs
+Reason: Requires formatting
+
+File: .\tests\ui\parser\raw\raw-byte-string-eof.rs
+Language: rs
+Reason: Requires formatting
+
+File: .\tests\ui\parser\raw\raw-string-2.rs
+Language: rs
+Reason: Requires formatting
+
+File: .\tests\ui\parser\raw\raw-string.rs
+Language: rs
+Reason: Requires formatting
+
+File: .\tests\ui\parser\shebang\issue-71471-ignore-tidy.rs
+Language: rs
+Reason: Requires formatting
+
+File: .\tests\ui\parser\unbalanced-doublequote-2.rs
+Language: rs
+Reason: Requires formatting
+
+File: .\tests\ui\parser\unbalanced-doublequote.rs
+Language: rs
+Reason: Requires formatting
+
+File: .\tests\ui\suggestions\issue-94171.rs
+Language: rs
+Reason: Requires formatting
+
+File: .\tests\ui\typeck\issue-92481.rs
+Language: rs
+Reason: Requires formatting
+

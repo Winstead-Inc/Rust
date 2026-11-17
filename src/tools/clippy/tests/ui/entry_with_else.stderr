@@ -1,0 +1,174 @@
+error: usage of `contains_key` followed by `insert` on a `HashMap`
+  --> tests/ui/entry_with_else.rs:16:5
+   |
+LL | /     if ! m.contains_key( & k)
+LL | |     {
+LL | |
+LL | |         m.insert(k, v);
+LL | |     }
+LL | |     else { m.insert(k, v2); }
+   | |_____________________________^
+   |
+   = note: `-D clippy::map-entry` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::map_entry)]`
+help: try
+   |
+LL ~     match m.entry(k)
+LL +     {
+LL +         std::collections::hash_map::Entry::Vacant(e) =>
+LL +         {
+LL +
+LL +             e.insert(v);
+LL +         }
+LL +         std::collections::hash_map::Entry::Occupied(mut e) => { e.insert(v2); }
+LL +     }
+   |
+
+error: usage of `contains_key` followed by `insert` on a `HashMap`
+  --> tests/ui/entry_with_else.rs:23:5
+   |
+LL | /     if m.contains_key( & k)
+LL | |     {
+LL | |
+LL | |         m.insert(k, v);
+LL | |     }
+LL | |     else { m.insert(k, v2); }
+   | |_____________________________^
+   |
+help: try
+   |
+LL ~     match m.entry(k)
+LL +     {
+LL +         std::collections::hash_map::Entry::Occupied(mut e) =>
+LL +         {
+LL +
+LL +             e.insert(v);
+LL +         }
+LL +         std::collections::hash_map::Entry::Vacant(e) => { e.insert(v2); }
+LL +     }
+   |
+
+error: usage of `contains_key` followed by `insert` on a `HashMap`
+  --> tests/ui/entry_with_else.rs:30:5
+   |
+LL | /     if ! m.contains_key( & k)
+LL | |     {
+LL | |
+LL | |         m.insert(k, v);
+LL | |     }
+LL | |     else { foo(); }
+   | |___________________^
+   |
+help: try
+   |
+LL ~     if let std::collections::hash_map::Entry::Vacant(e) = m.entry(k)
+LL +     {
+LL +
+LL +         e.insert(v);
+LL +     }
+LL +     else
+LL +     {
+LL +         foo(); 
+LL +     }
+   |
+
+error: usage of `contains_key` followed by `insert` on a `HashMap`
+  --> tests/ui/entry_with_else.rs:37:5
+   |
+LL | /     if ! m.contains_key( & k)
+LL | |     {
+LL | |
+LL | |         foo();
+LL | |     }
+LL | |     else { m.insert(k, v); }
+   | |____________________________^
+   |
+help: try
+   |
+LL ~     if let std::collections::hash_map::Entry::Occupied(mut e) = m.entry(k)
+LL +     {
+LL +         e.insert(v); 
+LL +     }
+LL +     else
+LL +     {
+LL +
+LL +         foo();
+LL +     }
+   |
+
+error: usage of `contains_key` followed by `insert` on a `HashMap`
+  --> tests/ui/entry_with_else.rs:44:5
+   |
+LL | /     if ! m.contains_key( & k)
+LL | |     {
+LL | |
+LL | |         m.insert(k, v);
+LL | |     }
+LL | |     else { m.insert(k, v2); }
+   | |_____________________________^
+   |
+help: try
+   |
+LL ~     match m.entry(k)
+LL +     {
+LL +         std::collections::hash_map::Entry::Vacant(e) =>
+LL +         {
+LL +
+LL +             e.insert(v);
+LL +         }
+LL +         std::collections::hash_map::Entry::Occupied(mut e) => { e.insert(v2); }
+LL +     }
+   |
+
+error: usage of `contains_key` followed by `insert` on a `HashMap`
+  --> tests/ui/entry_with_else.rs:51:5
+   |
+LL | /     if m.contains_key( & k)
+LL | |     {
+LL | |
+LL | |         if true { m.insert(k, v) } else { m.insert(k, v2) }
+LL | |     }
+LL | |     else { m.insert(k, v) };
+   | |___________________________^
+   |
+help: try
+   |
+LL ~     match m.entry(k)
+LL +     {
+LL +         std::collections::hash_map::Entry::Occupied(mut e) =>
+LL +         {
+LL +
+LL +             if true { Some(e.insert(v)) } else { Some(e.insert(v2)) }
+LL +         }
+LL +         std::collections::hash_map::Entry::Vacant(e) => { e.insert(v);
+LL +         None }
+LL ~     };
+   |
+
+error: usage of `contains_key` followed by `insert` on a `HashMap`
+  --> tests/ui/entry_with_else.rs:58:5
+   |
+LL | /     if m.contains_key( & k)
+LL | |     {
+LL | |
+LL | |         foo();
+...  |
+LL | |     else { None };
+   | |_________________^
+   |
+help: try
+   |
+LL ~     if let std::collections::hash_map::Entry::Occupied(mut e) = m.entry(k)
+LL +     {
+LL +
+LL +         foo();
+LL +         Some(e.insert(v))
+LL +     }
+LL +     else
+LL +     {
+LL +         None 
+LL ~     };
+   |
+
+error: aborting due to 7 previous errors
+

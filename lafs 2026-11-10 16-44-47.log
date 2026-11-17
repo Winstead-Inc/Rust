@@ -1,0 +1,164 @@
+No target files specified. Format all {js} files in current directory and subdirectories? [Y/N]: Formatted & Saved: .\src\tools\error_index_generator\redirect.js
+Formatted & Saved: .\src\tools\clippy\util\gh-pages\theme.js
+Formatted & Saved: .\src\librustdoc\html\static\.eslintrc.js
+Formatted & Saved: .\src\tools\rustdoc-js\.eslintrc.js
+Formatted & Saved: .\src\librustdoc\html\static\js\scrape-examples.js
+Formatted & Saved: .\tests\rustdoc-js-std\alias-2.js
+Formatted & Saved: .\tests\rustdoc-js-std\alias-3.js
+Formatted & Saved: .\tests\rustdoc-js-std\alias-1.js
+Formatted & Saved: .\tests\debuginfo\type-names.cdb.js
+Formatted & Saved: .\tests\rustdoc-js-std\alias-4.js
+Formatted & Saved: .\tests\rustdoc-js-std\alias-lev.js
+Formatted & Saved: .\tests\rustdoc-js-std\alias.js
+Formatted & Saved: .\tests\rustdoc-js-std\basic.js
+Formatted & Saved: .\tests\rustdoc-js-std\const-is-nullary-func.js
+Formatted & Saved: .\tests\rustdoc-js-std\deduplication.js
+Formatted & Saved: .\src\tools\error_index_generator\error-index.js
+Formatted & Saved: .\tests\rustdoc-js-std\doc-alias-use.js
+Formatted & Saved: .\tests\rustdoc-js-std\enum-option.js
+Formatted & Saved: .\tests\rustdoc-js-std\exact-case.js
+Error formatting .\tests\rustdoc-js-std\asrawfd.js: Safety Gate Failed: Significant token count mismatch! (Original: 28, Formatted: 25). Output aborted to prevent code corruption.
+Error formatting .\tests\rustdoc-js-std\core-transmute.js: Safety Gate Failed: Significant token count mismatch! (Original: 53, Formatted: 52). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js-std\filter-crate.js
+Formatted & Saved: .\tests\rustdoc-js-std\field-is-unary-func.js
+Error formatting .\tests\rustdoc-js-std\doc-alias-symbols-150921.js: Safety Gate Failed: Significant token count mismatch! (Original: 66, Formatted: 65). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js-std\filter-macro-attr-derive.js
+Formatted & Saved: .\tests\rustdoc-js-std\fn-forget.js
+Formatted & Saved: .\tests\rustdoc-js-std\from_u.js
+Formatted & Saved: .\tests\rustdoc-js-std\full-path-function.js
+Formatted & Saved: .\src\tools\rust-analyzer\.github\actions\github-release\main.js
+Formatted & Saved: .\tests\rustdoc-js-std\macro-print.js
+Formatted & Saved: .\tests\rustdoc-js-std\keyword.js
+Formatted & Saved: .\tests\rustdoc-js-std\macro-check.js
+Formatted & Saved: .\tests\rustdoc-js-std\never.js
+Formatted & Saved: .\src\librustdoc\html\static\js\src-script.js
+Formatted & Saved: .\tests\rustdoc-js-std\iterator-type-signatures.js
+Formatted & Saved: .\src\librustdoc\html\static\js\settings.js
+Formatted & Saved: .\tests\rustdoc-js-std\osstring-to-string.js
+Formatted & Saved: .\tests\rustdoc-js-std\parser-literal.js
+Error formatting .\tests\rustdoc-js-std\option-type-signatures.js: Safety Gate Failed: Significant token count mismatch! (Original: 570, Formatted: 567). Output aborted to prevent code corruption.
+Formatted & Saved: .\src\librustdoc\html\static\js\storage.js
+Formatted & Saved: .\tests\rustdoc-js-std\parser-quote.js
+Error formatting .\tests\rustdoc-js-std\parser-bindings.js: Safety Gate Failed: Significant token count mismatch! (Original: 807, Formatted: 798). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js-std\parser-ident.js
+Error formatting .\tests\rustdoc-js-std\parser-generics.js: Safety Gate Failed: Significant token count mismatch! (Original: 609, Formatted: 603). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js-std\parser-filter.js
+Formatted & Saved: .\tests\rustdoc-js-std\parser-paths.js
+Error formatting .\tests\rustdoc-js-std\parser-errors.js: Safety Gate Failed: Significant token count mismatch! (Original: 1764, Formatted: 1763). Output aborted to prevent code corruption.
+Formatted & Saved: .\src\tools\clippy\util\gh-pages\script.js
+Formatted & Saved: .\tests\rustdoc-js-std\path-end-empty.js
+Error formatting .\tests\rustdoc-js-std\parser-separators.js: Safety Gate Failed: Significant token count mismatch! (Original: 672, Formatted: 669). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js-std\parser-weird-queries.js
+Formatted & Saved: .\tests\rustdoc-js-std\path-ordering.js
+Formatted & Saved: .\tests\rustdoc-js-std\path-maxeditdistance.js
+Formatted & Saved: .\tests\rustdoc-js-std\parser-returned.js
+Formatted & Saved: .\tests\rustdoc-js-std\println-typo.js
+Error formatting .\tests\rustdoc-js-std\parser-hof.js: Safety Gate Failed: Significant token count mismatch! (Original: 2489, Formatted: 2486). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js-std\quoted.js
+Formatted & Saved: .\tests\rustdoc-js-std\regex.js
+Formatted & Saved: .\tests\rustdoc-js-std\primitive.js
+Formatted & Saved: .\tests\rustdoc-js-std\reference-shrink.js
+Formatted & Saved: .\tests\rustdoc-js-std\search-by-number.js
+Error formatting .\tests\rustdoc-js-std\parser-tuple.js: Safety Gate Failed: Significant token count mismatch! (Original: 1209, Formatted: 1204). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js-std\return-specific.js
+Formatted & Saved: .\tests\rustdoc-js-std\should-fail.js
+Formatted & Saved: .\src\tools\rustdoc-js\tester.js
+Formatted & Saved: .\tests\rustdoc-js-std\return-specific-literal.js
+Formatted & Saved: .\tests\rustdoc-js-std\return-based-sort.js
+Error formatting .\tests\rustdoc-js-std\transmute-fail.js: Safety Gate Failed: Significant token count mismatch! (Original: 56, Formatted: 55). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js-std\struct-vec.js
+Formatted & Saved: .\tests\rustdoc-js-std\trait-unbox.js
+Error formatting .\tests\rustdoc-js-std\parser-reference.js: Safety Gate Failed: Significant token count mismatch! (Original: 1801, Formatted: 1783). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js-std\string-from_ut.js
+Formatted & Saved: .\tests\rustdoc-js-std\simd-type-signatures.js
+Error formatting .\tests\rustdoc-js-std\transmute.js: Safety Gate Failed: Significant token count mismatch! (Original: 55, Formatted: 54). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js-std\typed-query.js
+Formatted & Saved: .\tests\rustdoc-js-std\unbox-type-result.js
+Error formatting .\tests\rustdoc-js-std\vec-type-signatures.js: Safety Gate Failed: Significant token count mismatch! (Original: 131, Formatted: 130). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js-std\vec-new.js
+Formatted & Saved: .\tests\rustdoc-js-std\write.js
+Error formatting .\tests\rustdoc-js\assoc-type-unbound.js: Safety Gate Failed: Significant token count mismatch! (Original: 105, Formatted: 103). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js\alias-rank-lower-140968.js
+Formatted & Saved: .\tests\rustdoc-js\alias-path-distance-146214.js
+Error formatting .\tests\rustdoc-js\big-result.js: Safety Gate Failed: Significant token count mismatch! (Original: 228, Formatted: 227). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js\alias-sort.js
+Formatted & Saved: .\tests\rustdoc-js\assoc-type-loop.js
+Formatted & Saved: .\tests\rustdoc-js\basic.js
+Formatted & Saved: .\tests\rustdoc-js\case.js
+Error formatting .\tests\rustdoc-js\doc-alias-whitespace.js: Safety Gate Failed: Significant token count mismatch! (Original: 41, Formatted: 39). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js\assoc-type.js
+Formatted & Saved: .\tests\rustdoc-js\doc-alias-after-other-items.js
+Error formatting .\tests\rustdoc-js\doc-alias-symbols-150921.js: Safety Gate Failed: Significant token count mismatch! (Original: 78, Formatted: 76). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js\doc-alias-filter-out.js
+Error formatting .\tests\rustdoc-js\foreign-type-path.js: Safety Gate Failed: Significant token count mismatch! (Original: 27, Formatted: 24). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js\doc-alias-filter.js
+Formatted & Saved: .\tests\rustdoc-js\assoc-type-backtrack.js
+Formatted & Saved: .\tests\rustdoc-js\empty-type.js
+Formatted & Saved: .\tests\rustdoc-js\exact-match.js
+Formatted & Saved: .\tests\rustdoc-js\extern-func.js
+Formatted & Saved: .\tests\rustdoc-js\enum-variant-not-type.js
+Error formatting .\tests\rustdoc-js\doc-alias.js: Safety Gate Failed: Significant token count mismatch! (Original: 845, Formatted: 826). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js\full-path-function.js
+Formatted & Saved: .\tests\rustdoc-js\generics-impl.js
+Error formatting .\tests\rustdoc-js\generics-trait.js: Safety Gate Failed: Significant token count mismatch! (Original: 360, Formatted: 352). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js\generics-nested.js
+Formatted & Saved: .\tests\rustdoc-js\generics-match-ambiguity-no-unbox.js
+Formatted & Saved: .\tests\rustdoc-js\gat.js
+Formatted & Saved: .\tests\rustdoc-js\generics-multi-trait.js
+Formatted & Saved: .\tests\rustdoc-js\generics-unbox.js
+Formatted & Saved: .\tests\rustdoc-js\generics-match-ambiguity.js
+Formatted & Saved: .\tests\rustdoc-js\generics2.js
+Formatted & Saved: .\tests\rustdoc-js\generics.js
+Formatted & Saved: .\tests\rustdoc-js\impl-trait-inlining.js
+Formatted & Saved: .\tests\rustdoc-js\impl-trait.js
+Formatted & Saved: .\tests\rustdoc-js\literal-path.js
+Error formatting .\tests\rustdoc-js\hof.js: Safety Gate Failed: Significant token count mismatch! (Original: 575, Formatted: 571). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js\looks-like-rustc-interner.js
+Formatted & Saved: .\tests\rustdoc-js\never-search.js
+Formatted & Saved: .\tests\rustdoc-js\ordering.js
+Formatted & Saved: .\tests\rustdoc-js\merged-doc.js
+Formatted & Saved: .\tests\rustdoc-js\module-substring.js
+Formatted & Saved: .\tests\rustdoc-js\macro-kinds.js
+Formatted & Saved: .\tests\rustdoc-js\nested-unboxed.js
+Formatted & Saved: .\tests\rustdoc-js\import-filter.js
+Formatted & Saved: .\tests\rustdoc-js\opaque.js
+Formatted & Saved: .\tests\rustdoc-js\path-maxeditdistance.js
+Error formatting .\tests\rustdoc-js-std\parser-slice-array.js: Safety Gate Failed: Significant token count mismatch! (Original: 1086, Formatted: 1078). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js\macro-search.js
+Formatted & Saved: .\tests\rustdoc-js\path-ordering.js
+Error formatting .\tests\rustdoc-js\reexport-dedup-macro.js: Safety Gate Failed: Significant token count mismatch! (Original: 47, Formatted: 46). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js\non-english-identifier.js
+Formatted & Saved: .\tests\rustdoc-js\primitive.js
+Formatted & Saved: .\tests\rustdoc-js\prototype.js
+Formatted & Saved: .\tests\rustdoc-js\path-substring.js
+Formatted & Saved: .\tests\rustdoc-js\raw-pointer.js
+Formatted & Saved: .\tests\rustdoc-js\reexport-alias.js
+Formatted & Saved: .\tests\rustdoc-js\pointer.js
+Formatted & Saved: .\tests\rustdoc-js\reexport-dedup-method.js
+Error formatting .\tests\rustdoc-js\search-method-disambiguate.js: Safety Gate Failed: Significant token count mismatch! (Original: 65, Formatted: 63). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js\reexport-dedup.js
+Formatted & Saved: .\tests\rustdoc-js\reexport-search_unbox.js
+Formatted & Saved: .\tests\rustdoc-js\reexport.js
+Formatted & Saved: .\tests\rustdoc-js\renamed-crate-148300.js
+Formatted & Saved: .\tests\rustdoc-js\search-short-types.js
+Formatted & Saved: .\tests\rustdoc-js\search-bag-semantics.js
+Formatted & Saved: .\tests\rustdoc-js\self-is-not-generic.js
+Error formatting .\tests\rustdoc-js\summaries.js: Safety Gate Failed: Significant token count mismatch! (Original: 85, Formatted: 84). Output aborted to prevent code corruption.
+Formatted & Saved: .\tests\rustdoc-js\search-non-local-trait-impl.js
+Formatted & Saved: .\tests\rustdoc-js\slice-array.js
+Formatted & Saved: .\tests\rustdoc-js\sort-stability.js
+Formatted & Saved: .\tests\rustdoc-js\struct-like-variant.js
+Formatted & Saved: .\tests\rustdoc-js\trailing.js
+Formatted & Saved: .\tests\rustdoc-js\substring.js
+Formatted & Saved: .\tests\rustdoc-js\trait-methods.js
+Formatted & Saved: .\tests\rustdoc-js\reference.js
+Formatted & Saved: .\tests\rustdoc-js\tuple-unit.js
+Formatted & Saved: .\tests\rustdoc-js\where-clause.js
+Formatted & Saved: .\tests\rustdoc-js\underscoredtype.js
+Formatted & Saved: .\tests\rustdoc-js\type-parameters.js
+Formatted & Saved: .\src\librustdoc\html\static\js\main.js
+Formatted & Saved: .\src\librustdoc\html\static\js\stringdex.js
+Formatted & Saved: .\src\librustdoc\html\static\js\search.js
+Formatted & Saved: .\src\doc\rustc-dev-guide\mermaid.min.js
+Summary: 136 formatted and saved, 1 already clean, 26 errors (493.71ms, 16 threads).
+Failed file paths recorded to 'failed.txt'. Use 'lafs format failed' to retry.

@@ -1,0 +1,519 @@
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:9:5
+   |
+LL | /     if a.is_none()
+LL | |     {
+LL | |
+LL | |         return None;
+LL | |     }
+   | |_____^ help: replace it with: `a?;`
+   |
+   = note: `-D clippy::question-mark` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::question_mark)]`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:36:9
+   |
+LL | /         if (self.opt).is_none()
+LL | |         {
+LL | |
+LL | |             return None;
+LL | |         }
+   | |_________^ help: replace it with: `(self.opt)?;`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:42:9
+   |
+LL | /         if self.opt.is_none()
+LL | |         {
+LL | |
+LL | |             return None
+LL | |         }
+   | |_________^ help: replace it with: `self.opt?;`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:48:17
+   |
+LL |           let _ = if self.opt.is_none()
+   |  _________________^
+LL | |         {
+LL | |
+LL | |             return None;
+LL | |         }
+LL | |         else { self.opt };
+   | |_________________________^ help: replace it with: `Some(self.opt?)`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:55:17
+   |
+LL |           let _ = if let Some(x) = self.opt
+   |  _________________^
+LL | |         {
+LL | |
+LL | |             x
+LL | |         }
+LL | |         else { return None; };
+   | |_____________________________^ help: replace it with: `self.opt?`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:73:9
+   |
+LL | /         if self.opt.is_none()
+LL | |         {
+LL | |
+LL | |             return None;
+LL | |         }
+   | |_________^ help: replace it with: `self.opt.as_ref()?;`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:84:9
+   |
+LL | /         if self.opt.is_none()
+LL | |         {
+LL | |
+LL | |             return None;
+LL | |         }
+   | |_________^ help: replace it with: `self.opt.as_ref()?;`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:95:9
+   |
+LL | /         if self.opt.is_none()
+LL | |         {
+LL | |
+LL | |             return None;
+LL | |         }
+   | |_________^ help: replace it with: `self.opt.as_ref()?;`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:105:30
+   |
+LL |           let v: & Vec < _ > = if let Some(ref v) = self.opt
+   |  ______________________________^
+LL | |         {
+LL | |
+LL | |             v
+LL | |         }
+LL | |         else { return None; };
+   | |_____________________________^ help: replace it with: `self.opt.as_ref()?`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:117:17
+   |
+LL |           let v = if let Some(v) = self.opt
+   |  _________________^
+LL | |         {
+LL | |
+LL | |             v
+LL | |         }
+LL | |         else { return None; };
+   | |_____________________________^ help: replace it with: `self.opt?`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:134:5
+   |
+LL | /     if f().is_none()
+LL | |     {
+LL | |
+LL | |         return None;
+LL | |     }
+   | |_____^ help: replace it with: `f()?;`
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:140:16
+   |
+LL |       let _val = match f()
+   |  ________________^
+LL | |     {
+LL | |
+LL | |         Some(val) => val,
+LL | |         None => return None,
+LL | |     };
+   | |_____^ help: try instead: `f()?`
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:147:20
+   |
+LL |       let s: & str = match & Some(String::new ())
+   |  ____________________^
+LL | |     {
+LL | |
+LL | |         Some(v) => v,
+LL | |         None => return None,
+LL | |     };
+   | |_____^ help: try instead: `& Some(String::new ())?`
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:154:5
+   |
+LL | /     match f()
+LL | |     {
+LL | |
+LL | |         Some(val) => val,
+LL | |         None => return None,
+LL | |     };
+   | |_____^ help: try instead: `f()?`
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:161:5
+   |
+LL | /     match opt_none!()
+LL | |     {
+LL | |
+LL | |         Some(x) => x,
+LL | |         None => return None,
+LL | |     };
+   | |_____^ help: try instead: `opt_none!()?`
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:170:5
+   |
+LL | /     match f()
+LL | |     {
+LL | |
+LL | |         Some(val) => { println ! ("{val}"); val },
+LL | |         None => return None,
+LL | |     };
+   | |_____^
+   |
+help: try instead
+   |
+LL ~     {
+LL ~         let val = f()?; println ! ("{val}"); val };
+   |
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:184:13
+   |
+LL |     let _ = if let Ok(x) = x { x } else { return x };
+   |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace it with: `x?`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:187:5
+   |
+LL | /     if x.is_err()
+LL | |     {
+LL | |
+LL | |         return x;
+LL | |     }
+   | |_____^ help: replace it with: `x?;`
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:193:16
+   |
+LL |       let _val = match func_returning_result()
+   |  ________________^
+LL | |     {
+LL | |
+LL | |         Ok(val) => val,
+LL | |         Err(err) => return Err(err),
+LL | |     };
+   | |_____^ help: try instead: `func_returning_result()?`
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:200:5
+   |
+LL | /     match func_returning_result()
+LL | |     {
+LL | |
+LL | |         Ok(val) => val,
+LL | |         Err(err) => return Err(err),
+LL | |     };
+   | |_____^ help: try instead: `func_returning_result()?`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:264:5
+   |
+LL | /     if let Err(err) = func_returning_result()
+LL | |     {
+LL | |
+LL | |         return Err(err);
+LL | |     }
+   | |_____^ help: replace it with: `func_returning_result()?;`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:274:5
+   |
+LL | /     if let Err(err) = func_returning_result()
+LL | |     {
+LL | |
+LL | |         return Err(err);
+LL | |     }
+   | |_____^ help: replace it with: `func_returning_result()?;`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:319:13
+   |
+LL | /             if a.is_none()
+LL | |             {
+LL | |
+LL | |                 return None;
+...  |
+LL | |             }
+   | |_____________^ help: replace it with: `a?;`
+
+error: this `let...else` may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:372:5
+   |
+LL |     let Some(v) = bar.foo.owned.clone() else { return None; };
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace it with: `let v = bar.foo.owned.clone()?;`
+
+error: this `let...else` may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:384:5
+   |
+LL |     let Some(ref x) = foo.opt_x else { return None; };
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace it with: `let x = foo.opt_x.as_ref()?;`
+
+error: this `let...else` may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:393:5
+   |
+LL |     let Some(ref mut x) = foo.opt_x else { return None; };
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace it with: `let x = foo.opt_x.as_mut()?;`
+
+error: this `let...else` may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:402:5
+   |
+LL |     let Some(ref x @ ref y) = foo.opt_x else { return None; };
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace it with: `let x @ y = foo.opt_x.as_ref()?;`
+
+error: this `let...else` may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:404:5
+   |
+LL |     let Some(ref x @ WrapperStructWithString(_)) = bar else { return None; };
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace it with: `let x @ &WrapperStructWithString(_) = bar.as_ref()?;`
+
+error: this `let...else` may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:406:5
+   |
+LL |     let Some(ref mut x @ WrapperStructWithString(_)) = bar else { return None; };
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace it with: `let x @ &mut WrapperStructWithString(_) = bar.as_mut()?;`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:423:5
+   |
+LL | /     if arg.is_none()
+LL | |     {
+LL | |
+LL | |         return None;
+LL | |     }
+   | |_____^ help: replace it with: `arg?;`
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:428:15
+   |
+LL |       let val = match arg
+   |  _______________^
+LL | |     {
+LL | |
+LL | |         Some(val) => val,
+LL | |         None => return None,
+LL | |     };
+   | |_____^ help: try instead: `arg?`
+
+error: this `let...else` may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:440:5
+   |
+LL |     let Some(a) = * a else { return None; };
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace it with: `let a = (* a)?;`
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:453:5
+   |
+LL | /     match some_result
+LL | |     {
+LL | |
+LL | |         Ok(val) => val,
+LL | |         Err(err) => return Err(err.into()),
+LL | |     };
+   | |_____^ help: try instead: `some_result?`
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:460:5
+   |
+LL | /     match some_result
+LL | |     {
+LL | |
+LL | |         Ok(val) => val,
+LL | |         Err(err) => return Err(Into::into(err)),
+LL | |     };
+   | |_____^ help: try instead: `some_result?`
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:467:5
+   |
+LL | /     match some_result
+LL | |     {
+LL | |
+LL | |         Ok(val) => val,
+LL | |         Err(err) => return Err( < & str as Into<String> > ::into(err)),
+LL | |     };
+   | |_____^ help: try instead: `some_result?`
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:486:17
+   |
+LL |           let x = match result
+   |  _________________^
+LL | |         {
+LL | |
+LL | |             Ok(v) => v,
+LL | |             Err(e) => return Err(e),
+LL | |         };
+   | |_________^ help: try instead: `result?`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:501:9
+   |
+LL | /         if let Err(reason) = result
+LL | |         {
+LL | |
+LL | |             return Err(reason);
+LL | |         }
+   | |_________^ help: replace it with: `result?;`
+
+error: this `let...else` may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:516:5
+   |
+LL |     let Some(x) = test_expr!(42) else { return None; };
+   |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: replace it with: `let x = test_expr!(42)?;`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:520:5
+   |
+LL | /     if test_expr!(42).is_none()
+LL | |     {
+LL | |
+LL | |         return None;
+LL | |     }
+   | |_____^ help: replace it with: `test_expr!(42)?;`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:532:10
+   |
+LL |       else if let Some(x) = a
+   |  __________^
+LL | |     {
+LL | |
+LL | |         x
+LL | |     }
+LL | |     else { return None; };
+   | |_________________________^ help: replace it with: `{ a? }`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:549:9
+   |
+LL | /         if let Err(err) = result
+LL | |         {
+LL | |
+LL | |             return Err(err);
+LL | |         }
+   | |_________^ help: replace it with: `result?;`
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:558:9
+   |
+LL | /         if let Err(err) = result
+LL | |         {
+LL | |
+LL | |             return Err(err);
+LL | |         }
+   | |_________^ help: replace it with: `{ result?; }`
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:571:13
+   |
+LL |       let _ = match & v
+   |  _____________^
+LL | |     {
+LL | |
+LL | |         Some(n) => { println ! ("{n}"); Some(42) }
+LL | |         None => return None,
+LL | |     };
+   | |_____^
+   |
+help: try instead
+   |
+LL ~     let _ = {
+LL ~         let n = & v?; println ! ("{n}"); Some(42) };
+   |
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:578:13
+   |
+LL |       let _ = match v
+   |  _____________^
+LL | |     {
+LL | |
+LL | |         Some(ref mut n) => { println ! ("{n}"); Some(42) }
+LL | |         None => return None,
+LL | |     };
+   | |_____^
+   |
+help: try instead
+   |
+LL ~     let _ = {
+LL ~         let ref mut n = v?; println ! ("{n}"); Some(42) };
+   |
+
+error: this block may be rewritten with the `?` operator
+  --> tests/ui/question_mark.rs:585:13
+   |
+LL |       let _ = if let Some(ref mut n) = v
+   |  _____________^
+LL | |     {
+LL | |
+LL | |         println!("{n}");
+...  |
+LL | |     else { return None; };
+   | |_________________________^
+   |
+help: replace it with
+   |
+LL ~     let _ = {
+LL +         let ref mut n = v?;
+LL +
+LL +         println!("{n}");
+LL +         42
+LL ~     };
+   |
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:593:5
+   |
+LL | /     match v
+LL | |     {
+LL | |
+LL | |         Some(n) => if n > 10 { Some(42) } else { None },
+LL | |         None => return None,
+LL | |     }
+   | |_____^
+   |
+help: try instead
+   |
+LL ~         {
+LL +         let n = v?;
+LL +         if n > 10 { Some(42) } else { None }
+LL +     }
+   |
+
+error: this `match` expression can be replaced with `?`
+  --> tests/ui/question_mark.rs:606:5
+   |
+LL | /     match opt
+LL | |     {
+LL | |
+LL | |         Some(x) => (a, b) = x,
+LL | |         None => return None,
+LL | |     }
+   | |_____^
+   |
+help: try instead
+   |
+LL ~         {
+LL +         let x = opt?;
+LL +         (a, b) = x
+LL +     }
+   |
+
+error: aborting due to 47 previous errors
+

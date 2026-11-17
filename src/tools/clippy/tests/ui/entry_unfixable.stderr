@@ -1,0 +1,43 @@
+error: usage of `contains_key` followed by `insert` on a `HashMap`
+  --> tests/ui/entry_unfixable.rs:24:13
+   |
+LL | /             if ! self.values.contains_key( & name)
+LL | |             {
+LL | |
+LL | |                 self.values.insert(name, value);
+...  |
+LL | |             else if let Some(enclosing) = & mut self.enclosing { enclosing.assign(name, value) } else { false }
+   | |_______________________________________________________________________________________________________________^
+   |
+   = help: consider using the `Entry` API: https://doc.rust-lang.org/std/collections/struct.HashMap.html#entry-api
+   = note: `-D clippy::map-entry` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::map_entry)]`
+
+error: usage of `contains_key` followed by `insert` on a `HashMap`
+  --> tests/ui/entry_unfixable.rs:38:5
+   |
+LL | /     if hm.contains_key( & key)
+LL | |     {
+LL | |
+LL | |         let bval = hm.get_mut( & key).unwrap();
+...  |
+LL | |     else { hm.insert(key, true); }
+   | |__________________________________^
+   |
+   = help: consider using the `Entry` API: https://doc.rust-lang.org/std/collections/struct.HashMap.html#entry-api
+
+error: usage of `contains_key` followed by `insert` on a `HashMap`
+  --> tests/ui/entry_unfixable.rs:66:13
+   |
+LL | /             if self.globals.contains_key( & name)
+LL | |             {
+LL | |
+LL | |                 self.globals.insert(name, value);
+LL | |             }
+LL | |             else { let interner = INTERNER.lock().unwrap(); return Err(interner.resolve(name).unwrap().to_owned()); }
+   | |_____________________________________________________________________________________________________________________^
+   |
+   = help: consider using the `Entry` API: https://doc.rust-lang.org/std/collections/struct.HashMap.html#entry-api
+
+error: aborting due to 3 previous errors
+

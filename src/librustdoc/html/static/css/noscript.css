@@ -1,0 +1,256 @@
+/*
+This whole CSS file is used only in case rustdoc is rendered with javascript disabled. Since a lot
+of content is hidden by default (depending on the settings too), we have to overwrite some of the
+rules.
+*/
+#main-content .attributes
+{
+    /* Since there is no toggle (the "[-]") when JS is disabled, no need for this margin either. */
+    margin-left: 0 !important;
+}
+#copy-path, #sidebar-button, .sidebar-resizer
+{
+    /* It requires JS to work so no need to display it in this case. */
+    display: none !important;
+}
+nav.sub
+{
+    /* The search bar and related controls don't work without JS */
+    display: none;
+}
+.src .sidebar { display: none; }
+.notable-traits
+{
+    /* layout requires javascript
+	    https://github.com/rust-lang/rust/issues/102576 */
+    display: none;
+}
+#synthetic-implementors-list:not(.loaded), #implementors-list:not(.loaded) { display: block; }
+/* Begin: styles for themes
+	Keep the default light and dark themes synchronized with the ones
+	in rustdoc.css */
+/* Begin theme: light */
+:root,:root:not([data-theme])
+{
+    --main-background-color: white;
+    --main-color: black;
+    --settings-input-color: #2196F3;
+    --settings-input-border-color: #717171;
+    --settings-button-color: #000;
+    --settings-button-border-focus: #717171;
+    --sidebar-background-color: #F5F5F5;
+    --sidebar-background-color-hover: #E0E0E0;
+    --sidebar-border-color: #DDD;
+    --code-block-background-color: #EAEAEA;
+    --scrollbar-track-background-color: #DCDCDC;
+    --scrollbar-thumb-background-color: rgba (36, 37, 39, 0.6 );
+    --scrollbar-color: rgba (36, 37, 39, 0.6 ) #D9D9D9;
+    --headings-border-bottom-color: #DDD;
+    --border-color: #E0E0E0;
+    --button-background-color: #FFF;
+    --right-side-color: grey;
+    --code-attribute-color: #999;
+    --toggles-color: #999;
+    --toggle-filter: none;
+    --mobile-sidebar-menu-filter: none;
+    --search-input-focused-border-color: #66AFE9;
+    --copy-path-button-color: #999;
+    --copy-path-img-filter: invert (50% );
+    --copy-path-img-hover-filter: invert (35% );
+    --code-example-button-color: #7F7F7F;
+    --code-example-button-hover-color: #595959;
+    --settings-menu-filter: invert (50% );
+    --settings-menu-hover-filter: invert (35% );
+    --codeblock-error-hover-color: rgb (255, 0, 0 );
+    --codeblock-error-color: rgba (255, 0, 0, .5 );
+    --codeblock-ignore-hover-color: rgb (255, 142, 0 );
+    --codeblock-ignore-color: rgba (255, 142, 0, .6 );
+    --warning-border-color: #FF8E00;
+    --type-link-color: #AD378A;
+    --trait-link-color: #6E4FC9;
+    --assoc-item-link-color: #3873AD;
+    --function-link-color: #AD7C37;
+    --macro-link-color: #068000;
+    --keyword-link-color: #3873AD;
+    --attribute-link-color: #3873AD;
+    --mod-link-color: #3873AD;
+    --link-color: #3873AD;
+    --sidebar-link-color: #356DA4;
+    --sidebar-current-link-background-color: #FFF;
+    --search-result-link-focus-background-color: #CCC;
+    --search-result-border-color: #AAA3;
+    --search-color: #000;
+    --search-error-code-background-color: #D0CCCC;
+    --search-results-alias-color: #000;
+    --search-results-grey-color: #999;
+    --search-tab-title-count-color: #888;
+    --search-tab-button-not-selected-border-top-color: #E6E6E6;
+    --search-tab-button-not-selected-background: #E6E6E6;
+    --search-tab-button-selected-border-top-color: #0089FF;
+    --search-tab-button-selected-background: #FFF;
+    --stab-background-color: #FFF5D6;
+    --stab-code-color: #000;
+    --code-highlight-kw-color: #8959A8;
+    --code-highlight-kw-2-color: #4271AE;
+    --code-highlight-lifetime-color: #B76514;
+    --code-highlight-prelude-color: #4271AE;
+    --code-highlight-prelude-val-color: #C82829;
+    --code-highlight-number-color: #718C00;
+    --code-highlight-string-color: #718C00;
+    --code-highlight-literal-color: #C82829;
+    --code-highlight-attribute-color: #C82829;
+    --code-highlight-self-color: #C82829;
+    --code-highlight-macro-color: #3E999F;
+    --code-highlight-question-mark-color: #FF9011;
+    --code-highlight-comment-color: #8E908C;
+    --code-highlight-doc-comment-color: #4D4D4C;
+    --src-line-numbers-span-color: #C67E2D;
+    --src-line-number-highlighted-background-color: #FDFFD3;
+    --target-background-color: #FDFFD3;
+    --target-border-color: #AD7C37;
+    --kbd-color: #000;
+    --kbd-background: #FAFBFC;
+    --kbd-box-shadow-color: #C6CBD1;
+    --rust-logo-filter: initial;
+    /* match border-color; uses https://codepen.io/sosuke/pen/Pjoqqp */
+    --crate-search-div-filter: invert (100% ) sepia (0% ) saturate (4223% ) hue-rotate (289deg ) brightness (114% ) contrast (76% );
+    --crate-search-div-hover-filter: invert (44% ) sepia (18% ) saturate (23% ) hue-rotate (317deg ) brightness (96% ) contrast (93% );
+    --crate-search-hover-border: #717171;
+    --src-sidebar-background-selected: #FFF;
+    --src-sidebar-background-hover: #E0E0E0;
+    --table-alt-row-background-color: #F5F5F5;
+    --codeblock-link-background: #EEE;
+    --scrape-example-toggle-line-background: #CCC;
+    --scrape-example-toggle-line-hover-background: #999;
+    --scrape-example-code-line-highlight: #FCFFD6;
+    --scrape-example-code-line-highlight-focus: #F6FDB0;
+    --scrape-example-help-border-color: #555;
+    --scrape-example-help-color: #333;
+    --scrape-example-help-hover-border-color: #000;
+    --scrape-example-help-hover-color: #000;
+    --scrape-example-code-wrapper-background-start: rgba (255, 255, 255, 1 );
+    --scrape-example-code-wrapper-background-end: rgba (255, 255, 255, 0 );
+    --sidebar-resizer-hover: hsl (207, 90%, 66% );
+    --sidebar-resizer-active: hsl (207, 90%, 54% );
+    --notable-badge-pink: oklch (0.88 0.21 0 );
+    --notable-badge-red: oklch (0.88 0.21 40 );
+    --notable-badge-orange: oklch (0.88 0.21 70 );
+    --notable-badge-green: oklch (0.88 0.21 150 );
+    --notable-badge-blue: oklch (0.88 0.21 240 );
+    --notable-badge-violet: oklch (0.88 0.21 300 );
+}
+/* End theme: light */
+@media (prefers-color-scheme: dark)
+{
+    /* Begin theme: dark */
+    :root,:root:not([data-theme])
+    {
+        --main-background-color: #353535;
+        --main-color: #DDD;
+        --settings-input-color: #2196F3;
+        --settings-input-border-color: #999;
+        --settings-button-color: #000;
+        --settings-button-border-focus: #FFB900;
+        --sidebar-background-color: #505050;
+        --sidebar-background-color-hover: #676767;
+        --sidebar-border-color: #2A2A2A;
+        --code-block-background-color: #2A2A2A;
+        --scrollbar-track-background-color: #717171;
+        --scrollbar-thumb-background-color: rgba (32, 34, 37, .6 );
+        --scrollbar-color: rgba (32, 34, 37, .6 ) #5A5A5A;
+        --headings-border-bottom-color: #D2D2D2;
+        --border-color: #E0E0E0;
+        --button-background-color: #F0F0F0;
+        --right-side-color: #D0D0D0;
+        --code-attribute-color: #999;
+        --toggles-color: #999;
+        --toggle-filter: invert (100% );
+        --mobile-sidebar-menu-filter: invert (100% );
+        --search-input-focused-border-color: #008DFD;
+        --copy-path-button-color: #999;
+        --copy-path-img-filter: invert (50% );
+        --copy-path-img-hover-filter: invert (65% );
+        --code-example-button-color: #7F7F7F;
+        --code-example-button-hover-color: #A5A5A5;
+        --codeblock-error-hover-color: rgb (255, 0, 0 );
+        --codeblock-error-color: rgba (255, 0, 0, .5 );
+        --codeblock-ignore-hover-color: rgb (255, 142, 0 );
+        --codeblock-ignore-color: rgba (255, 142, 0, .6 );
+        --warning-border-color: #FF8E00;
+        --type-link-color: #2DBFB8;
+        --trait-link-color: #B78CF2;
+        --assoc-item-link-color: #D2991D;
+        --function-link-color: #2BAB63;
+        --macro-link-color: #09BD00;
+        --keyword-link-color: #D2991D;
+        --attribute-link-color: #D2991D;
+        --mod-link-color: #D2991D;
+        --link-color: #D2991D;
+        --sidebar-link-color: #FDBF35;
+        --sidebar-current-link-background-color: #444;
+        --search-result-link-focus-background-color: #616161;
+        --search-result-border-color: #AAA3;
+        --search-color: #111;
+        --search-error-code-background-color: #484848;
+        --search-results-alias-color: #FFF;
+        --search-results-grey-color: #CCC;
+        --search-tab-title-count-color: #888;
+        --search-tab-button-not-selected-border-top-color: #252525;
+        --search-tab-button-not-selected-background: #252525;
+        --search-tab-button-selected-border-top-color: #0089FF;
+        --search-tab-button-selected-background: #353535;
+        --settings-menu-filter: invert (50% );
+        --settings-menu-hover-filter: invert (65% );
+        --stab-background-color: #314559;
+        --stab-code-color: #E6E1CF;
+        --code-highlight-kw-color: #AB8AC1;
+        --code-highlight-kw-2-color: #769ACB;
+        --code-highlight-lifetime-color: #D97F26;
+        --code-highlight-prelude-color: #769ACB;
+        --code-highlight-prelude-val-color: #EE6868;
+        --code-highlight-number-color: #83A300;
+        --code-highlight-string-color: #83A300;
+        --code-highlight-literal-color: #EE6868;
+        --code-highlight-attribute-color: #EE6868;
+        --code-highlight-self-color: #EE6868;
+        --code-highlight-macro-color: #3E999F;
+        --code-highlight-question-mark-color: #FF9011;
+        --code-highlight-comment-color: #8D8D8B;
+        --code-highlight-doc-comment-color: #8CA375;
+        --src-line-numbers-span-color: #3B91E2;
+        --src-line-number-highlighted-background-color: #0A042F;
+        --target-background-color: #494A3D;
+        --target-border-color: #BB7410;
+        --kbd-color: #000;
+        --kbd-background: #FAFBFC;
+        --kbd-box-shadow-color: #C6CBD1;
+        --rust-logo-filter: drop-shadow (1px 0 0px #FFF ) drop-shadow (0 1px 0 #FFF ) drop-shadow (-1px 0 0 #FFF ) drop-shadow (0 -1px 0 #FFF );
+        /* match border-color; uses https://codepen.io/sosuke/pen/Pjoqqp */
+        --crate-search-div-filter: invert (94% ) sepia (0% ) saturate (721% ) hue-rotate (255deg ) brightness (90% ) contrast (90% );
+        --crate-search-div-hover-filter: invert (69% ) sepia (60% ) saturate (6613% ) hue-rotate (184deg ) brightness (100% ) contrast (91% );
+        --crate-search-hover-border: #2196F3;
+        --src-sidebar-background-selected: #333;
+        --src-sidebar-background-hover: #444;
+        --table-alt-row-background-color: #1D1D1D;
+        --codeblock-link-background: #333;
+        --scrape-example-toggle-line-background: #999;
+        --scrape-example-toggle-line-hover-background: #C5C5C5;
+        --scrape-example-code-line-highlight: #5B3B01;
+        --scrape-example-code-line-highlight-focus: #7C4B0F;
+        --scrape-example-help-border-color: #AAA;
+        --scrape-example-help-color: #EEE;
+        --scrape-example-help-hover-border-color: #FFF;
+        --scrape-example-help-hover-color: #FFF;
+        --scrape-example-code-wrapper-background-start: rgba (53, 53, 53, 1 );
+        --scrape-example-code-wrapper-background-end: rgba (53, 53, 53, 0 );
+        --sidebar-resizer-hover: hsl (207, 30%, 54% );
+        --sidebar-resizer-active: hsl (207, 90%, 54% );
+        --notable-badge-pink: oklch (0.55 0.21 0 );
+        --notable-badge-red: oklch (0.55 0.21 40 );
+        --notable-badge-orange: oklch (0.55 0.21 70 );
+        --notable-badge-green: oklch (0.55 0.21 150 );
+        --notable-badge-blue: oklch (0.55 0.21 240 );
+        --notable-badge-violet: oklch (0.55 0.21 300 );
+    }
+    /* End theme: dark */
+}

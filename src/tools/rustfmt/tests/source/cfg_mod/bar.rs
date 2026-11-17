@@ -1,0 +1,1 @@
+fn bar() -> & str { "bar" }

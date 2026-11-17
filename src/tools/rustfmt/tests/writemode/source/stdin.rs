@@ -1,0 +1,5 @@
+fn
+some()
+{}
+
+fn main() {}

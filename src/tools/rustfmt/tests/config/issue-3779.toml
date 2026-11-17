@@ -1,0 +1,1 @@
+ignore = ["tests/**/issue-3779/ice.rs"]

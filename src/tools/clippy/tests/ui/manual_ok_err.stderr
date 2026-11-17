@@ -1,0 +1,153 @@
+error: manual implementation of `ok`
+  --> tests/ui/manual_ok_err.rs:7:13
+   |
+LL |       let _ = match funcall()
+   |  _____________^
+LL | |     {
+LL | |
+LL | |         Ok(v) => Some(v),
+LL | |         Err(_) => None,
+LL | |     };
+   | |_____^ help: replace with: `funcall().ok()`
+   |
+   = note: `-D clippy::manual-ok-err` implied by `-D warnings`
+   = help: to override `-D warnings` add `#[allow(clippy::manual_ok_err)]`
+
+error: manual implementation of `ok`
+  --> tests/ui/manual_ok_err.rs:14:13
+   |
+LL |       let _ = match funcall()
+   |  _____________^
+LL | |     {
+LL | |
+LL | |         Ok(v) => Some(v),
+LL | |         _v => None,
+LL | |     };
+   | |_____^ help: replace with: `funcall().ok()`
+
+error: manual implementation of `err`
+  --> tests/ui/manual_ok_err.rs:21:13
+   |
+LL |       let _ = match funcall()
+   |  _____________^
+LL | |     {
+LL | |
+LL | |         Err(v) => Some(v),
+LL | |         Ok(_) => None,
+LL | |     };
+   | |_____^ help: replace with: `funcall().err()`
+
+error: manual implementation of `err`
+  --> tests/ui/manual_ok_err.rs:28:13
+   |
+LL |       let _ = match funcall()
+   |  _____________^
+LL | |     {
+LL | |
+LL | |         Err(v) => Some(v),
+LL | |         _v => None,
+LL | |     };
+   | |_____^ help: replace with: `funcall().err()`
+
+error: manual implementation of `ok`
+  --> tests/ui/manual_ok_err.rs:35:13
+   |
+LL |       let _ = if let Ok(v) = funcall()
+   |  _____________^
+...  |
+LL | |     else { None };
+   | |_________________^ help: replace with: `funcall().ok()`
+
+error: manual implementation of `err`
+  --> tests/ui/manual_ok_err.rs:43:13
+   |
+LL |       let _ = if let Err(v) = funcall()
+   |  _____________^
+...  |
+LL | |     else { None };
+   | |_________________^ help: replace with: `funcall().err()`
+
+error: manual implementation of `ok`
+  --> tests/ui/manual_ok_err.rs:52:13
+   |
+LL |       let _ = match funcall()
+   |  _____________^
+LL | |     {
+LL | |
+LL | |         Ok(v) => Some(v),
+LL | |         _v @ _ => None,
+LL | |     };
+   | |_____^ help: replace with: `funcall().ok()`
+
+error: manual implementation of `ok`
+  --> tests/ui/manual_ok_err.rs:64:13
+   |
+LL |       let _ = match - S
+   |  _____________^
+LL | |     {
+LL | |
+LL | |         Ok(v) => Some(v),
+LL | |         _ => None,
+LL | |     };
+   | |_____^ help: replace with: `(- S).ok()`
+
+error: manual implementation of `ok`
+  --> tests/ui/manual_ok_err.rs:107:10
+   |
+LL |     else if let Ok(n) = "1".parse::<u8>() { Some(n) } else { None };
+   |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   |
+help: replace with
+   |
+LL ~     else {
+LL +         "1".parse::<u8>().ok()
+LL ~     };
+   |
+
+error: manual implementation of `ok`
+  --> tests/ui/manual_ok_err.rs:118:9
+   |
+LL | /         match & x.field
+LL | |         {
+LL | |
+LL | |             Ok(panel) => Some(panel),
+LL | |             Err(_) => None,
+LL | |         }
+   | |_________^ help: replace with: `(& x.field).as_ref().ok()`
+
+error: manual implementation of `ok`
+  --> tests/ui/manual_ok_err.rs:129:9
+   |
+LL | /         match result_with_ref()
+LL | |         {
+LL | |
+LL | |             Ok(panel) => Some(panel),
+LL | |             Err(_) => None,
+LL | |         }
+   | |_________^ help: replace with: `result_with_ref().as_ref().ok()`
+
+error: manual implementation of `ok`
+  --> tests/ui/manual_ok_err.rs:141:9
+   |
+LL | /         match result_with_ref_mut(x)
+LL | |         {
+LL | |
+LL | |             Ok(panel) => Some(panel),
+LL | |             Err(_) => None,
+LL | |         }
+   | |_________^ help: replace with: `result_with_ref_mut(x).as_mut().ok()`
+
+error: manual implementation of `ok`
+  --> tests/ui/manual_ok_err.rs:154:13
+   |
+LL |       let _ = match test_expr!(42)
+   |  _____________^
+LL | |     {
+LL | |
+LL | |         Ok(v) => Some(v),
+LL | |         Err(_) => None,
+LL | |     };
+   | |_____^ help: replace with: `test_expr!(42).ok()`
+
+error: aborting due to 13 previous errors
+

@@ -1,0 +1,1 @@
+Error formatting .\src\doc\rustc-dev-guide\mermaid.min.js: Safety Gate Failed: Significant token count mismatch! (Original: 501683, Formatted: 501701). Output aborted to prevent code corruption.

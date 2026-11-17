@@ -1,0 +1,4 @@
+todo!();
+//~ ERROR
+
+fn main() {}

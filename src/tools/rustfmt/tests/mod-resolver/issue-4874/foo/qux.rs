@@ -1,0 +1,2 @@
+fn
+badly_formatted() {}

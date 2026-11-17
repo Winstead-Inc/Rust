@@ -1,0 +1,218 @@
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: }
+File or directory not found: ', Got '"""; //~ ERROR unterminated double quote
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: }
+File or directory not found: ', Got '"""; //~ ERROR unterminated double quote
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: }
+File or directory not found: ', Got 'b"a  //~ ERROR unterminated double quote byte string
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: }
+File or directory not found: ', Got 'b"a  //~ ERROR unterminated double quote byte string
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: }
+File or directory not found: ', Got '"""	" //~ ERROR
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: }
+File or directory not found: ', Got '"""	" //~ ERROR
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: }
+File or directory not found: ', Got 'br##"a"#;  //~ ERROR unterminated raw string
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: }
+File or directory not found: ', Got 'br##"a"#;  //~ ERROR unterminated raw string
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: //~^ ERROR unterminated raw string
+File or directory not found: }
+File or directory not found: ', Got 'r##"lol"#;
+File or directory not found: //~^ ERROR unterminated raw string
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: //~^ ERROR unterminated raw string
+File or directory not found: }
+File or directory not found: ', Got 'r##"lol"#;
+File or directory not found: //~^ ERROR unterminated raw string
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: //~^ ERROR unterminated raw string
+File or directory not found: }
+File or directory not found: ', Got 'r###"here's a long string"# "# "##;
+File or directory not found: //~^ ERROR unterminated raw string
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: //~^ ERROR unterminated raw string
+File or directory not found: }
+File or directory not found: ', Got 'r###"here's a long string"# "# "##;
+File or directory not found: //~^ ERROR unterminated raw string
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: }
+File or directory not found: ', Got '"; //~ ERROR unterminated double quote
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: }
+File or directory not found: ', Got '"; //~ ERROR unterminated double quote
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: }
+File or directory not found: ', Got '"
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: }
+File or directory not found: ', Got '"
+File or directory not found: }
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: //~^^ ERROR mismatched closing delimiter
+File or directory not found: //~^^ ERROR unknown start of token
+File or directory not found: //~ ERROR this file contains an unclosed delimiter
+File or directory not found: ', Got '`
+File or directory not found: //~^^ ERROR mismatched closing delimiter
+File or directory not found: //~^^ ERROR unknown start of token
+File or directory not found: //~ ERROR this file contains an unclosed delimiter
+File or directory not found: '). Output aborted to prevent code corruption.
+File or directory not found: //~^^ ERROR mismatched closing delimiter
+File or directory not found: //~^^ ERROR unknown start of token
+File or directory not found: //~ ERROR this file contains an unclosed delimiter
+File or directory not found: ', Got '`
+File or directory not found: //~^^ ERROR mismatched closing delimiter
+File or directory not found: //~^^ ERROR unknown start of token
+File or directory not found: //~ ERROR this file contains an unclosed delimiter
+File or directory not found: '). Output aborted to prevent code corruption.
+Requires formatting: .\compiler\rustc_codegen_cranelift\example\mini_core.rs
+Requires formatting: .\compiler\rustc_codegen_gcc\example\mini_core.rs
+Requires formatting: .\library\alloc\src\collections\vec_deque\tests.rs
+Requires formatting: .\library\core\src\intrinsics\fallback.rs
+Requires formatting: .\library\core\src\slice\rotate.rs
+Requires formatting: .\library\portable-simd\crates\std_float\src\lib.rs
+Requires formatting: .\library\std\src\sys\pal\unix\sync\mod.rs
+Requires formatting: .\library\std\src\sys\thread_local\key\tests.rs
+Requires formatting: .\src\tools\clippy\clippy_lints\src\redundant_clone.rs
+Requires formatting: .\src\tools\clippy\tests\ui\boxed_local.rs
+Requires formatting: .\src\tools\clippy\tests\ui\needless_return.rs
+Requires formatting: .\src\tools\rust-analyzer\crates\hir-def\src\nameres\proc_macro.rs
+Requires formatting: .\src\tools\rust-analyzer\crates\hir-ty\src\layout\tests\closure.rs
+Error formatting .\src\tools\rust-analyzer\crates\parser\test_data\lexer\err\unclosed_byte_with_slash.rs: Safety Gate Failed: Token #0 mismatch! (Expected 'b'\', Got 'b'\
+'). Output aborted to prevent code corruption.
+Requires formatting: .\src\tools\rust-analyzer\crates\parser\test_data\lexer\ok\numbers.rs
+Requires formatting: .\src\tools\rust-analyzer\crates\parser\test_data\lexer\ok\symbols.rs
+Requires formatting: .\src\tools\rust-analyzer\crates\parser\test_data\parser\inline\err\recover_from_missing_assoc_item_binding.rs
+Requires formatting: .\src\tools\rust-analyzer\crates\parser\test_data\parser\inline\ok\closure_postfix_range_method_call.rs
+Requires formatting: .\src\tools\rust-analyzer\crates\parser\test_data\parser\inline\ok\closure_range_method_call.rs
+Requires formatting: .\src\tools\rust-analyzer\crates\parser\test_data\parser\ok\0035_weird_exprs.rs
+Requires formatting: .\src\tools\rust-analyzer\crates\rust-analyzer\src\config.rs
+Requires formatting: .\src\tools\rust-analyzer\lib\smol_str\tests\test.rs
+Requires formatting: .\src\tools\rustfmt\tests\source\configs\float_literal_trailing_zero\always.rs
+Requires formatting: .\src\tools\rustfmt\tests\source\configs\float_literal_trailing_zero\if-no-postfix.rs
+Requires formatting: .\src\tools\rustfmt\tests\source\configs\spaces_around_ranges\false.rs
+Requires formatting: .\src\tools\rustfmt\tests\source\configs\spaces_around_ranges\true.rs
+Requires formatting: .\src\tools\rustfmt\tests\source\expr.rs
+Requires formatting: .\src\tools\rustfmt\tests\source\issue-3465.rs
+Requires formatting: .\src\tools\rustfmt\tests\source\issue-4808.rs
+Requires formatting: .\src\tools\rustfmt\tests\source\issue-5088\deeply_nested_long_comment_wrap_comments_true.rs
+Requires formatting: .\src\tools\rustfmt\tests\source\issue-5791.rs
+Requires formatting: .\src\tools\rustfmt\tests\source\issue-6059\repro.rs
+Requires formatting: .\src\tools\rustfmt\tests\source\tuple.rs
+Requires formatting: .\src\tools\rustfmt\tests\source\tuple_v2.rs
+Requires formatting: .\tests\pretty\float-trailing-dot.rs
+Requires formatting: .\tests\ui\asm\naked-functions\naked-functions.rs
+Requires formatting: .\tests\ui\borrowck\or-patterns.rs
+Error formatting .\tests\ui\codemap_tests\tab_2.rs: Safety Gate Failed: Token #6 mismatch! (Expected '"""; //~ ERROR unterminated double quote
+}
+', Got '"""; //~ ERROR unterminated double quote
+}
+
+'). Output aborted to prevent code corruption.
+Requires formatting: .\tests\ui\const-generics\early\const_arg_trivial_macro_expansion-1.rs
+Requires formatting: .\tests\ui\consts\const-eval\dont_promote_unstable_const_fn.rs
+Requires formatting: .\tests\ui\consts\min_const_fn\min_const_unsafe_fn_libstd_stability.rs
+Requires formatting: .\tests\ui\consts\min_const_fn\min_const_unsafe_fn_libstd_stability2.rs
+Requires formatting: .\tests\ui\drop\if-let-guards-2.rs
+Requires formatting: .\tests\ui\drop\panic-in-drop-during-assignment.rs
+Requires formatting: .\tests\ui\expr\weird-exprs.rs
+Requires formatting: .\tests\ui\feature-gates\unknown-feature.rs
+Requires formatting: .\tests\ui\inference\dont-collect-stmts-from-parent-body.rs
+Requires formatting: .\tests\ui\lint\unused\must-use-block-expr.rs
+Requires formatting: .\tests\ui\macros\stringify.rs
+Error formatting .\tests\ui\malformed\issue-107423-unused-delim-only-one-no-pair.rs: Safety Gate Failed: Significant token count mismatch! (Original: 9, Formatted: 12). Output aborted to prevent code corruption.
+Requires formatting: .\tests\ui\mir\mir_let_chains_drop_order.rs
+Requires formatting: .\tests\ui\mir\mir_match_guard_let_chains_drop_order.rs
+Requires formatting: .\tests\ui\offset-of\offset-of-tuple-nested.rs
+Requires formatting: .\tests\ui\offset-of\offset-of-tuple.rs
+Requires formatting: .\tests\ui\parallel-rustc\nested-type-alias-cycle-issue-129911.rs
+Error formatting .\tests\ui\parser\byte-string-literals.rs: Safety Gate Failed: Token #30 mismatch! (Expected 'b"a  //~ ERROR unterminated double quote byte string
+}
+', Got 'b"a  //~ ERROR unterminated double quote byte string
+}
+
+'). Output aborted to prevent code corruption.
+Error formatting .\tests\ui\parser\issues\issue-83639.rs: Safety Gate Failed: Token #7 mismatch! (Expected '"""	" //~ ERROR
+}
+', Got '"""	" //~ ERROR
+}
+
+'). Output aborted to prevent code corruption.
+Error formatting .\tests\ui\parser\mismatched-delimiter-corner-case-issue-127868.rs: Safety Gate Failed: Significant token count mismatch! (Original: 41, Formatted: 61). Output aborted to prevent code corruption.
+Error formatting .\tests\ui\parser\parser-ice-ed2021-await-105210.rs: Safety Gate Failed: Significant token count mismatch! (Original: 41, Formatted: 52). Output aborted to prevent code corruption.
+Error formatting .\tests\ui\parser\raw\raw-byte-string-eof.rs: Safety Gate Failed: Token #6 mismatch! (Expected 'br##"a"#;  //~ ERROR unterminated raw string
+}
+', Got 'br##"a"#;  //~ ERROR unterminated raw string
+}
+
+'). Output aborted to prevent code corruption.
+Error formatting .\tests\ui\parser\raw\raw-string-2.rs: Safety Gate Failed: Token #8 mismatch! (Expected 'r###"here's a long string"# "# "##;
+    //~^ ERROR unterminated raw string
+}
+', Got 'r###"here's a long string"# "# "##;
+    //~^ ERROR unterminated raw string
+}
+
+'). Output aborted to prevent code corruption.
+Error formatting .\tests\ui\parser\raw\raw-string.rs: Safety Gate Failed: Token #8 mismatch! (Expected 'r##"lol"#;
+    //~^ ERROR unterminated raw string
+}
+', Got 'r##"lol"#;
+    //~^ ERROR unterminated raw string
+}
+
+'). Output aborted to prevent code corruption.
+Requires formatting: .\tests\ui\parser\recover\recover-assoc-eq-missing-term.rs
+Requires formatting: .\tests\ui\parser\recover\recover-range-pats.rs
+Error formatting .\tests\ui\parser\shebang\issue-71471-ignore-tidy.rs: Safety Gate Failed: Significant token count mismatch! (Original: 5, Formatted: 2). Output aborted to prevent code corruption.
+Error formatting .\tests\ui\parser\unbalanced-doublequote-2.rs: Safety Gate Failed: Token #7 mismatch! (Expected '"; //~ ERROR unterminated double quote
+}
+', Got '"; //~ ERROR unterminated double quote
+}
+
+'). Output aborted to prevent code corruption.
+Error formatting .\tests\ui\parser\unbalanced-doublequote.rs: Safety Gate Failed: Token #6 mismatch! (Expected '"
+}
+', Got '"
+}
+
+'). Output aborted to prevent code corruption.
+Requires formatting: .\tests\ui\span\issue-24356.rs
+Requires formatting: .\tests\ui\suggestions\issue-79843-impl-trait-with-missing-bounds-on-async-fn.rs
+Error formatting .\tests\ui\suggestions\issue-94171.rs: Safety Gate Failed: Token #9 mismatch! (Expected '`
+//~^^ ERROR mismatched closing delimiter
+//~^^ ERROR unknown start of token
+//~ ERROR this file contains an unclosed delimiter
+', Got '`
+//~^^ ERROR mismatched closing delimiter
+//~^^ ERROR unknown start of token
+//~ ERROR this file contains an unclosed delimiter
+
+'). Output aborted to prevent code corruption.
+Requires formatting: .\tests\ui\suggestions\lifetimes\type-param-missing-lifetime.rs
+Requires formatting: .\tests\ui\tuple\index-float.rs
+Error formatting .\tests\ui\typeck\issue-92481.rs: Safety Gate Failed: Significant token count mismatch! (Original: 25, Formatted: 27). Output aborted to prevent code corruption.
+Failed file paths recorded to 'b:\Rust\remaining_failed.txt'. Use 'lafs format failed' to retry.
