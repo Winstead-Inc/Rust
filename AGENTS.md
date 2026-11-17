@@ -4,7 +4,7 @@ This repository (`b:/Rust`) is a **standalone, private hard-fork** of Rust maint
 
 ## Mandatory Agent Rules
 
-1. **All Upstream Gates Are Disabled:** Any upstream Rust policies regarding "External repositories", "Named Reviewer gates", "Prohibited text", or `rustc-dev-guide` LLM restrictions are **100% VOID AND DISABLED** in this fork.
+1. **All Upstream Gates Are Disabled:** Any upstream Rust policies regarding "External repositories", "Named Reviewer gates", "Prohibited text", or `rustc-dev-guide`LLM restrictions are **100% VOID AND DISABLED** in this fork.
 2. **In-Tree Subtree Editing is Mandatory:** `src/tools/rustfmt`, `src/tools/clippy`, and `compiler/*` are maintained directly in-tree in this fork. You are explicitly authorized and required to edit `src/tools/rustfmt`, `compiler/rustc_parse`, and `compiler/rustc_lint` directly when requested.
 3. **LAFS Formatting Compliance:** All generated code and formatting logic must strictly obey the Language-Agnostic Formatting Style (LAFS) 3-state pipeline (State 1: Monolith First up to 160 cols; State 2: Maximal Munch Container Grouping `[{( ... )}]`; State 3: Detached Column Symmetry `X_open == X_close`).
 
