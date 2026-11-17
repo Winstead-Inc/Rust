@@ -1,7 +1,8 @@
 // Special typescript project file, used by eslint only.
 {
     "extends": "./tsconfig.json",
-    "include": [
+    "include":
+    [
         // repeated from base config's "include" setting
         "src",
         "tests",

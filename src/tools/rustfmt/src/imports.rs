@@ -1057,7 +1057,9 @@ fn rewrite_nested_use_tree(context: &RewriteContext<'_>, use_tree_list: &[UseTre
     let result = if (list_str.contains('\n') || list_str.len() > remaining_width || tactic == DefinitiveListTactic::Vertical)
         && context.config.imports_indent() == IndentStyle::Block
     {
-        format!("{{\n{}{}\n{}}}", nested_shape.indent.to_string(context.config), list_str, shape.indent.to_string(context.config))
+        let base_indent = shape.indent.to_string(context.config);
+        let nested_indent = nested_shape.indent.to_string(context.config);
+        format!("\n{base_indent}{{\n{nested_indent}{list_str}\n{base_indent}}}")
     }
     else
     {

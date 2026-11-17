@@ -8,11 +8,11 @@
                 {
                     "children":
                     [{
-                        "license": { "copyright": ["The Rust Project Developers (see https://thanks.rust-lang.org)"],"spdx": "Apache-2.0 OR MIT" },
+                        "license": { "copyright": ["The Rust Project Developers (see https://thanks.rust-lang.org)"], "spdx": "Apache-2.0 OR MIT" },
                         "name": "mod.rs",
                         "type": "file"
                     }],
-                    "license": { "copyright": ["1991-2024 Unicode, Inc"],"spdx": "Unicode-3.0" },
+                    "license": { "copyright": ["1991-2024 Unicode, Inc"], "spdx": "Unicode-3.0" },
                     "name": "library/core/src/unicode",
                     "type": "directory"
                 },
@@ -26,7 +26,7 @@
                                 [{
                                     "directories": [],
                                     "files": ["analyzer-decls.h", "malloc-macro.h", "sarif-path-role.h"],
-                                    "license": { "copyright": ["2000-2024 Free Software Foundation, Inc"],"spdx": "GPL-2.0-only" },
+                                    "license": { "copyright": ["2000-2024 Free Software Foundation, Inc"], "spdx": "GPL-2.0-only" },
                                     "type": "group"
                                 }],
                                 "license":
@@ -37,17 +37,17 @@
                                 "name": "c-c++-common/analyzer",
                                 "type": "directory"
                             }],
-                            "license": { "copyright": ["2000-2024 Free Software Foundation, Inc"],"spdx": "GPL-2.0-only" },
+                            "license": { "copyright": ["2000-2024 Free Software Foundation, Inc"], "spdx": "GPL-2.0-only" },
                             "name": "gcc/testsuite",
                             "type": "directory"
                         },
                         {
-                            "license": { "copyright": ["2000-2024 Free Software Foundation, Inc"],"spdx": "GCC-exception-3.1" },
+                            "license": { "copyright": ["2000-2024 Free Software Foundation, Inc"], "spdx": "GCC-exception-3.1" },
                             "name": "libstdc++-v3/config/os/aix/os_defines.h",
                             "type": "file"
                         }
                     ],
-                    "license": { "copyright": ["1997-2024 Free Software Foundation, Inc"],"spdx": "GPL-3.0-or-later" },
+                    "license": { "copyright": ["1997-2024 Free Software Foundation, Inc"], "spdx": "GPL-3.0-or-later" },
                     "name": "src/gcc",
                     "type": "directory"
                 },
@@ -55,11 +55,11 @@
                     "children":
                     [
                         {
-                            "license": { "copyright": ["The Rust Project Developers (see https://thanks.rust-lang.org)"],"spdx": "Apache-2.0 OR MIT" },
+                            "license": { "copyright": ["The Rust Project Developers (see https://thanks.rust-lang.org)"], "spdx": "Apache-2.0 OR MIT" },
                             "name": "noscript.css",
                             "type": "file"
                         },
-                        { "license": { "copyright": ["Nicolas Gallagher and Jonathan Neal"],"spdx": "MIT" },"name": "normalize.css", "type": "file" }
+                        { "license": { "copyright": ["Nicolas Gallagher and Jonathan Neal"], "spdx": "MIT" }, "name": "normalize.css", "type": "file" }
                     ],
                     "license":
                     {
@@ -73,7 +73,7 @@
                     "children":
                     [
                         {
-                            "license": { "copyright": ["The Rust Project Developers (see https://thanks.rust-lang.org)"],"spdx": "Apache-2.0 OR MIT" },
+                            "license": { "copyright": ["The Rust Project Developers (see https://thanks.rust-lang.org)"], "spdx": "Apache-2.0 OR MIT" },
                             "name": "README.txt",
                             "type": "file"
                         },
@@ -89,17 +89,17 @@
                                 "FiraSans-MediumItalic.woff2",
                                 "FiraSans-Regular.woff2"
                             ],
-                            "license": { "copyright": ["2014, Mozilla Foundation", "2014, Telefonica S.A"],"spdx": "OFL-1.1" },
+                            "license": { "copyright": ["2014, Mozilla Foundation", "2014, Telefonica S.A"], "spdx": "OFL-1.1" },
                             "type": "group"
                         },
                         {
                             "directories": [],
                             "files": ["NanumBarunGothic-LICENSE.txt", "NanumBarunGothic.ttf.woff2"],
-                            "license": { "copyright": ["2010 NAVER Corporation"],"spdx": "OFL-1.1" },
+                            "license": { "copyright": ["2010 NAVER Corporation"], "spdx": "OFL-1.1" },
                             "type": "group"
                         }
                     ],
-                    "license": { "copyright": ["2010, 2012, 2014-2023, Adobe Systems Incorporated"],"spdx": "OFL-1.1" },
+                    "license": { "copyright": ["2010, 2012, 2014-2023, Adobe Systems Incorporated"], "spdx": "OFL-1.1" },
                     "name": "src/librustdoc/html/static/fonts",
                     "type": "directory"
                 },
@@ -114,13 +114,13 @@
                 },
                 {
                     "children": [],
-                    "license": { "copyright": ["2014 Alex Crichton", "The Rust Project Developers (see https://thanks.rust-lang.org)"],"spdx": "Apache-2.0 OR MIT" },
+                    "license": { "copyright": ["2014 Alex Crichton", "The Rust Project Developers (see https://thanks.rust-lang.org)"], "spdx": "Apache-2.0 OR MIT" },
                     "name": "library/backtrace",
                     "type": "directory"
                 },
                 {
                     "children": [],
-                    "license": { "copyright": ["2019 The Crossbeam Project Developers", "The Rust Project Developers (see https://thanks.rust-lang.org)"],"spdx": "Apache-2.0 OR MIT" },
+                    "license": { "copyright": ["2019 The Crossbeam Project Developers", "The Rust Project Developers (see https://thanks.rust-lang.org)"], "spdx": "Apache-2.0 OR MIT" },
                     "name": "library/std/src/sync/mpmc",
                     "type": "directory"
                 },
@@ -145,11 +145,11 @@
                 },
                 {
                     "children": [],
-                    "license": { "copyright": ["2014 Jorge Aparicio", "The Rust Project Developers (see https://thanks.rust-lang.org)"],"spdx": "Apache-2.0 OR MIT" },
+                    "license": { "copyright": ["2014 Jorge Aparicio", "The Rust Project Developers (see https://thanks.rust-lang.org)"], "spdx": "Apache-2.0 OR MIT" },
                     "name": "src/doc/rust-by-example",
                     "type": "directory"
                 },
-                { "license": { "copyright": ["2014-2021 Knut Sveidqvist"],"spdx": "MIT" },"name": "src/doc/rustc-dev-guide/mermaid.min.js", "type": "file" },
+                { "license": { "copyright": ["2014-2021 Knut Sveidqvist"], "spdx": "MIT" }, "name": "src/doc/rustc-dev-guide/mermaid.min.js", "type": "file" },
                 {
                     "children": [],
                     "license":
@@ -166,7 +166,7 @@
                     "type": "directory"
                 }
             ],
-            "license": { "copyright": ["The Rust Project Developers (see https://thanks.rust-lang.org)"],"spdx": "Apache-2.0 OR MIT" },
+            "license": { "copyright": ["The Rust Project Developers (see https://thanks.rust-lang.org)"], "spdx": "Apache-2.0 OR MIT" },
             "name": ".",
             "type": "directory"
         }],

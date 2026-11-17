@@ -9,4 +9,3 @@
     "linker": "rust-lld",
     "executables": true
 }
-
