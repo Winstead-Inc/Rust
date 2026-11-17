@@ -39,10 +39,17 @@ impl GitInfo
         if ! dir.join(".git").exists() { match read_commit_info_file(dir) { Some(info) => return GitInfo::RecordedForTarball(info), None => return GitInfo::Absent, } }
 
         let mut git_command = helpers::git(Some(dir));
-        git_command.arg("rev-parse");
+        git_command.arg("rev-parse").arg("HEAD").run_in_dry_run();
         let output = git_command.allow_failure().run_capture( & exec_ctx);
 
-        if output.is_failure() { return GitInfo::Absent; }
+        if output.is_failure() || output.stdout_if_present().as_deref().unwrap_or("").trim().is_empty()
+        {
+            match read_commit_info_file(dir)
+            {
+                Some(info) => return GitInfo::RecordedForTarball(info),
+                None => return GitInfo::Absent,
+            }
+        }
 
         // If we're ignoring the git info, we don't actually need to collect it, just make sure this
         // was a git repo in the first place.
