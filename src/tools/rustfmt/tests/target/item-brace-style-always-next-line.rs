@@ -24,7 +24,8 @@ mod M
         A,
     }
 
-    struct B<T>
+    struct B
+    <T>
     where
         T: Copy,
     {
@@ -36,7 +37,8 @@ mod M
     where
         T: Copy, {}
 
-    struct D<T>
+    struct D
+    <T>
     where
         T: Copy, {}
 }
@@ -55,17 +57,6 @@ where
 
 trait Trait3<T>
 where
-    T: Something
-        + SomethingElse
-        + Sync
-        + Send
-        + Display
-        + Debug
-        + Copy
-        + Hash
-        + Debug
-        + Display
-        + Write
-        + Read,
+    T: Something + SomethingElse + Sync + Send + Display + Debug + Copy + Hash + Debug + Display + Write + Read,
 {
 }

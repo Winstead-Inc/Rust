@@ -1,3 +1,4 @@
-pub fn fn_in_bar() {
+pub fn fn_in_bar()
+{
     println!("foo/bar.rs");
 }

@@ -3,7 +3,8 @@
 
 fn lorem() -> usize { 42 }
 
-fn lorem() -> usize {
+fn lorem() -> usize
+{
     let ipsum = 42;
     ipsum
 }

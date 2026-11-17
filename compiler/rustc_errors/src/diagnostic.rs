@@ -732,20 +732,25 @@ fn sanitize_lafs_suggestion(snippet: &mut String)
             continue;
         }
 
-        // Case 3: Any line ending with " {" (anti-hugging rule)
-        if trimmed.ends_with('{') && !trimmed.ends_with("{{")
+        // Case 3: "} else"
+        if trimmed == "} else"
+        {
+            new_lines.push(format!("{indent}}}"));
+            new_lines.push(format!("{indent}else"));
+            changed = true;
+            continue;
+        }
+
+        // Case 4: Any line ending with '{' (anti-hugging rule)
+        if trimmed.ends_with('{') && !trimmed.ends_with("{{") && !trimmed.ends_with("'{'")
         {
             let before_brace = trimmed[..trimmed.len() - 1].trim_end();
-            if !before_brace.is_empty()
+            if !before_brace.is_empty() && !before_brace.ends_with('"') && !before_brace.ends_with('\'')
             {
-                let char_before = trimmed.as_bytes().get(trimmed.len().saturating_sub(2));
-                if matches!(char_before, Some(b' ' | b'\t' | b')' | b'>' | b'|'))
-                {
-                    new_lines.push(format!("{indent}{before_brace}"));
-                    new_lines.push(format!("{indent}{{"));
-                    changed = true;
-                    continue;
-                }
+                new_lines.push(format!("{indent}{before_brace}"));
+                new_lines.push(format!("{indent}{{"));
+                changed = true;
+                continue;
             }
         }
 

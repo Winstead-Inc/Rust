@@ -3,12 +3,13 @@
 // rustfmt-tab_spaces: 2
 
 // #1427
-fn main() {
-  exceptaions::config(move || {
-    (
-      NmiConfig {},
-      HardFaultConfig {},
-      SysTickConfig { gpio_sbsrr },
-    )
-  });
+fn main()
+{
+  exceptaions::config
+  (
+    move ||
+  {
+    (NmiConfig {}, HardFaultConfig {}, SysTickConfig { gpio_sbsrr })
+  }
+  );
 }

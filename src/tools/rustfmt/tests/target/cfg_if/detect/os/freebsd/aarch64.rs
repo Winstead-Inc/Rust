@@ -5,14 +5,17 @@ use crate::detect::{cache, Feature};
 
 /// Performs run-time feature detection.
 #[inline]
-pub fn check_for(x: Feature) -> bool {
+pub fn check_for(x: Feature) -> bool
+{
     cache::test(x as u32, detect_features)
 }
 
 #[cfg(test)]
-mod tests {
+mod tests
+{
     #[test]
-    fn dump() {
+    fn dump()
+    {
         println!("asimd: {:?}", is_aarch64_feature_detected!("asimd"));
         println!("pmull: {:?}", is_aarch64_feature_detected!("pmull"));
         println!("fp: {:?}", is_aarch64_feature_detected!("fp"));

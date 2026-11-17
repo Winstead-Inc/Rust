@@ -1,11 +1,13 @@
-fn main() {
+fn main()
+{
     #[cfg(debug_assertions)]
     {
         println!("DEBUG");
     }
 }
 
-fn main() {
+fn main()
+{
     #[cfg(feature = "foo")]
     {
         /*
@@ -14,12 +16,14 @@ fn main() {
     }
 }
 
-fn main() {
+fn main()
+{
     #[cfg(feature = "foo")]
     { /* let foo = 0; */ }
 }
 
-fn main() {
+fn main()
+{
     #[foo]
     #[bar]
     #[baz]

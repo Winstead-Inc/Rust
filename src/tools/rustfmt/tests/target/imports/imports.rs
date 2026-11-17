@@ -3,12 +3,8 @@
 // Imports.
 
 // Long import.
-use exceedingly::loooooooooooooooooooooooooooooooooooooooooooooooooooooooong::import::path::{
-    ItemA, ItemB,
-};
-use exceedingly::looooooooooooooooooooooooooooooooooooooooooooooooooooooooooong::import::path::{
-    ItemA, ItemB,
-};
+use exceedingly::loooooooooooooooooooooooooooooooooooooooooooooooooooooooong::import::path::{ItemA, ItemB};
+use exceedingly::looooooooooooooooooooooooooooooooooooooooooooooooooooooooooong::import::path::{ItemA, ItemB};
 use rustc_ast::ast::{ItemDefaultImpl, ItemForeignMod, ItemImpl, ItemMac, ItemMod, ItemStatic};
 
 use list::{
@@ -30,19 +26,18 @@ use {Bar /* comment */, /* Pre-comment! */ Foo};
 use std::io;
 use std::io::{self};
 
-mod Foo {
-    pub use rustc_ast::ast::{
-        ItemDefaultImpl, ItemForeignMod, ItemImpl, ItemMac, ItemMod, ItemStatic,
-    };
+mod Foo
+{
+    pub use rustc_ast::ast::{ItemDefaultImpl, ItemForeignMod, ItemImpl, ItemMac, ItemMod, ItemStatic};
 
-    mod Foo2 {
-        pub use rustc_ast::ast::{
-            self, ItemDefaultImpl, ItemForeignMod, ItemImpl, ItemMac, ItemMod, ItemStatic,
-        };
+    mod Foo2
+    {
+        pub use rustc_ast::ast::{self, ItemDefaultImpl, ItemForeignMod, ItemImpl, ItemMac, ItemMod, ItemStatic};
     }
 }
 
-fn test() {
+fn test()
+{
     use Baz::*;
     use Qux;
 }
@@ -89,10 +84,7 @@ use foo::{
 };
 
 use fooo::{
-    baar::foobar::{
-        xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx, yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy,
-        zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz,
-    },
+    baar::foobar::{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx, yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy, zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz},
     bar,
     bar::*,
     x, y, z,
@@ -126,4 +118,4 @@ use std::f64::consts::{E, PI, SQRT_2};
 
 // #3273
 #[rustfmt::skip]
-use std::fmt::{self, {Display, Formatter}};
+use std::fmt:: { self, { Display, Formatter } };

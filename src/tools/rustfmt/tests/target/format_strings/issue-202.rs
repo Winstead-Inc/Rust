@@ -1,7 +1,8 @@
 // rustfmt-format_strings: true
 
 #[test]
-fn compile_empty_program() {
+fn compile_empty_program()
+{
     let result = get_result();
     let expected = "; ModuleID = \'foo\'
 

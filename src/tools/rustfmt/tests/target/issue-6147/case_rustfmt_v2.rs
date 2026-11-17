@@ -1,8 +1,10 @@
 // rustfmt-style_edition: 2024
 
-pub fn main() {
+pub fn main()
+{
     let a = Some(12);
-    match a {
+    match a
+    {
         #![attr1]
         #![attr2]
         #![attr3]
@@ -10,7 +12,8 @@ pub fn main() {
     }
 
     {
-        match a {
+        match a
+        {
             #![attr1]
             #![attr2]
             #![attr3]

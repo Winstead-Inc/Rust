@@ -1,4 +1,5 @@
-fn main() {
+fn main()
+{
     let expected = "; ModuleID = \'foo\'
 
 ; Function Attrs: nounwind

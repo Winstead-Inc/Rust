@@ -1,3 +1,4 @@
-fn main() {
+fn main()
+{
     println!("{:?}", -1. ..1.);
 }

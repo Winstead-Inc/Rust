@@ -1,30 +1,43 @@
 // FIXME(calebcartwright) - Hopefully one day we can
 // elide these redundant semis like we do in other contexts.
-fn redundant_item_semis() {
-    impl Foo {
-        fn get(&self) -> usize {
+fn redundant_item_semis()
+{
+    impl Foo
+    {
+        fn get(&self) -> usize
+        {
             5
         }
     };
 
-    impl Bar {
-        fn get(&self) -> usize {
+    impl Bar
+    {
+        fn get(&self) -> usize
+        {
             5
         }
-    } /*asdfsf*/
+    }
+
+    /*asdfsf*/
     ;
 
-    impl Baz {
-        fn get(&self) -> usize {
+    impl Baz
+    {
+        fn get(&self) -> usize
+        {
             5
         }
-    } /*asdfsf*/
+    }
+
+    /*asdfsf*/
 
     // why would someone do this
     ;
 
-    impl Qux {
-        fn get(&self) -> usize {
+    impl Qux
+    {
+        fn get(&self) -> usize
+        {
             5
         }
     }
@@ -32,11 +45,14 @@ fn redundant_item_semis() {
     // why
     ;
 
-    impl Lorem {
-        fn get(&self) -> usize {
+    impl Lorem
+    {
+        fn get(&self) -> usize
+        {
             5
         }
     }
+
     // oh why
     ;
 }

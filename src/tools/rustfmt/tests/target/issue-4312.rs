@@ -1,5 +1,6 @@
 // issue 4312
-fn main() {
+fn main()
+{
     /* " */
     println!("Hello, world!");
     /* abc " */
@@ -7,16 +8,16 @@ fn main() {
     /* " abc */
     println!("Hello, world!");
     let y = 4;
-    let x = match 1 + y == 3 {
+    let x = match 1 + y == 3
+    {
         True => 3,
-        False => 4,
-        /* " unreachable */
+        False => 4, /* " unreachable */
     };
 }
 
 // issue 4806
-enum X {
+enum X
+{
     A,
-    B,
-    /*"*/
+    B, /*"*/
 }

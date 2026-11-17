@@ -1,3 +1,4 @@
-fn foo() -> &str {
+fn foo() -> &str
+{
     "foo"
 }

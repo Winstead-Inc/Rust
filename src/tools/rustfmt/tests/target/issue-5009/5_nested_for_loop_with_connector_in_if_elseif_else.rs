@@ -1,4 +1,5 @@
-fn main() {
+fn main()
+{
     let in_ = false;
 
     for variable_in_x /* ... */ in 0..1 {

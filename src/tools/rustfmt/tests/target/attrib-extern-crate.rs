@@ -7,7 +7,8 @@ extern crate Bar;
 extern crate Baz;
 extern crate Foo;
 
-fn foo() {
+fn foo()
+{
     #[Attr1]
     extern crate Bar;
     #[Attr2]

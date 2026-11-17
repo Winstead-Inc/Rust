@@ -2,7 +2,8 @@
 // See #2526.
 
 // comment comment comment comment comment comment comment comment comment comment comment comment comment
-fn foo() -> F<'a> {
+fn foo() -> F<'a>
+{
     bar()
 }
 // comment comment comment comment comment comment comment comment comment comment comment comment comment

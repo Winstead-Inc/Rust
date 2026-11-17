@@ -9,7 +9,8 @@ use r#foo as r#alias_foo;
 // https://github.com/rust-lang/rustfmt/issues/3837
 pub(crate) static r#break: &'static str = "foo";
 
-fn main() {
+fn main()
+{
     #[r#attr]
     r#foo::r#bar();
 
@@ -19,32 +20,39 @@ fn main() {
     let r#async = r#foo(r#local);
     r#macro!();
 
-    if let r#sub_pat @ r#Foo(_) = r#Foo(3) {}
+    if let r#sub_pat @ r#Foo(_) = r#Foo(3)
+    {}
 
-    match r#async {
+    match r#async
+    {
         r#Foo | r#Bar => r#foo(),
     }
 }
 
 fn r#bar<'a, r#T>(r#x: &'a r#T) {}
 
-mod r#foo {
+mod r#foo
+{
     pub fn r#bar() {}
 }
 
-enum r#Foo {
+enum r#Foo
+{
     r#Bar {},
 }
 
-struct r#Struct {
+struct r#Struct
+{
     r#field: r#FieldType,
 }
 
-trait r#Trait {
+trait r#Trait
+{
     type r#Type;
 }
 
-impl r#Trait for r#Impl {
+impl r#Trait for r#Impl
+{
     type r#Type = r#u32;
     fn r#xxx(r#fjio: r#u32) {}
 }
@@ -54,12 +62,15 @@ extern "C" {
     static r#static_val: u32;
 }
 
-macro_rules! r#macro {
+macro_rules! r#macro
+{
     () => {};
 }
 
-macro_rules! foo {
-    ($x:expr) => {
+macro_rules! foo
+{
+    ($x:expr) =>
+    {
         let r#catch = $x + 1;
         println!("{}", r#catch);
     };

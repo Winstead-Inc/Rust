@@ -21,7 +21,8 @@
 /// Lorem ipsum dolor sit amet.
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
-pub struct BufferAttr {
+pub struct BufferAttr
+{
     /* NOTE: Blah blah blah blah blah. */
     /// Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
     /// ut labore et dolore magna aliqua. Morbi quis commodo odio aenean sed adipiscing. Nunc

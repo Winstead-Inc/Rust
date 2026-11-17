@@ -13,7 +13,8 @@
 //! ```rust
 //! let x = 3;
 //! some_macro!(
-//!     pub fn foo() {
+//!     pub fn foo()
+//!     {
 //!         println!("Don't unindent me!");
 //!     }
 //! );

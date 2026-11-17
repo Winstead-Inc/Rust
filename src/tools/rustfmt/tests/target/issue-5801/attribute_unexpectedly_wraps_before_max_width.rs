@@ -1,7 +1,9 @@
 // rustfmt-config: issue-5801-v1.toml
 
-pub enum Severity {
-    #[something(
+pub enum Severity
+{
+    #[something
+    (
         AAAAAAAAAAAAA,
         BBBBBBBBBBBBBB,
         CCCCCCCCCCCCCCCC,

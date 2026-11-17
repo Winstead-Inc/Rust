@@ -1,4 +1,5 @@
-fn f(
+fn f
+(
     xxxxxxxxxxxxxxxxxx: fn(a, b, b) -> a,
     xxxxxxxxxxxxxxxxxx: fn() -> a,
     xxxxxxxxxxxxxxxxxx: fn(a, b, b),

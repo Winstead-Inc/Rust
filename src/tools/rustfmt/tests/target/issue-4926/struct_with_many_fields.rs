@@ -1,6 +1,7 @@
 // rustfmt-struct_field_align_threshold: 30
 
-struct X {
+struct X
+{
     a: i32,
     b: i32,
     c: i32,
@@ -14,21 +15,7 @@ struct X {
     k: i32,
 }
 
-fn test(x: X) {
-    let y = matches!(
-        x,
-        X {
-            a: 1_000,
-            b: 1_000,
-            c: 1_000,
-            d: 1_000,
-            e: 1_000,
-            f: 1_000,
-            g: 1_000,
-            h: 1_000,
-            i: 1_000,
-            j: 1_000,
-            ..
-        }
-    );
+fn test(x: X)
+{
+    let y = matches!(x, X { a: 1_000, b: 1_000, c: 1_000, d: 1_000, e: 1_000, f: 1_000, g: 1_000, h: 1_000, i: 1_000, j: 1_000, .. });
 }

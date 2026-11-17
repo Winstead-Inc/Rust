@@ -1,16 +1,23 @@
 // rustfmt-wrap_comments: true
 
-pub mod a_long_name {
-    pub mod b_long_name {
-        pub mod c_long_name {
-            pub mod d_long_name {
-                pub mod e_long_name {
+pub mod a_long_name
+{
+    pub mod b_long_name
+    {
+        pub mod c_long_name
+        {
+            pub mod d_long_name
+            {
+                pub mod e_long_name
+                {
                     pub struct Bananas;
-                    impl Bananas {
+                    impl Bananas
+                    {
                         pub fn fantastic() {}
                     }
 
-                    pub mod f_long_name {
+                    pub mod f_long_name
+                    {
                         pub struct Apples;
                     }
                 }

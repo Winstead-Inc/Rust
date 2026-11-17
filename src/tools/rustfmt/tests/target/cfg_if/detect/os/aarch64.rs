@@ -21,12 +21,15 @@ use crate::detect::{cache, Feature};
 /// Try to read the features from the system registers.
 ///
 /// This will cause SIGILL if the current OS is not trapping the mrs instruction.
-pub(crate) fn detect_features() -> cache::Initializer {
+pub(crate) fn detect_features() -> cache::Initializer
+{
     let mut value = cache::Initializer::default();
 
     {
-        let mut enable_feature = |f, enable| {
-            if enable {
+        let mut enable_feature = |f, enable|
+        {
+            if enable
+            {
                 value.set(f as u32);
             }
         };
@@ -34,7 +37,7 @@ pub(crate) fn detect_features() -> cache::Initializer {
         // ID_AA64ISAR0_EL1 - Instruction Set Attribute Register 0
         let aa64isar0: u64;
         unsafe {
-            asm!("mrs $0, ID_AA64ISAR0_EL1" : "=r"(aa64isar0));
+            asm ! ("mrs $0, ID_AA64ISAR0_EL1": "=r"(aa64isar0));
         }
 
         let aes = bits_shift(aa64isar0, 7, 4) >= 1;
@@ -50,7 +53,7 @@ pub(crate) fn detect_features() -> cache::Initializer {
         // ID_AA64PFR0_EL1 - Processor Feature Register 0
         let aa64pfr0: u64;
         unsafe {
-            asm!("mrs $0, ID_AA64PFR0_EL1" : "=r"(aa64pfr0));
+            asm ! ("mrs $0, ID_AA64PFR0_EL1": "=r"(aa64pfr0));
         }
 
         let fp = bits_shift(aa64pfr0, 19, 16) < 0xF;
@@ -64,16 +67,13 @@ pub(crate) fn detect_features() -> cache::Initializer {
         enable_feature(Feature::asimd, fp && asimd && (!fphp | asimdhp));
         // SIMD extensions require SIMD support:
         enable_feature(Feature::rdm, asimd && bits_shift(aa64isar0, 31, 28) >= 1);
-        enable_feature(
-            Feature::dotprod,
-            asimd && bits_shift(aa64isar0, 47, 44) >= 1,
-        );
+        enable_feature(Feature::dotprod, asimd && bits_shift(aa64isar0, 47, 44) >= 1);
         enable_feature(Feature::sve, asimd && bits_shift(aa64pfr0, 35, 32) >= 1);
 
         // ID_AA64ISAR1_EL1 - Instruction Set Attribute Register 1
         let aa64isar1: u64;
         unsafe {
-            asm!("mrs $0, ID_AA64ISAR1_EL1" : "=r"(aa64isar1));
+            asm ! ("mrs $0, ID_AA64ISAR1_EL1": "=r"(aa64isar1));
         }
 
         enable_feature(Feature::rcpc, bits_shift(aa64isar1, 23, 20) >= 1);
@@ -83,6 +83,7 @@ pub(crate) fn detect_features() -> cache::Initializer {
 }
 
 #[inline]
-fn bits_shift(x: u64, high: usize, low: usize) -> u64 {
+fn bits_shift(x: u64, high: usize, low: usize) -> u64
+{
     (x >> low) & ((1 << (high - low + 1)) - 1)
 }

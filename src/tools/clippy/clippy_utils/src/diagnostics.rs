@@ -348,6 +348,82 @@ pub fn span_lint_hir_and_then
     );
 }
 
+/// Formats a suggestion string to adhere to the Language-Agnostic Formatting Style (LAFS).
+///
+/// Single-line suggestions remain untouched as State 1 Monoliths.
+/// Multiline suggestions have their boundaries decoupled according to pure LAFS Symmetry
+/// (Anti-Hugging Law: opening and closing delimiters detached onto dedicated lines).
+pub fn to_lafs_suggestion(sugg: &str) -> String
+{
+    if !sugg.contains('\n')
+    {
+        return sugg.to_string();
+    }
+
+    let mut new_lines = Vec::new();
+
+    for line in sugg.lines()
+    {
+        let trimmed = line.trim();
+        if trimmed == "{" || trimmed.is_empty()
+        {
+            new_lines.push(line.to_string());
+            continue;
+        }
+
+        let indent_len = line.chars().take_while(|c| c.is_whitespace()).count();
+        let indent = &line[..indent_len];
+
+        // Case 1: "} else {"
+        if trimmed == "} else {"
+        {
+            new_lines.push(format!("{indent}}}"));
+            new_lines.push(format!("{indent}else"));
+            new_lines.push(format!("{indent}{{"));
+            continue;
+        }
+
+        // Case 2: "} else if ... {"
+        if trimmed.starts_with("} else if ") && trimmed.ends_with('{')
+        {
+            let if_part = &trimmed[2..trimmed.len() - 1].trim();
+            new_lines.push(format!("{indent}}}"));
+            new_lines.push(format!("{indent}{if_part}"));
+            new_lines.push(format!("{indent}{{"));
+            continue;
+        }
+
+        // Case 3: "} else"
+        if trimmed == "} else"
+        {
+            new_lines.push(format!("{indent}}}"));
+            new_lines.push(format!("{indent}else"));
+            continue;
+        }
+
+        // Case 4: Any line ending with '{' (Anti-Hugging Rule)
+        if trimmed.ends_with('{') && !trimmed.ends_with("{{") && !trimmed.ends_with("'{'")
+        {
+            let before = trimmed[..trimmed.len() - 1].trim_end();
+            if !before.is_empty() && !before.ends_with('"') && !before.ends_with('\'')
+            {
+                new_lines.push(format!("{indent}{before}"));
+                new_lines.push(format!("{indent}{{"));
+                continue;
+            }
+        }
+
+        new_lines.push(line.to_string());
+    }
+
+    let mut result = new_lines.join("\n");
+    if sugg.ends_with('\n')
+    {
+        result.push('\n');
+    }
+    result
+}
+
 /// Add a span lint with a suggestion on how to fix it.
 ///
 /// These suggestions can be parsed by rustfix to allow it to automatically fix your code.
@@ -393,6 +469,7 @@ pub fn span_lint_and_sugg<T: LintContext>
     applicability: Applicability,
 )
 {
+    let sugg = to_lafs_suggestion(&sugg);
     span_lint_and_then
     (
         cx, lint, sp, msg.into(), | diag |

@@ -1,5 +1,7 @@
-fn main() {
-    println!(
+fn main()
+{
+    println!
+    (
         "{}", // comment
         111
     );

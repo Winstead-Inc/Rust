@@ -1,41 +1,53 @@
 // rustfmt-use_small_heuristics: Off
 
-enum Lorem {
+enum Lorem
+{
     Ipsum,
     Dolor(bool),
-    Sit {
+    Sit
+    {
         amet: Consectetur,
         adipiscing: Elit,
     },
 }
 
-fn main() {
+fn main()
+{
     lorem("lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing");
 
-    let lorem = Lorem {
+    let lorem = Lorem
+    {
         ipsum: dolor,
         sit: amet,
     };
 
-    let lorem = if ipsum {
+    let lorem = if ipsum
+    {
         dolor
-    } else {
+    }
+    else
+    {
         sit
     };
 }
 
-fn format_let_else() {
-    let Some(a) = opt else {};
+fn format_let_else()
+{
+    let Some(a) = opt else
+    {};
 
-    let Some(b) = opt else {
+    let Some(b) = opt else
+    {
         return;
     };
 
-    let Some(c) = opt else {
+    let Some(c) = opt else
+    {
         return;
     };
 
-    let Some(d) = some_very_very_very_very_long_name else {
+    let Some(d) = some_very_very_very_very_long_name else
+    {
         return;
     };
 }

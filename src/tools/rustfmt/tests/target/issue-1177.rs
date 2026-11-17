@@ -1,5 +1,6 @@
 // rustfmt-normalize_comments: true
-fn main() {
+fn main()
+{
     // Line Comment
     // Block Comment
 

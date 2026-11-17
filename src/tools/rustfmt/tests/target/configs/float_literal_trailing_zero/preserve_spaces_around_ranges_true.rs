@@ -1,7 +1,8 @@
 // rustfmt-float_literal_trailing_zero: Preserve
 // rustfmt-spaces_around_ranges: true
 
-fn float_literals() {
+fn float_literals()
+{
     let a = 0.;
     let b = 0.0;
     let c = 100.;
@@ -23,14 +24,19 @@ fn float_literals() {
     let s = 1_000_.000_000;
 }
 
-fn range_bounds() {
-    if (1. .. 2.0).contains(&1.0) {}
-    if (1.1 .. 2.2).contains(&1.1) {}
-    if (1.0e1 .. 2.0e1).contains(&1.0e1) {}
+fn range_bounds()
+{
+    if (1. .. 2.0).contains(&1.0)
+    {}
+    if (1.1 .. 2.2).contains(&1.1)
+    {}
+    if (1.0e1 .. 2.0e1).contains(&1.0e1)
+    {}
     let _binop_range = 3.0 / 2.0 .. 4.0;
 }
 
-fn method_calls() {
+fn method_calls()
+{
     let x = 1.0.neg();
     let y = 2.3.neg();
     let z = (4.).neg();
@@ -38,7 +44,4 @@ fn method_calls() {
     let v = -6.0.neg();
 }
 
-fn pattern_in_function_parameters_exactly_max_width_before_zero___(
-    2. .. 10.0: std::ops::Range<f32>,
-) {
-}
+fn pattern_in_function_parameters_exactly_max_width_before_zero___(2. .. 10.0: std::ops::Range<f32>) {}

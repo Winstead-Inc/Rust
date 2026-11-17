@@ -1,14 +1,14 @@
-use std::fmt:: { self, Display };
+use std::fmt::{self, Display};
 
 /// Convert special characters into XML entities.
 /// This is needed for checkstyle output.
-pub (super) struct XmlEscaped<'a>(pub (super) & 'a str);
+pub(super) struct XmlEscaped<'a>(pub(super) &'a str);
 
-impl <'a> Display for XmlEscaped<'a>
+impl<'a> Display for XmlEscaped<'a>
 {
-    fn fmt( & self, formatter: & mut fmt::Formatter<'_>) -> fmt::Result
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result
     {
-        for char in self.0 .chars()
+        for char in self.0.chars()
         {
             match char
             {
@@ -18,8 +18,7 @@ impl <'a> Display for XmlEscaped<'a>
                 '\'' => write!(formatter, "&apos;"),
                 '&' => write!(formatter, "&amp;"),
                 _ => write!(formatter, "{char}"),
-            }
-            ?;
+            }?;
         }
 
         Ok(())
@@ -29,12 +28,15 @@ impl <'a> Display for XmlEscaped<'a>
 #[cfg(test)]
 mod tests
 {
-    use super:: * ;
+    use super::*;
 
-   #[test]
-    fn special_characters_are_escaped() { assert_eq ! ("&lt;&gt;&quot;&apos;&amp;", format ! ("{}", XmlEscaped(r#"<>"'&"#)),); }
+    #[test]
+    fn special_characters_are_escaped()
+    {
+        assert_eq!("&lt;&gt;&quot;&apos;&amp;", format!("{}", XmlEscaped(r#"<>"'&"#)),);
+    }
 
-   #[test]
+    #[test]
     fn special_characters_are_escaped_in_string_with_other_characters()
     {
         assert_eq!
@@ -44,10 +46,10 @@ mod tests
         );
     }
 
-   #[test]
+    #[test]
     fn other_characters_are_not_escaped()
     {
         let string = "The quick brown 🦊 jumps over the lazy 🐶";
-        assert_eq!(string, format ! ("{}", XmlEscaped(string)));
+        assert_eq!(string, format!("{}", XmlEscaped(string)));
     }
 }

@@ -5,24 +5,28 @@ use foo;
 // バー
 use bar;
 
-impl MyStruct {
+impl MyStruct
+{
     // コメント
     fn f1() {} // こんにちは
     fn f2() {} // ありがとう
                // コメント
 }
 
-trait MyTrait {
+trait MyTrait
+{
     // コメント
     fn f1() {} // こんにちは
     fn f2() {} // ありがとう
                // コメント
 }
 
-fn main() {
+fn main()
+{
     // コメント
     let x = 1; // Ｘ
-    println!(
+    println!
+    (
         "x = {}", // xの値
         x,        // Ｘ
     );

@@ -1,5 +1,3 @@
-
-
 // Test that newlines at the top of this file are preserved when they're not
 // in the --file-lines range.
 

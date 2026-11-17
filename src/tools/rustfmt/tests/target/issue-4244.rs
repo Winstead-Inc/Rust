@@ -10,7 +10,8 @@ pub type C
     /* Comment C */
     = SS;
 
-pub trait D<T> {
+pub trait D<T>
+{
     type E /* Comment E */ = SS;
 }
 

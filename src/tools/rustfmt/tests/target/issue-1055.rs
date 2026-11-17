@@ -1,3 +1,4 @@
-fn issue_1055() {
+fn issue_1055()
+{
     let foo = (|| {})();
 }

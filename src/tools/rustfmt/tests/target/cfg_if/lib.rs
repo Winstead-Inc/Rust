@@ -24,21 +24,17 @@
 #[macro_use]
 extern crate cfg_if;
 
-cfg_if! {
-    if #[cfg(feature = "std_detect_file_io")] {
-        #[cfg_attr(test, macro_use(println))]
+cfg_if!
+{
+    if #[cfg(feature = "std_detect_file_io")]
+    {
+       #[cfg_attr(test, macro_use(println))]
         extern crate std;
 
-        #[allow(unused_imports)]
-        use std::{arch, fs, io, mem, sync};
-    } else {
-        #[cfg(test)]
-        #[macro_use(println)]
-        extern crate std;
-
-        #[allow(unused_imports)]
-        use core::{arch, mem, sync};
+       #[allow(unused_imports)]
+        use std:: { arch, fs, io, mem, sync };
     }
+    else {#[cfg(test)]#[macro_use(println)] extern crate std;#[allow(unused_imports)] use core:: { arch, mem, sync }; }
 }
 
 #[cfg(feature = "std_detect_dlsym_getauxval")]

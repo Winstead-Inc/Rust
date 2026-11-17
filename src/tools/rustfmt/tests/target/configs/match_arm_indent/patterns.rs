@@ -1,7 +1,9 @@
 // rustfmt-match_arm_indent: false
 
-fn multiple() {
-    match body.kind {
+fn multiple()
+{
+    match body.kind
+    {
     // We do not allow `if` to stay on the same line, since we could easily mistake
     // `pat => if cond { ... }` and `pat if cond => { ... }`.
     ast::ExprKind::If(..) => false,

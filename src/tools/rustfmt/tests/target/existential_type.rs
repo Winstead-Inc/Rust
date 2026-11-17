@@ -10,7 +10,8 @@ where
 
 pub type Adderrr<T> = impl Fn(T) -> T;
 
-impl Foo for Bar {
+impl Foo for Bar
+{
     type E = impl Trait;
 }
 

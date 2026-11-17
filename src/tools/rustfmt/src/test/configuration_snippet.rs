@@ -1,15 +1,15 @@
-use std::collections:: { HashMap, HashSet };
+use std::collections::{HashMap, HashSet};
 use std::fs;
-use std::io:: { BufRead, BufReader, Write };
+use std::io::{BufRead, BufReader, Write};
 use std::iter::Enumerate;
-use std::path:: { Path, PathBuf };
+use std::path::{Path, PathBuf};
 
-use super:: { DIFF_CONTEXT_SIZE, print_mismatches, write_message };
-use crate::config:: { Config, EmitMode, Verbosity };
-use crate::rustfmt_diff:: { Mismatch, make_diff };
-use crate:: { Input, Session };
+use super::{DIFF_CONTEXT_SIZE, print_mismatches, write_message};
+use crate::config::{Config, EmitMode, Verbosity};
+use crate::rustfmt_diff::{Mismatch, make_diff};
+use crate::{Input, Session};
 
-const CONFIGURATIONS_FILE_NAME: & str = "Configurations.md";
+const CONFIGURATIONS_FILE_NAME: &str = "Configurations.md";
 
 // This enum is used to represent one of three text features in Configurations.md: a block of code
 // with its starting line number, the name of a rustfmt configuration option, or the value of a
@@ -23,7 +23,7 @@ enum ConfigurationSection
 
 impl ConfigurationSection
 {
-    fn get_section < I: Iterator < Item = String >> (file: & mut Enumerate<I>,) -> Option<ConfigurationSection>
+    fn get_section<I: Iterator<Item = String>>(file: &mut Enumerate<I>) -> Option<ConfigurationSection>
     {
         let config_name_regex = static_regex!(r"^## `([^`]+)`");
         // Configuration values, which will be passed to `from_str`:
@@ -41,10 +41,7 @@ impl ConfigurationSection
                     if line.starts_with("```rust")
                     {
                         // Get the lines of the code block.
-                        let lines: Vec < String > = file
-                       .map( | (_i, l) | l)
-                       .take_while( | l | ! l.starts_with("```"))
-                       .collect();
+                        let lines: Vec<String> = file.map(|(_i, l)| l).take_while(|l| !l.starts_with("```")).collect();
                         let block = format!("{}\n", lines.join("\n"));
 
                         // +1 to translate to one-based indexing
@@ -53,13 +50,13 @@ impl ConfigurationSection
 
                         return Some(ConfigurationSection::CodeBlock((block, start_line)));
                     }
-                    else if let Some(c) = config_name_regex.captures( & line)
+                    else if let Some(c) = config_name_regex.captures(&line)
                     {
-                        return Some(ConfigurationSection::ConfigName(String::from( & c[1])));
+                        return Some(ConfigurationSection::ConfigName(String::from(&c[1])));
                     }
-                    else if let Some(c) = config_value_regex.captures( & line)
+                    else if let Some(c) = config_value_regex.captures(&line)
                     {
-                        return Some(ConfigurationSection::ConfigValue(String::from( & c[1])));
+                        return Some(ConfigurationSection::ConfigValue(String::from(&c[1])));
                     }
                 }
                 None => return None, // reached the end of the file
@@ -70,34 +67,50 @@ impl ConfigurationSection
 
 // This struct stores the information about code blocks in the configurations
 // file, formats the code blocks, and prints formatting errors.
-struct ConfigCodeBlock { config_name: Option<String>, config_value: Option<String>, code_block: Option<String>, code_block_start: Option<u32>, }
+struct ConfigCodeBlock
+{
+    config_name: Option<String>,
+    config_value: Option<String>,
+    code_block: Option<String>,
+    code_block_start: Option<u32>,
+}
 
 impl ConfigCodeBlock
 {
-    fn new () -> ConfigCodeBlock { ConfigCodeBlock { config_name: None, config_value: None, code_block: None, code_block_start: None, } }
+    fn new() -> ConfigCodeBlock
+    {
+        ConfigCodeBlock { config_name: None, config_value: None, code_block: None, code_block_start: None }
+    }
 
-    fn set_config_name( & mut self, name: Option<String>) { self.config_name = name; self.config_value = None; }
+    fn set_config_name(&mut self, name: Option<String>)
+    {
+        self.config_name = name;
+        self.config_value = None;
+    }
 
-    fn set_config_value( & mut self, value: Option<String>) { self.config_value = value; }
+    fn set_config_value(&mut self, value: Option<String>)
+    {
+        self.config_value = value;
+    }
 
-    fn set_code_block( & mut self, code_block: String, code_block_start: u32)
+    fn set_code_block(&mut self, code_block: String, code_block_start: u32)
     {
         self.code_block = Some(code_block);
         self.code_block_start = Some(code_block_start);
     }
 
-    fn get_block_config( & self) -> Config
+    fn get_block_config(&self) -> Config
     {
-        let mut config = Config:: default();
-        config. set().verbose(Verbosity::Quiet);
+        let mut config = Config::default();
+        config.set().verbose(Verbosity::Quiet);
         if self.config_name.is_some() && self.config_value.is_some()
         {
-            config.override_value(self.config_name.as_ref().unwrap(), self.config_value.as_ref().unwrap(),);
+            config.override_value(self.config_name.as_ref().unwrap(), self.config_value.as_ref().unwrap());
         }
         config
     }
 
-    fn code_block_valid( & self) -> bool
+    fn code_block_valid(&self) -> bool
     {
         // We never expect to not have a code block.
         assert!(self.code_block.is_some() && self.code_block_start.is_some());
@@ -105,44 +118,51 @@ impl ConfigCodeBlock
         // See if code block begins with #![rustfmt::skip].
         let fmt_skip = self.fmt_skip();
 
-        if self.config_name.is_none() && ! fmt_skip
+        if self.config_name.is_none() && !fmt_skip
         {
-            write_message( & format ! ("No configuration name for {}:{}", CONFIGURATIONS_FILE_NAME, self.code_block_start.unwrap()));
+            write_message(&format!("No configuration name for {}:{}", CONFIGURATIONS_FILE_NAME, self.code_block_start.unwrap()));
             return false;
         }
-        if self.config_value.is_none() && ! fmt_skip
+        if self.config_value.is_none() && !fmt_skip
         {
-            write_message( & format ! ("No configuration value for {}:{}", CONFIGURATIONS_FILE_NAME, self.code_block_start.unwrap()));
+            write_message(&format!("No configuration value for {}:{}", CONFIGURATIONS_FILE_NAME, self.code_block_start.unwrap()));
             return false;
         }
         true
     }
 
     /// True if the code block starts with #![rustfmt::skip]
-    fn fmt_skip( & self) -> bool { self.code_block.as_ref().unwrap().lines().nth(0).unwrap_or("") == "#![rustfmt::skip]" }
+    fn fmt_skip(&self) -> bool
+    {
+        self.code_block.as_ref().unwrap().lines().nth(0).unwrap_or("") == "#![rustfmt::skip]"
+    }
 
-    fn has_parsing_errors<T: Write>( & self, session: & Session<'_, T>) -> bool
+    fn has_parsing_errors<T: Write>(&self, session: &Session<'_, T>) -> bool
     {
         if session.has_parsing_errors()
         {
-            write_message( & format ! ("\u{261d}\u{1f3fd} Cannot format {}:{}", CONFIGURATIONS_FILE_NAME, self.code_block_start.unwrap()));
+            write_message(&format!("\u{261d}\u{1f3fd} Cannot format {}:{}", CONFIGURATIONS_FILE_NAME, self.code_block_start.unwrap()));
             return true;
         }
 
         false
     }
 
-    fn print_diff( & self, compare: Vec<Mismatch>)
+    fn print_diff(&self, compare: Vec<Mismatch>)
     {
-        let mut mismatches = HashMap:: new ();
+        let mut mismatches = HashMap::new();
         mismatches.insert(PathBuf::from(CONFIGURATIONS_FILE_NAME), compare);
-        print_mismatches(mismatches, | line_num | { format ! ("\nMismatch at {}:{}:", CONFIGURATIONS_FILE_NAME, line_num + self.code_block_start.unwrap() - 1) });
+        print_mismatches(mismatches, |line_num| { format!("\nMismatch at {}:{}:", CONFIGURATIONS_FILE_NAME, line_num + self.code_block_start.unwrap() - 1) });
     }
 
-    fn formatted_has_diff( & self, text: & str) -> bool
+    fn formatted_has_diff(&self, text: &str) -> bool
     {
         let compare = make_diff(self.code_block.as_ref().unwrap(), text, DIFF_CONTEXT_SIZE);
-        if ! compare.is_empty() { self.print_diff(compare); return true; }
+        if !compare.is_empty()
+        {
+            self.print_diff(compare);
+            return true;
+        }
 
         false
     }
@@ -150,23 +170,52 @@ impl ConfigCodeBlock
     // Return a bool indicating if formatting this code block is an idempotent
     // operation. This function also triggers printing any formatting failure
     // messages.
-    fn formatted_is_idempotent( & self) -> bool
+    fn formatted_is_idempotent(&self) -> bool
     {
         // Verify that we have all of the expected information.
-        if ! self.code_block_valid() { return false; }
+        if !self.code_block_valid()
+        {
+            return false;
+        }
 
         let input = Input::Text(self.code_block.as_ref().unwrap().to_owned());
         let mut config = self.get_block_config();
-        config. set().emit_mode(EmitMode::Stdout);
-        let mut buf: Vec < u8 > = vec![];
+        config.set().emit_mode(EmitMode::Stdout);
+        let mut buf: Vec<u8> = vec![];
 
         {
-            let mut session = Session:: new (config, Some( & mut buf));
+            let mut session = Session::new(config, Some(&mut buf));
             session.format(input).unwrap();
-            if self.has_parsing_errors( & session) { return false; }
+            if self.has_parsing_errors(&session)
+            {
+                return false;
+            }
         }
 
-        ! self.formatted_has_diff( & String::from_utf8(buf).unwrap())
+        !self.formatted_has_diff(&String::from_utf8(buf).unwrap())
+    }
+
+    fn format_snippet(&self) -> Option<String>
+    {
+        if !self.code_block_valid() || self.fmt_skip()
+        {
+            return None;
+        }
+        let input = Input::Text(self.code_block.as_ref().unwrap().to_owned());
+        let mut config = self.get_block_config();
+        config.set().emit_mode(EmitMode::Stdout);
+        let mut buf: Vec<u8> = vec![];
+
+        {
+            let mut session = Session::new(config, Some(&mut buf));
+            session.format(input).ok()?;
+            if self.has_parsing_errors(&session)
+            {
+                return None;
+            }
+        }
+
+        String::from_utf8(buf).ok()
     }
 
     // Extract a code block from the iterator. Behavior:
@@ -178,23 +227,30 @@ impl ConfigCodeBlock
     //   "## `NAME`".
     // - Configuration values in Configurations.md must be in the form of
     //   "#### `VALUE`".
-    fn extract < I: Iterator < Item = String >> (file: & mut Enumerate<I>, prev: Option< & ConfigCodeBlock>, hash_set: & mut HashSet<String>,) -> Option<ConfigCodeBlock>
+    fn extract<I: Iterator<Item = String>>(file: &mut Enumerate<I>, prev: Option<&ConfigCodeBlock>, hash_set: &mut HashSet<String>) -> Option<ConfigCodeBlock>
     {
-        let mut code_block = ConfigCodeBlock:: new ();
-        code_block.config_name = prev.and_then( | cb | cb.config_name.clone());
+        let mut code_block = ConfigCodeBlock::new();
+        code_block.config_name = prev.and_then(|cb| cb.config_name.clone());
 
         loop
         {
             match ConfigurationSection::get_section(file)
             {
-                Some(ConfigurationSection::CodeBlock((block, start_line))) => { code_block.set_code_block(block, start_line); break ; }
+                Some(ConfigurationSection::CodeBlock((block, start_line))) =>
+                {
+                    code_block.set_code_block(block, start_line);
+                    break;
+                }
                 Some(ConfigurationSection::ConfigName(name)) =>
                 {
-                    assert!(Config::is_valid_name( & name), "an unknown configuration option was found: {name}");
-                    assert!(hash_set.remove( & name), "multiple configuration guides found for option {name}");
+                    assert!(Config::is_valid_name(&name), "an unknown configuration option was found: {name}");
+                    assert!(hash_set.remove(&name), "multiple configuration guides found for option {name}");
                     code_block.set_config_name(Some(name));
                 }
-                Some(ConfigurationSection::ConfigValue(value)) => { code_block.set_config_value(Some(value)); }
+                Some(ConfigurationSection::ConfigValue(value)) =>
+                {
+                    code_block.set_config_value(Some(value));
+                }
                 None => return None, // end of file was reached
             }
         }
@@ -207,12 +263,59 @@ impl ConfigCodeBlock
 fn configuration_snippet_tests()
 {
     super::init_log();
-    let blocks = get_code_blocks();
-    let failures = blocks
-   .iter()
-   .filter( | block | ! block.fmt_skip())
-   .map(ConfigCodeBlock::formatted_is_idempotent)
-   .fold(0, | acc, r | acc + ( ! r as u32));
+    let mut blocks = get_code_blocks();
+
+    if std::env::var_os("RUSTC_BLESS").is_some_and(|v| v != "0")
+    {
+        let file = fs::File::open(CONFIGURATIONS_FILE_NAME).unwrap();
+        let reader = BufReader::new(file);
+        let mut new_content = String::new();
+        let mut in_rust_block = false;
+        let mut block_idx = 0;
+
+        for line in reader.lines().map(Result::unwrap)
+        {
+            if in_rust_block
+            {
+                if line.starts_with("```")
+                {
+                    in_rust_block = false;
+                    new_content.push_str(&line);
+                    new_content.push('\n');
+                }
+                continue;
+            }
+
+            if line.starts_with("```rust")
+            {
+                in_rust_block = true;
+                new_content.push_str(&line);
+                new_content.push('\n');
+                if block_idx < blocks.len()
+                {
+                    let block = &blocks[block_idx];
+                    block_idx += 1;
+                    if let Some(formatted) = block.format_snippet()
+                    {
+                        new_content.push_str(&formatted);
+                    }
+                    else
+                    {
+                        new_content.push_str(block.code_block.as_ref().unwrap());
+                    }
+                }
+                continue;
+            }
+
+            new_content.push_str(&line);
+            new_content.push('\n');
+        }
+
+        fs::write(CONFIGURATIONS_FILE_NAME, new_content).unwrap();
+        blocks = get_code_blocks();
+    }
+
+    let failures = blocks.iter().filter(|block| !block.fmt_skip()).map(ConfigCodeBlock::formatted_is_idempotent).fold(0, |acc, r| acc + (!r as u32));
 
     // Display results.
     println!("Ran {} configurations tests.", blocks.len());
@@ -223,17 +326,26 @@ fn configuration_snippet_tests()
 // entry for each Rust code block found.
 fn get_code_blocks() -> Vec<ConfigCodeBlock>
 {
-    let mut file_iter = BufReader:: new (fs::File::open(Path::new (CONFIGURATIONS_FILE_NAME)).unwrap_or_else( | _ | panic ! ("couldn't read file {}", CONFIGURATIONS_FILE_NAME)),)
-   .lines()
-   .map(Result::unwrap)
-   .enumerate();
-    let mut code_blocks: Vec < ConfigCodeBlock > = Vec:: new ();
+    let mut file_iter =
+        BufReader::new(fs::File::open(Path::new(CONFIGURATIONS_FILE_NAME)).unwrap_or_else(|_| panic!("couldn't read file {}", CONFIGURATIONS_FILE_NAME)))
+            .lines()
+            .map(Result::unwrap)
+            .enumerate();
+    let mut code_blocks: Vec<ConfigCodeBlock> = Vec::new();
     let mut hash_set = Config::hash_set();
 
-    while let Some(cb) = ConfigCodeBlock::extract( & mut file_iter, code_blocks.last(), & mut hash_set)
-    { code_blocks.push(cb); }
+    while let Some(cb) = ConfigCodeBlock::extract(&mut file_iter, code_blocks.last(), &mut hash_set)
+    {
+        code_blocks.push(cb);
+    }
 
-    for name in hash_set { if ! Config::is_hidden_option( & name) { panic ! ("{name} does not have a configuration guide"); } }
+    for name in hash_set
+    {
+        if !Config::is_hidden_option(&name)
+        {
+            panic!("{name} does not have a configuration guide");
+        }
+    }
 
     code_blocks
 }
@@ -242,18 +354,17 @@ fn get_code_blocks() -> Vec<ConfigCodeBlock>
 fn check_unstable_option_tracking_issue_numbers()
 {
     // Ensure that tracking issue links point to the correct issue number
-    let tracking_issue =
-    regex::Regex:: new (r"\(tracking issue: \[#(?P<number>\d+)\]\((?P<link>\S+)\)\)")
-   .expect("failed creating configuration pattern");
+    let tracking_issue = regex::Regex::new(r"\(tracking issue: \[#(?P<number>\d+)\]\((?P<link>\S+)\)\)").expect("failed creating configuration pattern");
 
-    let lines = BufReader:: new (fs::File::open(Path::new (CONFIGURATIONS_FILE_NAME)).unwrap_or_else( | _ | panic ! ("couldn't read file {}", CONFIGURATIONS_FILE_NAME)),)
-   .lines()
-   .map(Result::unwrap)
-   .enumerate();
+    let lines =
+        BufReader::new(fs::File::open(Path::new(CONFIGURATIONS_FILE_NAME)).unwrap_or_else(|_| panic!("couldn't read file {}", CONFIGURATIONS_FILE_NAME)))
+            .lines()
+            .map(Result::unwrap)
+            .enumerate();
 
     for (idx, line) in lines
     {
-        if let Some(capture) = tracking_issue.captures( & line)
+        if let Some(capture) = tracking_issue.captures(&line)
         {
             let number = capture.name("number").unwrap().as_str();
             let link = capture.name("link").unwrap().as_str();

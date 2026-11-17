@@ -4,16 +4,13 @@
 #[macro_export]
 #[unstable(feature = "stdsimd", issue = "27731")]
 #[allow_internal_unstable(stdsimd_internal, stdsimd)]
-macro_rules! is_mips64_feature_detected {
-    ("msa") => {
-        cfg!(target_feature = "msa") || $crate::detect::check_for($crate::detect::Feature::msa)
-    };
-    ($t:tt,) => {
-        is_mips64_feature_detected!($t);
-    };
-    ($t:tt) => {
-        compile_error!(concat!("unknown mips64 target feature: ", $t))
-    };
+macro_rules! is_mips64_feature_detected
+{
+    ("msa") => { cfg!(target_feature = "msa") || $crate::detect::check_for($crate::detect::Feature::msa) };
+
+    ($t: tt,) => { is_mips64_feature_detected!($t); };
+
+    ($t: tt) => { compile_error!(concat!("unknown mips64 target feature: ", $t)) };
 }
 
 /// MIPS64 CPU Feature enum. Each variant denotes a position in a bitset
@@ -24,7 +21,8 @@ macro_rules! is_mips64_feature_detected {
 #[allow(non_camel_case_types)]
 #[repr(u8)]
 #[unstable(feature = "stdsimd_internal", issue = "0")]
-pub enum Feature {
+pub enum Feature
+{
     /// MIPS SIMD Architecture (MSA)
     msa,
 }

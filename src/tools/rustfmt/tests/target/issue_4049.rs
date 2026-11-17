@@ -5,7 +5,8 @@
 // rustfmt-overflow_delimited_expr: true
 
 // https://github.com/rust-lang/rustfmt/issues/4049
-fn foo() {
+fn foo()
+{
 	{
 		{
 			if let Some(MpcEv::PlayDrum(pitch, vel)) =

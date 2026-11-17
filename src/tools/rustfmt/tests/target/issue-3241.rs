@@ -6,6 +6,7 @@ use ::ignore::some::more;
 use ::*;
 use ::{bar, foo};
 
-fn main() {
+fn main()
+{
     println!("Hello, world!");
 }

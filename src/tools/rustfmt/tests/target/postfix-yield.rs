@@ -6,12 +6,11 @@
 use std::ops::{Coroutine, CoroutineState};
 use std::pin::pin;
 
-fn main() {
-    let mut coro = pin!(
+fn main()
+{
+    let mut coro = pin!
+    (
         #[coroutine]
-        |_: i32| {
-            let x = 1.yield;
-            (x + 2).await;
-        }
+        |_: i32| { let x = 1.yield; (x + 2).await; }
     );
 }

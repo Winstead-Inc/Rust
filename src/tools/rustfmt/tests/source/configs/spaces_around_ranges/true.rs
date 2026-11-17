@@ -21,8 +21,8 @@ fn half_open()
     if let..5 = 0 {}
     // For now `.. .5` fails parsing with `float literals must have an integer part`
     if let..0.5 = 0 {}
-    if let 5..= 0 {}
-    if let 5. ..= 0 {}
+    if let 5.. = 0 {}
+    if let 5. .. = 0 {}
 }
 
 fn pattern_in_function_parameters_exactly_max_width_before_space__(2. ..10.: std::ops::Range<f32>) {}

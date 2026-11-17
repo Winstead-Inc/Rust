@@ -2,7 +2,8 @@
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "PascalCase")]
-struct AuditLog1 {
+struct AuditLog1
+{
     creation_time:                     String,
     id:                                String,
     operation:                         String,
@@ -25,7 +26,8 @@ struct AuditLog1 {
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "PascalCase")]
-struct AuditLog2 {
+struct AuditLog2
+{
     creation_time:                     String,
     id:                                String,
     operation:                         String,

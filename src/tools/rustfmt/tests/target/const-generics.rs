@@ -8,7 +8,8 @@ const WHERECLAUSE: i32 = 0
 where
     i32:;
 
-trait Foo {
+trait Foo
+{
     const GENERIC<N, const M: usize>: i32;
 
     const WHERECLAUSE: i32
@@ -16,7 +17,8 @@ trait Foo {
         i32:;
 }
 
-impl Foo for () {
+impl Foo for ()
+{
     const GENERIC<N, const M: usize>: i32 = 0;
 
     const WHERECLAUSE: i32 = 0

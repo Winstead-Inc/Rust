@@ -9,7 +9,8 @@ fn foo(a: u8) -> u8
 }
 
 // Case with 2 variables and some pre-comments.
-fn foo(
+fn foo
+(
     a: u8, // Comment 1
     b: u8, // Comment 2
 ) -> u8
@@ -18,7 +19,8 @@ fn foo(
 }
 
 // Case with 2 variables and some post-comments.
-fn foo(
+fn foo
+(
     // Comment 1
     a: u8,
     // Comment 2
@@ -31,6 +33,5 @@ fn foo(
 trait Test
 {
     fn foo(a: u8) {}
-
     fn bar(a: u8) -> String {}
 }

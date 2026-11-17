@@ -1,22 +1,12 @@
 // Test different indents.
 
-fn foo(
-    a: Aaaaaaaaaaaaaaa,
-    b: Bbbbbbbbbbbbbbbb,
-    c: Ccccccccccccccccc,
-    d: Ddddddddddddddddddddddddd,
-    e: Eeeeeeeeeeeeeeeeeee,
-) {
+fn foo(a: Aaaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbbbb, c: Ccccccccccccccccc, d: Ddddddddddddddddddddddddd, e: Eeeeeeeeeeeeeeeeeee)
+{
     foo();
 }
 
-fn bar<
-    'a: 'bbbbbbbbbbbbbbbbbbbbbbbbbbb,
-    TTTTTTTTTTTTT,
-    UUUUUUUUUUUUUUUUUUUU: WWWWWWWWWWWWWWWWWWWWWWWW,
->(
-    a: Aaaaaaaaaaaaaaa,
-) {
+fn bar<'a: 'bbbbbbbbbbbbbbbbbbbbbbbbbbb, TTTTTTTTTTTTT, UUUUUUUUUUUUUUUUUUUU: WWWWWWWWWWWWWWWWWWWWWWWW>(a: Aaaaaaaaaaaaaaa)
+{
     bar();
 }
 
@@ -37,25 +27,15 @@ where
     baz();
 }
 
-impl Foo {
-    fn foo(
-        self,
-        a: Aaaaaaaaaaaaaaa,
-        b: Bbbbbbbbbbbbbbbb,
-        c: Ccccccccccccccccc,
-        d: Ddddddddddddddddddddddddd,
-        e: Eeeeeeeeeeeeeeeeeee,
-    ) {
+impl Foo
+{
+    fn foo(self, a: Aaaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbbbb, c: Ccccccccccccccccc, d: Ddddddddddddddddddddddddd, e: Eeeeeeeeeeeeeeeeeee)
+    {
         foo();
     }
 
-    fn bar<
-        'a: 'bbbbbbbbbbbbbbbbbbbbbbbbbbb,
-        TTTTTTTTTTTTT,
-        UUUUUUUUUUUUUUUUUUUU: WWWWWWWWWWWWWWWWWWWWWWWW,
-    >(
-        a: Aaaaaaaaaaaaaaa,
-    ) {
+    fn bar<'a: 'bbbbbbbbbbbbbbbbbbbbbbbbbbb, TTTTTTTTTTTTT, UUUUUUUUUUUUUUUUUUUU: WWWWWWWWWWWWWWWWWWWWWWWW>(a: Aaaaaaaaaaaaaaa)
+    {
         bar();
     }
 
@@ -67,11 +47,8 @@ impl Foo {
     }
 }
 
-struct Foo<
-    TTTTTTTTTTTTTTTTTTTTTTTTTTTT,
-    UUUUUUUUUUUUUUUUUUUUUU,
-    VVVVVVVVVVVVVVVVVVVVVVVVVVV,
-    WWWWWWWWWWWWWWWWWWWWWWWW,
-> {
+struct Foo
+<TTTTTTTTTTTTTTTTTTTTTTTTTTTT, UUUUUUUUUUUUUUUUUUUUUU, VVVVVVVVVVVVVVVVVVVVVVVVVVV, WWWWWWWWWWWWWWWWWWWWWWWW>
+{
     foo: Foo,
 }

@@ -4,9 +4,11 @@ use a;
 use b;
 use c;
 use d;
+
 // The previous line has a space after the `use a;`
 
-mod a {
+mod a
+{
     use a;
     use b;
     use c;

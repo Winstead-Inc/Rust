@@ -4,8 +4,10 @@ use {
     std::io,
 };
 
-mod foo {
-    pub mod bar {}
+mod foo
+{
+    pub mod bar
+    {}
 }
 
 fn main() {}

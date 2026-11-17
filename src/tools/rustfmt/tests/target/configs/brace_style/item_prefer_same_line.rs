@@ -1,11 +1,13 @@
 // rustfmt-brace_style: PreferSameLine
 // Item brace style
 
-struct Lorem {
+struct Lorem
+{
     ipsum: bool,
 }
 
-struct Dolor<T>
+struct Dolor
+<T>
 where
     T: Eq, {
     sit: T,

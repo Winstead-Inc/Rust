@@ -1,7 +1,8 @@
 // rustfmt-trailing_semicolon: false
 
 fn foo() {}
-fn main() {
+fn main()
+{
     return;
     foo()
 }

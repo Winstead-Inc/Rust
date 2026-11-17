@@ -6,9 +6,11 @@ use a::{a, b, c, d, e, f, g};
 use a::b;
 use a::{c, d};
 
+use a::{c, d, e};
+
 #[doc(hidden)]
 use a::b;
-use a::{c, d, e};
+use a::d;
 
 use foo::{a, b, c};
 pub use foo::{bar, foobar};
@@ -27,8 +29,17 @@ use j::a::{self};
 use k::{a, b, c, d};
 use l::{a, b, c, d};
 
+use b::{d, e, r};
+use b::{
+    f::g,
+    h::{i, j}, /* After b::h group */
+};
+use b::{
+    /* Before b::l group */ l::{self, m, n::o, p::*},
+    q,
+};
+// After b::r
 use b::q::{self /* After b::q::self */};
-use b::r; // After b::r
 use b::s::{
     a,
     b, // After b::s::b
@@ -46,14 +57,6 @@ use b::v::{
     b,
 };
 use b::{
-    c, d, e,
+    c,
     u::{a, b},
-};
-use b::{
-    f::g,
-    h::{i, j}, /* After b::h group */
-};
-use b::{
-    /* Before b::l group */ l::{self, m, n::o, p::*},
-    q,
 };

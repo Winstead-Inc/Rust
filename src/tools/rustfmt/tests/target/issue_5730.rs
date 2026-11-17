@@ -1,3 +1,4 @@
-macro_rules! statement {
+macro_rules! statement
+{
     () => {};
 }

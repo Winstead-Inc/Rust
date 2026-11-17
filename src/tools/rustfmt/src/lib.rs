@@ -26,7 +26,7 @@ use std::cell::RefCell;
 use std::cmp::min;
 use std::collections::HashMap;
 use std::fmt;
-use std::io:: { self, Write };
+use std::io::{self, Write};
 use std::mem;
 use std::panic;
 use std::path::PathBuf;
@@ -38,42 +38,45 @@ use thiserror::Error;
 
 use crate::comment::LineClasses;
 use crate::emitter::Emitter;
-use crate::formatting:: { FormatErrorMap, FormattingError, ReportedErrors, SourceFile };
+use crate::formatting::{FormatErrorMap, FormattingError, ReportedErrors, SourceFile};
 use crate::modules::ModuleResolutionError;
 use crate::parse::parser::DirectoryOwnership;
 use crate::shape::Indent;
 use crate::utils::indent_next_line;
 
-pub use crate::config:: { CliOptions, Color, Config, Edition, EmitMode, FileLines, FileName, NewlineStyle, Range, StyleEdition, Verbosity, Version, load_config, };
+pub use crate::config::{
+    CliOptions, Color, Config, Edition, EmitMode, FileLines, FileName, NewlineStyle, Range, StyleEdition, Verbosity, Version, load_config,
+};
 
-pub use crate::format_report_formatter:: { FormatReportFormatter, FormatReportFormatterBuilder };
+pub use crate::format_report_formatter::{FormatReportFormatter, FormatReportFormatterBuilder};
 
-pub use crate::rustfmt_diff:: { ModifiedChunk, ModifiedLines };
+pub use crate::rustfmt_diff::{ModifiedChunk, ModifiedLines};
 
 #[macro_use]
 mod utils;
 
 macro_rules! static_regex
 {
-    ($re: literal)
-    =>
-    {{
-        static RE: ::std::sync::OnceLock <::regex::Regex > =::std::sync::OnceLock:: new ();
-        RE.get_or_init( ||::regex::Regex::new ($re).unwrap())
-    }};
+    ($re: literal) =>
+    {
+    {
+        static RE: ::std::sync::OnceLock<::regex::Regex> = ::std::sync::OnceLock::new();
+        RE.get_or_init(|| ::regex::Regex::new($re).unwrap())
+    }
+    };
 }
 
 mod attr;
 mod chains;
 mod closures;
 mod comment;
-pub (crate) mod config;
+pub(crate) mod config;
 mod coverage;
 mod emitter;
 mod expr;
 mod format_report_formatter;
-pub (crate) mod formatting;
-pub (crate) mod header;
+pub(crate) mod formatting;
+pub(crate) mod header;
 mod ignore_path;
 mod imports;
 mod items;
@@ -81,7 +84,7 @@ mod lists;
 mod macros;
 mod matches;
 mod missed_spans;
-pub (crate) mod modules;
+pub(crate) mod modules;
 mod overflow;
 mod pairs;
 mod parse;
@@ -90,12 +93,12 @@ mod range;
 mod release_channel;
 mod reorder;
 mod rewrite;
-pub (crate) mod rustfmt_diff;
+pub(crate) mod rustfmt_diff;
 mod shape;
 mod skip;
 mod sort;
-pub (crate) mod source_file;
-pub (crate) mod source_map;
+pub(crate) mod source_file;
+pub(crate) mod source_map;
 mod spanned;
 mod stmt;
 mod string;
@@ -103,7 +106,7 @@ mod string;
 mod test;
 mod types;
 mod vertical;
-pub (crate) mod visitor;
+pub(crate) mod visitor;
 
 /// The various errors that can occur during formatting. Note that not all of
 /// these can currently be propagated to clients.
@@ -111,14 +114,11 @@ pub (crate) mod visitor;
 pub enum ErrorKind
 {
     /// Line has exceeded character limit (found, maximum).
-    #
-    [
-        error
-        (
-            "line formatted, but exceeded maximum width \
+    #[error
+    (
+        "line formatted, but exceeded maximum width \
          (maximum: {1} (see `max_width` option), found: {0})"
-        )
-    ]
+    )]
     LineOverflow(usize, usize),
     /// Line ends in whitespace.
     #[error("left behind trailing whitespace")]
@@ -150,23 +150,45 @@ pub enum ErrorKind
     InvalidGlobPattern(ignore::Error),
 }
 
-impl ErrorKind { fn is_comment( & self) -> bool { matches ! (self, ErrorKind::LostComment) } }
+impl ErrorKind
+{
+    fn is_comment(&self) -> bool
+    {
+        matches!(self, ErrorKind::LostComment)
+    }
+}
 
-impl From<io::Error> for ErrorKind { fn from(e: io::Error) -> ErrorKind { ErrorKind::IoError(e) } }
+impl From<io::Error> for ErrorKind
+{
+    fn from(e: io::Error) -> ErrorKind
+    {
+        ErrorKind::IoError(e)
+    }
+}
 
 /// Result of formatting a snippet of code along with ranges of lines that didn't get formatted,
 /// i.e., that got returned as they were originally.
 #[derive(Debug)]
-struct FormattedSnippet { snippet: String, non_formatted_ranges: Vec < (usize, usize) > , }
+struct FormattedSnippet
+{
+    snippet: String,
+    non_formatted_ranges: Vec<(usize, usize)>,
+}
 
 impl FormattedSnippet
 {
     /// In case the snippet needed to be wrapped in a function, this shifts down the ranges of
     /// non-formatted code.
-    fn unwrap_code_block( & mut self) { self.non_formatted_ranges.iter_mut().for_each( | (low, high) | { * low -= 1; * high -= 1; }); }
+    fn unwrap_code_block(&mut self)
+    {
+        self.non_formatted_ranges.iter_mut().for_each(|(low, high)| { *low -= 1; *high -= 1; });
+    }
 
     /// Returns `true` if the line n did not get formatted.
-    fn is_line_non_formatted( & self, n: usize) -> bool { self.non_formatted_ranges.iter().any( | (low, high) | * low <= n && n <= * high) }
+    fn is_line_non_formatted(&self, n: usize) -> bool
+    {
+        self.non_formatted_ranges.iter().any(|(low, high)| *low <= n && n <= *high)
+    }
 }
 
 /// Reports on any issues that occurred during a run of Rustfmt.
@@ -176,63 +198,98 @@ impl FormattedSnippet
 pub struct FormatReport
 {
     // Maps stringified file paths to their associated formatting errors.
-    internal: Rc < RefCell < (FormatErrorMap, ReportedErrors) >> ,
-    non_formatted_ranges: Vec < (usize, usize) > ,
+    internal: Rc<RefCell<(FormatErrorMap, ReportedErrors)>>,
+    non_formatted_ranges: Vec<(usize, usize)>,
 }
 
 impl FormatReport
 {
-    fn new () -> FormatReport { FormatReport { internal : Rc::new (RefCell::new ((HashMap::new (), ReportedErrors::default ()))), non_formatted_ranges: Vec::new (), } }
-
-    fn add_non_formatted_ranges( & mut self, mut ranges: Vec < (usize, usize) >) { self.non_formatted_ranges.append( & mut ranges); }
-
-    fn append( & self, f: FileName, mut v: Vec<FormattingError>)
+    fn new() -> FormatReport
     {
-        self.track_errors( & v);
-        self. internal
-       .borrow_mut()
-       .0
-        .entry(f)
-       .and_modify( | fe | fe.append( & mut v))
-       .or_insert(v);
+        FormatReport { internal: Rc::new(RefCell::new((HashMap::new(), ReportedErrors::default()))), non_formatted_ranges: Vec::new() }
     }
 
-    fn track_errors( & self, new_errors: & [FormattingError])
+    fn add_non_formatted_ranges(&mut self, mut ranges: Vec<(usize, usize)>)
     {
-        let errs = & mut self. internal.borrow_mut().1;
-        if ! new_errors.is_empty() { errs.has_formatting_errors = true; }
+        self.non_formatted_ranges.append(&mut ranges);
+    }
+
+    fn append(&self, f: FileName, mut v: Vec<FormattingError>)
+    {
+        self.track_errors(&v);
+        self.internal.borrow_mut().0.entry(f).and_modify(|fe| fe.append(&mut v)).or_insert(v);
+    }
+
+    fn track_errors(&self, new_errors: &[FormattingError])
+    {
+        let errs = &mut self.internal.borrow_mut().1;
+        if !new_errors.is_empty()
+        {
+            errs.has_formatting_errors = true;
+        }
         if errs.has_operational_errors && errs.has_check_errors && errs.has_unformatted_code_errors
-        { return ; }
+        {
+            return;
+        }
         for err in new_errors
         {
             match err.kind
             {
-                ErrorKind::LineOverflow(..) => { errs.has_operational_errors = true; }
-                ErrorKind::TrailingWhitespace => { errs.has_operational_errors = true; errs.has_unformatted_code_errors = true; }
-                ErrorKind::LostComment => { errs.has_unformatted_code_errors = true; }
-                ErrorKind::DeprecatedAttr | ErrorKind::BadAttr | ErrorKind::VersionMismatch => { errs.has_check_errors = true; }
-                _ => {}
+                ErrorKind::LineOverflow(..) =>
+                {
+                    errs.has_operational_errors = true;
+                }
+                ErrorKind::TrailingWhitespace =>
+                {
+                    errs.has_operational_errors = true;
+                    errs.has_unformatted_code_errors = true;
+                }
+                ErrorKind::LostComment =>
+                {
+                    errs.has_unformatted_code_errors = true;
+                }
+                ErrorKind::DeprecatedAttr | ErrorKind::BadAttr | ErrorKind::VersionMismatch =>
+                {
+                    errs.has_check_errors = true;
+                }
+                _ =>
+                {}
             }
         }
     }
 
-    fn add_diff( & mut self) { self.internal.borrow_mut().1 .has_diff = true; }
+    fn add_diff(&mut self)
+    {
+        self.internal.borrow_mut().1.has_diff = true;
+    }
 
-    fn add_macro_format_failure( & mut self) { self.internal.borrow_mut().1 .has_macro_format_failure = true; }
+    fn add_macro_format_failure(&mut self)
+    {
+        self.internal.borrow_mut().1.has_macro_format_failure = true;
+    }
 
-    fn add_parsing_error( & mut self) { self.internal.borrow_mut().1 .has_parsing_errors = true; }
+    fn add_parsing_error(&mut self)
+    {
+        self.internal.borrow_mut().1.has_parsing_errors = true;
+    }
 
-    fn warning_count( & self) -> usize { self.internal.borrow().0 .values().map( | errors | errors.len()).sum() }
+    fn warning_count(&self) -> usize
+    {
+        self.internal.borrow().0.values().map(|errors| errors.len()).sum()
+    }
 
     /// Whether any warnings or errors are present in the report.
-    pub fn has_warnings( & self) -> bool { self.internal.borrow().1 .has_formatting_errors }
+    pub fn has_warnings(&self) -> bool
+    {
+        self.internal.borrow().1.has_formatting_errors
+    }
 
     /// Print the report to a terminal using colours and potentially other
     /// fancy output.
     #[deprecated(note = "Use FormatReportFormatter with colors enabled instead")]
-    pub fn fancy_print( & self, mut t: Box < dyn term::Terminal < Output = io::Stderr >> ,) -> Result < (), term::Error >
+    pub fn fancy_print(&self, mut t: Box<dyn term::Terminal<Output = io::Stderr>>) -> Result<(), term::Error>
     {
-        writeln!(t, "{}", FormatReportFormatterBuilder::new (self).enable_colors(true).build())?;
+        writeln!(t, "{}", FormatReportFormatterBuilder::new(self).enable_colors(true).build())?;
         Ok(())
     }
 }
@@ -243,70 +300,81 @@ impl FormatReport
 impl fmt::Display for FormatReport
 {
     // Prints all the formatting errors.
-    fn fmt( & self, fmt: & mut fmt::Formatter<'_>) -> Result < (), fmt::Error >
+    fn fmt(&self, fmt: &mut fmt::Formatter<'_>) -> Result<(), fmt::Error>
     {
-        write!(fmt, "{}", FormatReportFormatterBuilder::new (self).build())?;
+        write!(fmt, "{}", FormatReportFormatterBuilder::new(self).build())?;
         Ok(())
     }
 }
 
 /// Format the given snippet. The snippet is expected to be *complete* code.
 /// When we cannot parse the given snippet, this function returns `None`.
-fn format_snippet(snippet: & str, config: & Config, is_macro_def: bool) -> Option<FormattedSnippet>
+fn format_snippet(snippet: &str, config: &Config, is_macro_def: bool) -> Option<FormattedSnippet>
 {
     let mut config = config.clone();
     panic::catch_unwind
     (
         ||
+    {
+        let mut out: Vec<u8> = Vec::with_capacity(snippet.len() * 2);
+        config.set().emit_mode(config::EmitMode::Stdout);
+        config.set().verbose(Verbosity::Quiet);
+        config.set().show_parse_errors(false);
+        if is_macro_def
         {
-            let mut out: Vec < u8 > = Vec::with_capacity(snippet.len() * 2);
-            config. set().emit_mode(config::EmitMode::Stdout);
-            config. set().verbose(Verbosity::Quiet);
-            config. set().show_parse_errors(false);
-            if is_macro_def { config.set ().error_on_unformatted(true); }
+            config.set().error_on_unformatted(true);
+        }
 
-            let (formatting_error, result) =
-            {
-                let input = Input::Text(snippet.into());
-                let mut session = Session:: new (config, Some( & mut out));
-                let result = session.format_input_inner(input, is_macro_def);
-                (
-                    session.errors.has_macro_format_failure
-                    || session.out.as_ref().unwrap().is_empty() && ! snippet.is_empty()
+        let (formatting_error, result) = {
+            let input = Input::Text(snippet.into());
+            let mut session = Session::new(config, Some(&mut out));
+            let result = session.format_input_inner(input, is_macro_def);
+            (
+                session.errors.has_macro_format_failure
+                    || session.out.as_ref().unwrap().is_empty() && !snippet.is_empty()
                     || result.is_err()
                     || (is_macro_def && session.has_unformatted_code_errors()),
-                    result,
-                )
-            };
-            if formatting_error { None }
-            else { String::from_utf8(out).ok().map( | snippet | FormattedSnippet { snippet, non_formatted_ranges: result.unwrap().non_formatted_ranges, }) }
+                result,
+            )
+        };
+        if formatting_error
+        {
+            None
         }
+        else
+        {
+            String::from_utf8(out).ok().map(|snippet| FormattedSnippet { snippet, non_formatted_ranges: result.unwrap().non_formatted_ranges })
+        }
+    }
     )
     // Discard panics encountered while formatting the snippet
     // The ? operator is needed to remove the extra Option
-   .ok()?
+    .ok()?
 }
 
 /// Format the given code block. Mainly targeted for code block in comment.
 /// The code block may be incomplete (i.e., parser may be unable to parse it).
 /// To avoid panic in parser, we wrap the code block with a dummy function.
 /// The returned code block does **not** end with newline.
-fn format_code_block(code_snippet: & str, config: & Config, is_macro_def: bool ,) -> Option<FormattedSnippet>
+fn format_code_block(code_snippet: &str, config: &Config, is_macro_def: bool) -> Option<FormattedSnippet>
 {
-    const FN_MAIN_PREFIX: & str = "fn main() {\n";
+    const FN_MAIN_PREFIX: &str = "fn main() {\n";
 
-    fn enclose_in_main_block(s: & str, config: & Config) -> String
+    fn enclose_in_main_block(s: &str, config: &Config) -> String
     {
         let indent = Indent::from_width(config, config.tab_spaces());
         let mut result = String::with_capacity(s.len() * 2);
         result.push_str(FN_MAIN_PREFIX);
         let mut need_indent = true;
-        for (kind, line) in LineClasses:: new (s)
+        for (kind, line) in LineClasses::new(s)
         {
-            if need_indent { result.push_str( & indent.to_string(config)); }
-            result.push_str( & line);
+            if need_indent
+            {
+                result.push_str(&indent.to_string(config));
+            }
+            result.push_str(&line);
             result.push('\n');
-            need_indent = indent_next_line(kind, & line, config);
+            need_indent = indent_next_line(kind, &line, config);
         }
         result.push('}');
         result
@@ -322,19 +390,14 @@ fn format_code_block(code_snippet: & str, config: & Config, is_macro_def: bool ,
     // not directly outputted by rustfmt command, but used by the comment formatter's input.
     // We have output-file-wide "\n" ==> "\r\n" conversion process after here if it's necessary.
     let mut config_with_unix_newline = config.clone();
-    config_with_unix_newline
-   . set()
-   .newline_style(NewlineStyle::Unix);
-    let mut formatted = format_snippet( & snippet, & config_with_unix_newline, is_macro_def)?;
+    config_with_unix_newline.set().newline_style(NewlineStyle::Unix);
+    let mut formatted = format_snippet(&snippet, &config_with_unix_newline, is_macro_def)?;
     // Remove wrapping main block
     formatted.unwrap_code_block();
 
     // Trim "fn main() {" on the first line and "}" on the last line,
     // then unindent the whole code block.
-    let block_len = formatted
-   .snippet
-   .rfind('}')
-   .unwrap_or_else( || formatted.snippet.len());
+    let block_len = formatted.snippet.rfind('}').unwrap_or_else(|| formatted.snippet.len());
 
     // It's possible that `block_len < FN_MAIN_PREFIX.len()`. This can happen if the code block was
     // formatted into the empty string, leading to the enclosing `fn main() {\n}` being formatted
@@ -343,10 +406,20 @@ fn format_code_block(code_snippet: & str, config: & Config, is_macro_def: bool ,
 
     let mut is_indented = true;
     let indent_str = Indent::from_width(config, config.tab_spaces()).to_string(config);
-    for (kind, ref line) in LineClasses:: new ( & formatted.snippet[block_start..block_len])
+    for (kind, ref line) in LineClasses::new(&formatted.snippet[block_start..block_len])
     {
-        if ! is_first { result.push('\n'); } else { is_first = false; }
-        let trimmed_line = if ! is_indented { line }
+        if !is_first
+        {
+            result.push('\n');
+        }
+        else
+        {
+            is_first = false;
+        }
+        let trimmed_line = if !is_indented
+        {
+            line
+        }
         else if line.len() > config.max_width()
         {
             // If there are lines that are larger than max width, we cannot tell
@@ -358,99 +431,159 @@ fn format_code_block(code_snippet: & str, config: & Config, is_macro_def: bool ,
         else if line.len() > indent_str.len()
         {
             // Make sure that the line has leading whitespaces.
-            if line.starts_with(indent_str.as_ref()) { let offset = if config.hard_tabs() { 1 } else { config.tab_spaces() }; & line[offset..] } else { line }
+            if line.starts_with(indent_str.as_ref())
+            {
+                let offset = if config.hard_tabs() { 1 } else { config.tab_spaces() };
+                &line[offset..]
+            }
+            else
+            {
+                line
+            }
         }
-        else { line };
+        else
+        {
+            line
+        };
         result.push_str(trimmed_line);
         is_indented = indent_next_line(kind, line, config);
     }
-    Some(FormattedSnippet { snippet: result, non_formatted_ranges: formatted.non_formatted_ranges, })
+    Some(FormattedSnippet { snippet: result, non_formatted_ranges: formatted.non_formatted_ranges })
 }
 
 /// A session is a run of rustfmt across a single or multiple inputs.
-pub struct Session<'b, T: Write> { pub config: Config, pub out: Option< & 'b mut T>, pub (crate) errors: ReportedErrors, source_file: SourceFile, emitter: Box<dyn Emitter + 'b>, }
-
-impl <'b, T: Write + 'b> Session<'b, T>
+pub struct Session
+<'b, T: Write>
 {
-    pub fn new (config: Config, mut out: Option< & 'b mut T>) -> Session<'b, T>
+    pub config: Config,
+    pub out: Option<&'b mut T>,
+    pub(crate) errors: ReportedErrors,
+    source_file: SourceFile,
+    emitter: Box<dyn Emitter + 'b>,
+}
+
+impl<'b, T: Write + 'b> Session<'b, T>
+{
+    pub fn new(config: Config, mut out: Option<&'b mut T>) -> Session<'b, T>
     {
-        let emitter = create_emitter( & config);
+        let emitter = create_emitter(&config);
 
-        if let Some(ref mut out) = out { let _ = emitter.emit_header(out); }
+        if let Some(ref mut out) = out
+        {
+            let _ = emitter.emit_header(out);
+        }
 
-        Session { config, out, emitter, errors: ReportedErrors::default (), source_file: SourceFile::new (), }
+        Session { config, out, emitter, errors: ReportedErrors::default(), source_file: SourceFile::new() }
     }
 
     /// The main entry point for Rustfmt. Formats the given input according to the
     /// given config. `out` is only necessary if required by the configuration.
-    pub fn format( & mut self, input: Input) -> Result<FormatReport, ErrorKind> { self.format_input_inner(input, false) }
-
-    pub fn override_config<F, U>( & mut self, mut config: Config, f: F) -> U
-    where
-    F: FnOnce( & mut Session<'b, T>) -> U,
+    pub fn format(&mut self, input: Input) -> Result<FormatReport, ErrorKind>
     {
-        mem::swap( & mut config, & mut self.config);
+        self.format_input_inner(input, false)
+    }
+
+    pub fn override_config<F, U>(&mut self, mut config: Config, f: F) -> U
+    where
+        F: FnOnce(&mut Session<'b, T>) -> U,
+    {
+        mem::swap(&mut config, &mut self.config);
         let result = f(self);
-        mem::swap( & mut config, & mut self.config);
+        mem::swap(&mut config, &mut self.config);
         result
     }
 
-    pub fn add_operational_error( & mut self) { self.errors.has_operational_errors = true; }
-
-    pub fn has_operational_errors( & self) -> bool { self.errors.has_operational_errors }
-
-    pub fn has_parsing_errors( & self) -> bool { self.errors.has_parsing_errors }
-
-    pub fn has_formatting_errors( & self) -> bool { self.errors.has_formatting_errors }
-
-    pub fn has_check_errors( & self) -> bool { self.errors.has_check_errors }
-
-    pub fn has_diff( & self) -> bool { self.errors.has_diff }
-
-    pub fn has_unformatted_code_errors( & self) -> bool { self.errors.has_unformatted_code_errors }
-
-    pub fn has_no_errors( & self) -> bool
+    pub fn add_operational_error(&mut self)
     {
-        !
-        (
-            self.has_operational_errors()
+        self.errors.has_operational_errors = true;
+    }
+
+    pub fn has_operational_errors(&self) -> bool
+    {
+        self.errors.has_operational_errors
+    }
+
+    pub fn has_parsing_errors(&self) -> bool
+    {
+        self.errors.has_parsing_errors
+    }
+
+    pub fn has_formatting_errors(&self) -> bool
+    {
+        self.errors.has_formatting_errors
+    }
+
+    pub fn has_check_errors(&self) -> bool
+    {
+        self.errors.has_check_errors
+    }
+
+    pub fn has_diff(&self) -> bool
+    {
+        self.errors.has_diff
+    }
+
+    pub fn has_unformatted_code_errors(&self) -> bool
+    {
+        self.errors.has_unformatted_code_errors
+    }
+
+    pub fn has_no_errors(&self) -> bool
+    {
+        !(self.has_operational_errors()
             || self.has_parsing_errors()
             || self.has_formatting_errors()
             || self.has_check_errors()
             || self.has_diff()
             || self.has_unformatted_code_errors()
-            || self.errors.has_macro_format_failure
-        )
+            || self.errors.has_macro_format_failure)
     }
 }
 
-pub (crate) fn create_emitter<'a>(config: & Config) -> Box<dyn Emitter + 'a>
+pub(crate) fn create_emitter<'a>(config: &Config) -> Box<dyn Emitter + 'a>
 {
     match config.emit_mode()
     {
-        EmitMode::Files if config.make_backup() => { Box::new (emitter::FilesWithBackupEmitter::default ()) }
-        EmitMode::Files => Box:: new (emitter::FilesEmitter::new (config.print_misformatted_file_names(),)),
-        EmitMode::Stdout | EmitMode::Coverage => { Box::new (emitter::StdoutEmitter::new (config.verbose())) }
-        EmitMode::Json => Box:: new (emitter::JsonEmitter::default ()),
-        EmitMode::ModifiedLines => Box:: new (emitter::ModifiedLinesEmitter::default ()),
-        EmitMode::Checkstyle => Box:: new (emitter::CheckstyleEmitter::default ()),
-        EmitMode::Diff => Box:: new (emitter::DiffEmitter::new (config.clone())),
+        EmitMode::Files if config.make_backup() => Box::new(emitter::FilesWithBackupEmitter::default()),
+        EmitMode::Files => Box::new(emitter::FilesEmitter::new(config.print_misformatted_file_names())),
+        EmitMode::Stdout | EmitMode::Coverage => Box::new(emitter::StdoutEmitter::new(config.verbose())),
+        EmitMode::Json => Box::new(emitter::JsonEmitter::default()),
+        EmitMode::ModifiedLines => Box::new(emitter::ModifiedLinesEmitter::default()),
+        EmitMode::Checkstyle => Box::new(emitter::CheckstyleEmitter::default()),
+        EmitMode::Diff => Box::new(emitter::DiffEmitter::new(config.clone())),
     }
 }
 
-impl <'b, T: Write + 'b> Drop for Session<'b, T>
+impl<'b, T: Write + 'b> Drop for Session<'b, T>
 {
-    fn drop( & mut self) { if let Some(ref mut out) = self.out { let _ = self.emitter.emit_footer(out); } }
+    fn drop(&mut self)
+    {
+        if let Some(ref mut out) = self.out
+        {
+            let _ = self.emitter.emit_footer(out);
+        }
+    }
 }
 
 #[derive(Debug)]
-pub enum Input { File(PathBuf), Text(String), }
+pub enum Input
+{
+    File(PathBuf),
+    Text(String),
+}
 
 impl Input
 {
-    fn file_name( & self) -> FileName { match * self { Input::File(ref file) => FileName::Real(file.clone()), Input::Text(..) => FileName::Stdin, } }
+    fn file_name(&self) -> FileName
+    {
+        match *self
+        {
+            Input::File(ref file) => FileName::Real(file.clone()),
+            Input::Text(..) => FileName::Stdin,
+        }
+    }
 
-    fn to_directory_ownership( & self) -> Option<DirectoryOwnership>
+    fn to_directory_ownership(&self) -> Option<DirectoryOwnership>
     {
         match self
         {
@@ -459,8 +592,14 @@ impl Input
                 // If there exists a directory with the same name as an input,
                 // then the input should be parsed as a sub module.
                 let file_stem = file.file_stem()?;
-                if file.parent()?.to_path_buf().join(file_stem).is_dir() { Some(DirectoryOwnership::Owned { relative: file_stem.to_str().map(symbol::Ident::from_str), }) }
-                else { None }
+                if file.parent()?.to_path_buf().join(file_stem).is_dir()
+                {
+                    Some(DirectoryOwnership::Owned { relative: file_stem.to_str().map(symbol::Ident::from_str) })
+                }
+                else
+                {
+                    None
+                }
             }
             _ => None,
         }
@@ -470,50 +609,50 @@ impl Input
 #[cfg(test)]
 mod unit_tests
 {
-    use super:: * ;
+    use super::*;
 
-   #[test]
+    #[test]
     fn test_no_panic_on_format_snippet_and_format_code_block()
     {
         // `format_snippet()` and `format_code_block()` should not panic
         // even when we cannot parse the given snippet.
         let snippet = "let";
-        assert!(format_snippet(snippet, & Config::default (), false).is_none());
-        assert!(format_code_block(snippet, & Config::default (), false).is_none());
+        assert!(format_snippet(snippet, &Config::default(), false).is_none());
+        assert!(format_code_block(snippet, &Config::default(), false).is_none());
     }
 
-    fn test_format_inner<F>(formatter: F, input: & str, expected: & str) -> bool
+    fn test_format_inner<F>(formatter: F, input: &str, expected: &str) -> bool
     where
-    F: Fn( & str, & Config, bool) -> Option<FormattedSnippet>,
+        F: Fn(&str, &Config, bool) -> Option<FormattedSnippet>,
     {
-        let output = formatter(input, & Config::default (), false);
+        let output = formatter(input, &Config::default(), false);
         output.is_some() && output.unwrap().snippet == expected
     }
 
-   #[test]
+    #[test]
     fn test_format_snippet()
     {
         let snippet = "fn main() { println!(\"hello, world\"); }";
-       #[cfg(not(windows))]
-        let expected = "fn main() {\n    \
+        #[cfg(not(windows))]
+        let expected = "fn main()\n{\n    \
                         println!(\"hello, world\");\n\
                         }\n";
-       #[cfg(windows)]
-        let expected = "fn main() {\r\n    \
+        #[cfg(windows)]
+        let expected = "fn main()\r\n{\r\n    \
                         println!(\"hello, world\");\r\n\
                         }\r\n";
         assert!(test_format_inner(format_snippet, snippet, expected));
     }
 
-   #[test]
+    #[test]
     fn test_format_code_block_fail()
     {
-       #[rustfmt::skip]
-        let code_block = "this_line_is_100_characters_long_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx(x, y, z);";
-        assert!(format_code_block(code_block, & Config::default (), false).is_none());
+        #[rustfmt::skip]
+        let code_block = "this_line_is_170_characters_long_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx(x, y, z);";
+        assert!(format_code_block(code_block, &Config::default(), false).is_none());
     }
 
-   #[test]
+    #[test]
     fn test_format_code_block()
     {
         // simple code block
@@ -522,8 +661,7 @@ mod unit_tests
         assert!(test_format_inner(format_code_block, code_block, expected));
 
         // more complex code block, taken from chains.rs.
-        let code_block =
-        "let (nested_shape, extend) = if !parent_rewrite_contains_newline && is_continuable(&parent) {
+        let code_block = "let (nested_shape, extend) = if !parent_rewrite_contains_newline && is_continuable(&parent) {
 (
 chain_indent(context, shape.add_offset(parent_rewrite.len())),
 context.config.indent_style() == IndentStyle::Visual || is_small_parent,
@@ -543,26 +681,28 @@ false,
 )
 };
 ";
-        let expected =
-        "let (nested_shape, extend) = if !parent_rewrite_contains_newline && is_continuable(&parent) {
-    (
-        chain_indent(context, shape.add_offset(parent_rewrite.len())),
-        context.config.indent_style() == IndentStyle::Visual || is_small_parent,
-    )
-} else if is_block_expr(context, &parent, &parent_rewrite) {
-    match context.config.indent_style() {
-        // Try to put the first child on the same line with parent's last line
-        IndentStyle::Block => (parent_shape.block_indent(context.config.tab_spaces()), true),
-        // The parent is a block, so align the rest of the chain with the closing
-        // brace.
-        IndentStyle::Visual => (parent_shape, false),
-    }
-} else {
-    (
-        chain_indent(context, shape.add_offset(parent_rewrite.len())),
-        false,
-    )
-};";
+        let expected = concat!
+        (
+            "let (nested_shape, extend) = if !parent_rewrite_contains_newline && is_continuable(&parent)\n",
+            "{\n",
+            "    (chain_indent(context, shape.add_offset(parent_rewrite.len())), context.config.indent_style() == IndentStyle::Visual || is_small_parent)\n",
+            "}\n",
+            "else if is_block_expr(context, &parent, &parent_rewrite)\n",
+            "{\n",
+            "    match context.config.indent_style()\n",
+            "    {\n",
+            "        // Try to put the first child on the same line with parent's last line\n",
+            "        IndentStyle::Block => (parent_shape.block_indent(context.config.tab_spaces()), true),\n",
+            "        // The parent is a block, so align the rest of the chain with the closing\n",
+            "        // brace.\n",
+            "        IndentStyle::Visual => (parent_shape, false),\n",
+            "    }\n",
+            "}\n",
+            "else\n",
+            "{\n",
+            "    (chain_indent(context, shape.add_offset(parent_rewrite.len())), false)\n",
+            "};",
+        );
         assert!(test_format_inner(format_code_block, code_block, expected));
     }
 }

@@ -789,7 +789,16 @@ pub (crate) enum MatchArmBodyWithoutBracesSugg
             applicability = "machine-applicable"
         )
     ]
-    AddBraces {#[suggestion_part(code = "{{ ")] left: Span,#[suggestion_part(code = " }}")] right: Span, num_statements: usize, },
+    AddBraces
+    {
+        #[suggestion_part(code = "{left_code}")]
+        left: Span,
+        #[suggestion_part(code = "{right_code}")]
+        right: Span,
+        num_statements: usize,
+        left_code: &'static str,
+        right_code: &'static str,
+    },
    #[suggestion("replace `;` with `,` to end a `match` arm expression", code = ",", applicability = "machine-applicable", style = "verbose")]
     UseComma {#[primary_span] semicolon: Span, },
 }

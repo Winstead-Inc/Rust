@@ -1,5 +1,6 @@
 mod foo;
 
-fn main() {
+fn main()
+{
     println!("Hello, world!");
 }

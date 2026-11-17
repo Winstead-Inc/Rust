@@ -5,18 +5,22 @@ use crate::detect::{bit, cache, Feature};
 
 /// Performs run-time feature detection.
 #[inline]
-pub fn check_for(x: Feature) -> bool {
+pub fn check_for(x: Feature) -> bool
+{
     cache::test(x as u32, detect_features)
 }
 
 /// Try to read the features from the auxiliary vector, and if that fails, try
 /// to read them from /proc/cpuinfo.
-fn detect_features() -> cache::Initializer {
-    if let Ok(auxv) = auxvec::auxv() {
+fn detect_features() -> cache::Initializer
+{
+    if let Ok(auxv) = auxvec::auxv()
+    {
         let hwcap: AtHwcap = auxv.into();
         return hwcap.cache();
     }
-    if let Ok(c) = cpuinfo::CpuInfo::new() {
+    if let Ok(c) = cpuinfo::CpuInfo::new()
+    {
         let hwcap: AtHwcap = c.into();
         return hwcap.cache();
     }
@@ -26,7 +30,8 @@ fn detect_features() -> cache::Initializer {
 /// These values are part of the platform-specific [asm/hwcap.h][hwcap] .
 ///
 /// [hwcap]: https://github.com/torvalds/linux/blob/master/arch/arm64/include/uapi/asm/hwcap.h
-struct AtHwcap {
+struct AtHwcap
+{
     fp: bool,    // 0
     asimd: bool, // 1
     // evtstrm: bool, // 2
@@ -52,10 +57,13 @@ struct AtHwcap {
     sve: bool, // 22
 }
 
-impl From<auxvec::AuxVec> for AtHwcap {
+impl From<auxvec::AuxVec> for AtHwcap
+{
     /// Reads AtHwcap from the auxiliary vector.
-    fn from(auxv: auxvec::AuxVec) -> Self {
-        AtHwcap {
+    fn from(auxv: auxvec::AuxVec) -> Self
+    {
+        AtHwcap
+        {
             fp: bit::test(auxv.hwcap, 0),
             asimd: bit::test(auxv.hwcap, 1),
             // evtstrm: bit::test(auxv.hwcap, 2),
@@ -83,11 +91,14 @@ impl From<auxvec::AuxVec> for AtHwcap {
     }
 }
 
-impl From<cpuinfo::CpuInfo> for AtHwcap {
+impl From<cpuinfo::CpuInfo> for AtHwcap
+{
     /// Reads AtHwcap from /proc/cpuinfo .
-    fn from(c: cpuinfo::CpuInfo) -> Self {
+    fn from(c: cpuinfo::CpuInfo) -> Self
+    {
         let f = &c.field("Features");
-        AtHwcap {
+        AtHwcap
+        {
             // 64-bit names. FIXME: In 32-bit compatibility mode /proc/cpuinfo will
             // map some of the 64-bit names to some 32-bit feature names. This does not
             // cover that yet.
@@ -118,16 +129,20 @@ impl From<cpuinfo::CpuInfo> for AtHwcap {
     }
 }
 
-impl AtHwcap {
+impl AtHwcap
+{
     /// Initializes the cache from the feature -bits.
     ///
     /// The features are enabled approximately like in LLVM host feature detection:
     /// https://github.com/llvm-mirror/llvm/blob/master/lib/Support/Host.cpp#L1273
-    fn cache(self) -> cache::Initializer {
+    fn cache(self) -> cache::Initializer
+    {
         let mut value = cache::Initializer::default();
         {
-            let mut enable_feature = |f, enable| {
-                if enable {
+            let mut enable_feature = |f, enable|
+            {
+                if enable
+                {
                     value.set(f as u32);
                 }
             };
@@ -150,10 +165,7 @@ impl AtHwcap {
             enable_feature(Feature::sve, self.sve && asimd);
 
             // Crypto is specified as AES + PMULL + SHA1 + SHA2 per LLVM/hosts.cpp
-            enable_feature(
-                Feature::crypto,
-                self.aes && self.pmull && self.sha1 && self.sha2,
-            );
+            enable_feature(Feature::crypto, self.aes && self.pmull && self.sha1 && self.sha2);
         }
         value
     }

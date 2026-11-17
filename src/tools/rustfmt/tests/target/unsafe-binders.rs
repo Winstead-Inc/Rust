@@ -2,7 +2,8 @@
 
 fn foo() -> unsafe<'a> &'a () {}
 
-struct Foo {
+struct Foo
+{
     x: unsafe<'a> &'a (),
 }
 

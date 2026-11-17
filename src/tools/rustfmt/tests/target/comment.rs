@@ -2,15 +2,17 @@
 // rustfmt-wrap_comments: true
 
 //! Doc comment
-fn test() {
+fn test()
+{
     //! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a diam
     //! lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam
 
     // comment
     // comment2
 
-    code(); // leave this comment alone!
-            // ok?
+    code();
+    // leave this comment alone!
+    // ok?
 
     // Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec a
     // diam lectus. Sed sit amet ipsum mauris. Maecenas congue ligula ac quam
@@ -31,8 +33,9 @@ fn test() {
     //                                       self.config)
     //                           .unwrap());
 
-    funk(); // dontchangeme
-            // or me
+    funk();
+    // dontchangeme
+    // or me
 
     // #1388
     const EXCEPTION_PATHS: &'static [&'static str] = &[
@@ -45,21 +48,26 @@ fn test() {
 /// test123
 fn doc_comment() {}
 
-fn chains() {
-    foo.bar(|| {
-        let x = 10;
-        // comment
+fn chains()
+{
+    foo.bar
+    (
+        ||
+    {
+        let x = 10; // comment
         x
-    })
+    }
+    )
 }
 
-fn issue_1086() {
-    //
+fn issue_1086()
+{ //
 }
 
 // random comment
 
-fn main() { // Test
+fn main()
+{ // Test
 }
 
 // #1643
@@ -86,7 +94,8 @@ fn some_fn4()
 }
 
 // #1603
-pub enum Foo {
+pub enum Foo
+{
     A, // `/** **/`
     B, // `/*!`
     C,

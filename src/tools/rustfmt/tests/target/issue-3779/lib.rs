@@ -4,6 +4,7 @@
 #[path = "ice.rs"]
 mod ice;
 
-fn foo() {
+fn foo()
+{
     println!("abc");
 }

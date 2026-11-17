@@ -1,6 +1,7 @@
 // rustfmt-reorder_impl_items: true
 
-impl<T> IntoIterator for SafeVec<T> {
+impl<T> IntoIterator for SafeVec<T>
+{
     type Bar = u32;
     type BarFoo = u32;
     type FooBar = u32;
@@ -16,39 +17,48 @@ impl<T> IntoIterator for SafeVec<T> {
     const SomeConst: i32 = 100;
 
     // comment on foo()
-    fn foo() {
+    fn foo()
+    {
         println!("hello, world");
     }
 
-    fn foo1() {
+    fn foo1()
+    {
         println!("hello, world");
     }
 
-    fn foo2() {
+    fn foo2()
+    {
         println!("hello, world");
     }
 
-    fn foo3() {
+    fn foo3()
+    {
         println!("hello, world");
     }
 
-    fn foo4() {
+    fn foo4()
+    {
         println!("hello, world");
     }
 
-    fn foo5() {
+    fn foo5()
+    {
         println!("hello, world");
     }
 
-    fn foo6() {
+    fn foo6()
+    {
         println!("hello, world");
     }
 
-    fn foo7() {
+    fn foo7()
+    {
         println!("hello, world");
     }
 
-    fn foo8() {
+    fn foo8()
+    {
         println!("hello, world");
     }
 }

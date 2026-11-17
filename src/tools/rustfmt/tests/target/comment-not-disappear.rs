@@ -1,6 +1,7 @@
 // All the comments here should not disappear.
 
-fn a() {
+fn a()
+{
     match x {
         X |
         // A comment
@@ -8,8 +9,10 @@ fn a() {
     };
 }
 
-fn b() {
-    match x {
+fn b()
+{
+    match x
+    {
         X =>
         // A comment
         {
@@ -18,11 +21,13 @@ fn b() {
     }
 }
 
-fn c() {
+fn c()
+{
     a() /* ... */;
 }
 
-fn foo() -> Vec<i32> {
+fn foo() -> Vec<i32>
+{
     (0..11)
         .map(|x|
         // This comment disappears.
@@ -30,7 +35,8 @@ fn foo() -> Vec<i32> {
         .collect()
 }
 
-fn calc_page_len(prefix_len: usize, sofar: usize) -> usize {
+fn calc_page_len(prefix_len: usize, sofar: usize) -> usize
+{
     2 // page type and flags
     + 1 // stored depth
     + 2 // stored count

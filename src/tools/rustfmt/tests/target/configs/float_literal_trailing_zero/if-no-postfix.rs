@@ -1,7 +1,8 @@
 // rustfmt-float_literal_trailing_zero: IfNoPostfix
 // spaces_around_ranges: false is implied since it's the default
 
-fn float_literals() {
+fn float_literals()
+{
     let a = 0.0;
     let b = 0.0;
     let c = 100.0;
@@ -23,14 +24,19 @@ fn float_literals() {
     let s = 1_000_.000_000;
 }
 
-fn range_bounds() {
-    if (1.0..2.0).contains(&1.0) {}
-    if (1.1..2.2).contains(&1.1) {}
-    if (1e1..2e1).contains(&1e1) {}
+fn range_bounds()
+{
+    if (1.0..2.0).contains(&1.0)
+    {}
+    if (1.1..2.2).contains(&1.1)
+    {}
+    if (1e1..2e1).contains(&1e1)
+    {}
     let _binop_range = 3.0 / 2.0..4.0;
 }
 
-fn method_calls() {
+fn method_calls()
+{
     let x = 1.0.neg();
     let y = 2.3.neg();
     let z = (4.0).neg();
@@ -38,15 +44,10 @@ fn method_calls() {
     let v = -6.0.neg();
 }
 
-fn line_wrapping() {
-    let array = [
-        1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0,
-        17.0, 18.0,
-    ];
+fn line_wrapping()
+{
+    let array = [1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0, 17.0, 18.0];
     println!("This is floaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaat {}", 10e3);
 }
 
-fn pattern_in_function_parameters_exactly_max_width_before_zero___(
-    2.0..10.0: std::ops::Range<f32>,
-) {
-}
+fn pattern_in_function_parameters_exactly_max_width_before_zero___(2.0..10.0: std::ops::Range<f32>) {}

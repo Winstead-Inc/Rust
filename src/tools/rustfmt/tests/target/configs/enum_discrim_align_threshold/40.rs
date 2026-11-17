@@ -1,31 +1,36 @@
 // rustfmt-enum_discrim_align_threshold: 40
 
-enum Standard {
+enum Standard
+{
     A     = 1,
     Bcdef = 2,
 }
 
-enum NoDiscrims {
+enum NoDiscrims
+{
     ThisIsAFairlyLongEnumVariantWithoutDiscrimLongerThan40,
     A     = 1,
     ThisIsAnotherFairlyLongEnumVariantWithoutDiscrimLongerThan40,
     Bcdef = 2,
 }
 
-enum TooLong {
+enum TooLong
+{
     ThisOneHasDiscrimAaaaaaaaaaaaaaaaaaaaaaChar40 = 10,
     A     = 1,
     Bcdef = 2,
 }
 
-enum Borderline {
+enum Borderline
+{
     ThisOneHasDiscrimAaaaaaaaaaaaaaaaaaaaaa = 10,
     A                                       = 1,
     Bcdef                                   = 2,
 }
 
 // Live specimen from #1686
-enum LongWithSmallDiff {
+enum LongWithSmallDiff
+{
     SceneColorimetryEstimates             = 0x73636F65,
     SceneAppearanceEstimates              = 0x73617065,
     FocalPlaneColorimetryEstimates        = 0x66706365,

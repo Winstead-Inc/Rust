@@ -9,7 +9,8 @@ where
     // body
 }
 
-fn lorem_multi_line<Ipsum, Dolor, Sit, Amet>(
+fn lorem_multi_line<Ipsum, Dolor, Sit, Amet>
+(
     a: Aaaaaaaaaaaaaaa,
     b: Bbbbbbbbbbbbbbbb,
     c: Ccccccccccccccccc,
@@ -23,7 +24,8 @@ where
 }
 
 fn lorem<Ipsum, Dolor, Sit, Amet>() -> T
-where Ipsum: Eq {
+where Ipsum: Eq
+{
     // body
 }
 

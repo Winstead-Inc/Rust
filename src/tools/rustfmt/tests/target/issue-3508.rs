@@ -12,11 +12,13 @@ where
 {
 }
 
-fn bar(
+fn bar
+(
     bar2: impl Fn(
         // this comment is deleted
     ),
-) {
+)
+{
 }
 
 fn bar_block(bar2: impl Fn(/* this comment is deleted */)) {}

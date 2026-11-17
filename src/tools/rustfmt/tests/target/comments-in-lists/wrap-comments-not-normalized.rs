@@ -1,7 +1,8 @@
 // rustfmt-wrap_comments: true
 
 // https://github.com/rust-lang/rustfmt/issues/4909
-pub enum E {
+pub enum E
+{
     // Expand as needed, numbers should be ascending according to the stage
     // through the inclusion pipeline, or according to the descriptions
     Variant1,
@@ -18,18 +19,17 @@ pub enum E2 {
     // through the inclusion pipeline, or according to the descriptions
 }
 
-pub enum E3 {
-    // Expand as needed, numbers should be ascending according to the stage through the inclusion
-    // pipeline, or according to the descriptions
+pub enum E3
+{
+    // Expand as needed, numbers should be ascending according to the stage through the inclusion pipeline, or according to the descriptions
     Variant1,
-    // Expand as needed, numbers should be ascending according to the stage through the inclusion
-    // pipeline, or according to the descriptions
+    // Expand as needed, numbers should be ascending according to the stage through the inclusion pipeline, or according to the descriptions
     Variant2,
-    // Expand as needed, numbers should be ascending according to the stage through the inclusion
-    // pipeline, or according to the descriptions
+    // Expand as needed, numbers should be ascending according to the stage through the inclusion pipeline, or according to the descriptions
 }
 
-pub struct S {
+pub struct S
+{
     // Expand as needed, numbers should be ascending according to the stage
     // through the inclusion pipeline, or according to the descriptions
     some_field: usize,
@@ -46,18 +46,17 @@ pub struct S2 {
     // through the inclusion pipeline, or according to the descriptions
 }
 
-pub struct S3 {
-    // Expand as needed, numbers should be ascending according to the stage through the inclusion
-    // pipeline, or according to the descriptions
+pub struct S3
+{
+    // Expand as needed, numbers should be ascending according to the stage through the inclusion pipeline, or according to the descriptions
     some_field: usize,
-    // Expand as needed, numbers should be ascending according to the stage through the inclusion
-    // pipeline, or according to the descriptions
+    // Expand as needed, numbers should be ascending according to the stage through the inclusion pipeline, or according to the descriptions
     last_field: usize,
-    // Expand as needed, numbers should be ascending according to the stage through the inclusion
-    // pipeline, or according to the descriptions
+    // Expand as needed, numbers should be ascending according to the stage through the inclusion pipeline, or according to the descriptions
 }
 
-fn foo(
+fn foo
+(
     // Expand as needed, numbers should be ascending according to the stage
     // through the inclusion pipeline, or according to the descriptions
     a: usize,
@@ -66,31 +65,34 @@ fn foo(
     b: usize,
     // Expand as needed, numbers should be ascending according to the stage
     // through the inclusion pipeline, or according to the descriptions
-) -> usize {
+) -> usize
+{
     5
 }
 
 fn foo2(// Expand as needed, numbers should be ascending according to the stage
     // through the inclusion pipeline, or according to the descriptions
-) -> usize {
+) -> usize
+{
     5
 }
 
-fn foo3(
-    // Expand as needed, numbers should be ascending according to the stage through the inclusion
-    // pipeline, or according to the descriptions
+fn foo3
+(
+    // Expand as needed, numbers should be ascending according to the stage through the inclusion pipeline, or according to the descriptions
     a: usize,
-    // Expand as needed, numbers should be ascending according to the stage through the inclusion
-    // pipeline, or according to the descriptions
+    // Expand as needed, numbers should be ascending according to the stage through the inclusion pipeline, or according to the descriptions
     b: usize,
-    // Expand as needed, numbers should be ascending according to the stage through the inclusion
-    // pipeline, or according to the descriptions
-) -> usize {
+    // Expand as needed, numbers should be ascending according to the stage through the inclusion pipeline, or according to the descriptions
+) -> usize
+{
     5
 }
 
-fn main() {
-    let v = vec![
+fn main()
+{
+    let v = vec!
+    [
         // Expand as needed, numbers should be ascending according to the stage
         // through the inclusion pipeline, or according to the descriptions
         1,
@@ -101,24 +103,24 @@ fn main() {
         // through the inclusion pipeline, or according to the descriptions
     ];
 
-    let v2: Vec<i32> = vec![
+    let v2: Vec<i32> = vec!
+    [
         // Expand as needed, numbers should be ascending according to the stage
         // through the inclusion pipeline, or according to the descriptions
     ];
 
-    let v3 = vec![
-        // Expand as needed, numbers should be ascending according to the stage through the
-        // inclusion pipeline, or according to the descriptions
+    let v3 = vec!
+    [
+        // Expand as needed, numbers should be ascending according to the stage through the inclusion pipeline, or according to the descriptions
         1,
-        // Expand as needed, numbers should be ascending according to the stage through the
-        // inclusion pipeline, or according to the descriptions
+        // Expand as needed, numbers should be ascending according to the stage through the inclusion pipeline, or according to the descriptions
         2,
-        // Expand as needed, numbers should be ascending according to the stage through the
-        // inclusion pipeline, or according to the descriptions
+        // Expand as needed, numbers should be ascending according to the stage through the inclusion pipeline, or according to the descriptions
     ];
 
     // https://github.com/rust-lang/rustfmt/issues/4430
-    match a {
+    match a
+    {
         // Expand as needed, numbers should be ascending according to the stage
         // through the inclusion pipeline, or according to the descriptions
         b => c,
@@ -129,14 +131,12 @@ fn main() {
         // through the inclusion pipeline, or according to the descriptions
     }
 
-    match a {
-        // Expand as needed, numbers should be ascending according to the stage through the
-        // inclusion pipeline, or according to the descriptions
+    match a
+    {
+        // Expand as needed, numbers should be ascending according to the stage through the inclusion pipeline, or according to the descriptions
         b => c,
-        // Expand as needed, numbers should be ascending according to the stage through the
-        // inclusion pipeline, or according to the descriptions
+        // Expand as needed, numbers should be ascending according to the stage through the inclusion pipeline, or according to the descriptions
         d => e,
-        // Expand as needed, numbers should be ascending according to the stage through the
-        // inclusion pipeline, or according to the descriptions
+        // Expand as needed, numbers should be ascending according to the stage through the inclusion pipeline, or according to the descriptions
     }
 }

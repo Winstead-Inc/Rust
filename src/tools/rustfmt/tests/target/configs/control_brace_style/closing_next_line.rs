@@ -1,7 +1,8 @@
 // rustfmt-control_brace_style: ClosingNextLine
 // Control brace style
 
-fn main() {
+fn main()
+{
     if lorem {
         println!("ipsum!");
     }

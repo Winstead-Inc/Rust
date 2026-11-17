@@ -1,10 +1,12 @@
 #![feature(fn_delegation)]
 
 struct Ty;
-impl Ty {
+impl Ty
+{
     reuse std::convert::identity;
 }
 
-trait Trait {
+trait Trait
+{
     reuse std::convert::identity;
 }

@@ -6,7 +6,8 @@ use ipsum;
 use lorem;
 use sit;
 
-fn foo() {
+fn foo()
+{
     use A;
     use B;
     use C;

@@ -2,9 +2,11 @@
 // Default annotation incorrectly removed on associated types
 #![feature(specialization)]
 
-trait Trait {
+trait Trait
+{
     type Type;
 }
-impl<T> Trait for T {
+impl<T> Trait for T
+{
     default type Type = u64; // 'default' should not be removed
 }

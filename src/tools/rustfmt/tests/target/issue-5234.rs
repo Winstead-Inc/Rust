@@ -22,14 +22,16 @@ fn foo() {}
 /// ```
 fn foo() {}
 
-fn foo() {
+fn foo()
+{
     /// ```
     /// ```
     struct bar {}
 }
 
 /// ```
-/// fn com() {
+/// fn com()
+/// {
 ///     let i = 5;
 ///
 ///     let j = 6;
@@ -37,9 +39,11 @@ fn foo() {
 /// ```
 fn foo() {}
 
-fn foo() {
+fn foo()
+{
     /// ```
-    /// fn com() {
+    /// fn com()
+    /// {
     ///     let i = 5;
     /// }
     /// ```

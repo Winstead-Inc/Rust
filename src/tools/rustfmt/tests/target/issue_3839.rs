@@ -1,4 +1,5 @@
-struct Foo {
+struct Foo
+{
     a: i32,
     /*
     asd

@@ -1,3 +1,4 @@
-fn wasm32() -> &str {
+fn wasm32() -> &str
+{
     "wasm32"
 }

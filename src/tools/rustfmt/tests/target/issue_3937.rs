@@ -6,7 +6,8 @@ struct Foo {
     // b: i32,
 }
 
-struct Foo {
+struct Foo
+{
     a: i32,
     //
     // b: i32,

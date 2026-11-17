@@ -2988,7 +2988,23 @@ impl <'a> Parser<'a>
                     num_statements: stmts.len(),
                     sub: if stmts.len() > 1
                     {
-                        diagnostics::MatchArmBodyWithoutBracesSugg::AddBraces { left: span.shrink_to_lo(), right: span.shrink_to_hi(), num_statements: stmts.len(), }
+                        let is_multiline = this.psess.source_map().is_multiline(span);
+                        let (left_code, right_code) = if is_multiline
+                        {
+                            ("\n{\n    ", "\n}")
+                        }
+                        else
+                        {
+                            ("{ ", " }")
+                        };
+                        diagnostics::MatchArmBodyWithoutBracesSugg::AddBraces
+                        {
+                            left: span.shrink_to_lo(),
+                            right: span.shrink_to_hi(),
+                            num_statements: stmts.len(),
+                            left_code,
+                            right_code,
+                        }
                     }
                     else { diagnostics::MatchArmBodyWithoutBracesSugg::UseComma { semicolon: semi_sp } },
                 }

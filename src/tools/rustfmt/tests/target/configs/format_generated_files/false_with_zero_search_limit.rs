@@ -2,7 +2,9 @@
 // rustfmt-generated_marker_line_search_limit: 0
 
 // @generated
-fn main() {
+fn main()
+{
     println!("hello, world");
 }
+
 // @generated

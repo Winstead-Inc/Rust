@@ -1,5 +1,7 @@
-macro_rules! atomic_bits {
-    ($ldrex:expr) => {
+macro_rules! atomic_bits
+{
+    ($ldrex:expr) =>
+    {
         execute(|| {
             asm!($ldrex
                  : "=r"(raw)

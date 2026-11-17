@@ -1,3 +1,4 @@
-fn bar() -> &str {
+fn bar() -> &str
+{
     "bar"
 }

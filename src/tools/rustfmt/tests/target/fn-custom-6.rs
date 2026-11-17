@@ -5,13 +5,7 @@ fn foo(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb) {
     foo();
 }
 
-fn bar(
-    a: Aaaaaaaaaaaaaa,
-    b: Bbbbbbbbbbbbbb,
-    c: Cccccccccccccccccc,
-    d: Dddddddddddddddd,
-    e: Eeeeeeeeeeeeeee,
-) {
+fn bar(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb, c: Cccccccccccccccccc, d: Dddddddddddddddd, e: Eeeeeeeeeeeeeee) {
     bar();
 }
 
@@ -19,13 +13,7 @@ fn foo(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb) -> String {
     foo();
 }
 
-fn bar(
-    a: Aaaaaaaaaaaaaa,
-    b: Bbbbbbbbbbbbbb,
-    c: Cccccccccccccccccc,
-    d: Dddddddddddddddd,
-    e: Eeeeeeeeeeeeeee,
-) -> String {
+fn bar(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb, c: Cccccccccccccccccc, d: Dddddddddddddddd, e: Eeeeeeeeeeeeeee) -> String {
     bar();
 }
 
@@ -35,13 +23,8 @@ where
     foo();
 }
 
-fn bar(
-    a: Aaaaaaaaaaaaaa,
-    b: Bbbbbbbbbbbbbb,
-    c: Cccccccccccccccccc,
-    d: Dddddddddddddddd,
-    e: Eeeeeeeeeeeeeee,
-) where
+fn bar(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb, c: Cccccccccccccccccc, d: Dddddddddddddddd, e: Eeeeeeeeeeeeeee)
+where
     T: UUUUUUUUUUU, {
     bar();
 }
@@ -52,13 +35,7 @@ where
     foo();
 }
 
-fn bar(
-    a: Aaaaaaaaaaaaaa,
-    b: Bbbbbbbbbbbbbb,
-    c: Cccccccccccccccccc,
-    d: Dddddddddddddddd,
-    e: Eeeeeeeeeeeeeee,
-) -> String
+fn bar(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb, c: Cccccccccccccccccc, d: Dddddddddddddddd, e: Eeeeeeeeeeeeeee) -> String
 where
     T: UUUUUUUUUUU, {
     bar();
@@ -66,6 +43,5 @@ where
 
 trait Test {
     fn foo(a: u8) {}
-
     fn bar(a: u8) -> String {}
 }

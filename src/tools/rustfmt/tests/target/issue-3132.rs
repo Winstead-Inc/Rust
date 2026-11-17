@@ -1,6 +1,7 @@
 // rustfmt-style_edition: 2024
 
-fn test() {
+fn test()
+{
     /*
     a
     */

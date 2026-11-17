@@ -1,3 +1,4 @@
-trait T {
+trait T
+{
     itemmacro!(this, is.now().formatted(yay));
 }

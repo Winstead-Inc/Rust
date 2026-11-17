@@ -10,7 +10,8 @@ struct Lorem
     ipsum: bool,
 }
 
-struct Dolor<T>
+struct Dolor
+<T>
 where
     T: Eq,
 {

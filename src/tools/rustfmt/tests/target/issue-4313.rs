@@ -1,5 +1,6 @@
 extern "C" {
-    fn f() {
+    fn f()
+    {
         fn g() {}
     }
 }

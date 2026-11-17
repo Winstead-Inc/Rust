@@ -10,4 +10,5 @@ pub enum Foo {}
 pub enum Bar {}
 
 #[doc = "no leading space"]
-pub mod FooBar {}
+pub mod FooBar
+{}

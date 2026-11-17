@@ -142,7 +142,7 @@ fn mod_resolution_error_path_attribute_does_not_exist()
 fn rustfmt_emits_error_on_line_overflow_true()
 {
     // See also https://github.com/rust-lang/rustfmt/issues/3164
-    let args = ["--config", "error_on_line_overflow=true", "tests/cargo-fmt/source/issue_3164/src/main.rs",];
+    let args = ["--config", "error_on_line_overflow=true,max_width=100", "tests/cargo-fmt/source/issue_3164/src/main.rs",];
 
     let (_stdout, stderr) = rustfmt( & args);
     assert!(stderr.contains("line formatted, but exceeded maximum width (maximum: 100 (see `max_width` option)"))

@@ -1,10 +1,14 @@
 // rustfmt-match_block_trailing_comma: true
 // rustfmt-trailing_comma: Always
 
-fn main() {
-    match foo {
-        x => {},
-        y => {
+fn main()
+{
+    match foo
+    {
+        x =>
+        {},
+        y =>
+        {
             foo();
         },
         _ => x,
@@ -31,7 +35,8 @@ where
     }
 }
 
-struct Pair<S, T,>
+struct Pair
+<S, T,>
 where
     T: P,
     S: P + Q,
@@ -50,7 +55,10 @@ where
     S: P,
     T: P,
 {
-    A { a: T, },
+    A
+    {
+        a: T,
+    },
 }
 
 type Double<T,>

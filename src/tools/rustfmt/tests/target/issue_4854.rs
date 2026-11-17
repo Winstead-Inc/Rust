@@ -58,7 +58,8 @@ struct Struct10 {
     */
 }
 
-mod module {
+mod module
+{
     struct Struct {
         // Multiline comment
         // should be formatted

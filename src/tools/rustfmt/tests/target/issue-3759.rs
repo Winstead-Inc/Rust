@@ -1,26 +1,33 @@
-fn main() {
-    let Test {
+fn main()
+{
+    let Test
+    {
         #[cfg(feature = "test")]
         x,
-    } = Test {
+    } = Test
+    {
         #[cfg(feature = "test")]
         x: 1,
     };
 
-    let Test {
+    let Test
+    {
         #[cfg(feature = "test")]
         // comment
         x,
-    } = Test {
+    } = Test
+    {
         #[cfg(feature = "test")]
         x: 1,
     };
 
-    let Test {
+    let Test
+    {
         // comment
         #[cfg(feature = "test")]
         x,
-    } = Test {
+    } = Test
+    {
         #[cfg(feature = "test")]
         x: 1,
     };

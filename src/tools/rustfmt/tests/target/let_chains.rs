@@ -1,11 +1,13 @@
 // rustfmt-edition: 2024
 
-fn main() {
+fn main()
+{
     if let x = x
         && x
     {}
 
-    if xxx && let x = x {}
+    if xxx && let x = x
+    {}
 
     if aaaaaaaaaaaaaaaaaaaaa
         && aaaaaaaaaaaaaaa
@@ -24,63 +26,65 @@ fn main() {
     {}
 
     if let Some(Struct { x: TS(1, 2) }) = path::to::<_>(hehe)
-        && let [Simple, people] = /* get ready */
-            create_universe(/* hi */ GreatPowers)
-                .initialize_badminton()
-                .populate_swamps()
-        && let everybody = (Loops {
-            hi, /*hi*/
-            ..loopy()
-        })
+        && let [Simple, people] = /* get ready */ create_universe(/* hi */ GreatPowers).initialize_badminton().populate_swamps()
+        && let everybody = (Loops { hi /*hi*/, ..loopy() })
         && summons::triumphantly()
     {
         todo!()
     }
 
-    if let XXXXXXXXX {
-        xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,
-        yyyyyyyyyyyyy,
-        zzzzzzzzzzzzz,
-    } = xxxxxxx()
+    if let XXXXXXXXX { xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx, yyyyyyyyyyyyy, zzzzzzzzzzzzz } = xxxxxxx()
         && let Foo = bar()
     {
         todo!()
     }
 }
 
-fn test_single_line_let_chain() {
+fn test_single_line_let_chain()
+{
     // first item in let-chain is an ident
-    if a && let Some(b) = foo() {}
+    if a && let Some(b) = foo()
+    {}
 
     // first item in let-chain is a bool literal
-    if true && let Some(x) = y {}
+    if true && let Some(x) = y
+    {}
 
     // first item in let-chain is a unary ! with an ident
-    let unary_not = if !from_hir_call && let Some(p) = parent {};
+    let unary_not = if !from_hir_call && let Some(p) = parent
+    {};
 
     // first item in let-chain is a unary * with an ident
-    let unary_deref = if *some_deref && let Some(p) = parent {};
+    let unary_deref = if *some_deref && let Some(p) = parent
+    {};
 
     // first item in let-chain is a unary - (neg) with an ident
-    let unary_neg = if -some_ident && let Some(p) = parent {};
+    let unary_neg = if -some_ident && let Some(p) = parent
+    {};
 
     // first item in let-chain is a try (?) with an ident
-    let try_ = if some_try? && let Some(p) = parent {};
+    let try_ = if some_try? && let Some(p) = parent
+    {};
 
     // first item in let-chain is an ident wrapped in parens
-    let in_parens = if (some_ident) && let Some(p) = parent {};
+    let in_parens = if (some_ident) && let Some(p) = parent
+    {};
 
     // first item in let-chain is a ref & with an ident
-    let _ref = if &some_ref && let Some(p) = parent {};
+    let _ref = if &some_ref && let Some(p) = parent
+    {};
 
     // first item in let-chain is a ref &mut with an ident
-    let mut_ref = if &mut some_ref && let Some(p) = parent {};
+    let mut_ref = if &mut some_ref && let Some(p) = parent
+    {};
 
     // chain unary ref and try
-    let chain_of_unary_ref_and_try = if !&*some_ref? && let Some(p) = parent {};
+    let chain_of_unary_ref_and_try = if !&*some_ref? && let Some(p) = parent
+    {};
 }
 
-fn test_multi_line_let_chain() {
+fn test_multi_line_let_chain()
+{
     // Can only single line the let-chain if the first item is an ident
     if let Some(x) = y
         && a

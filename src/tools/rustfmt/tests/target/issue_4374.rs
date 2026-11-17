@@ -3,11 +3,18 @@ where
     F: FnOnce() -> (),
 {
 }
-fn main() {
-    a(|| {
+
+fn main()
+{
+    a
+    (
+        ||
+    {
         #[allow(irrefutable_let_patterns)]
-        while let _ = 0 {
+        while let _ = 0
+        {
             break;
         }
-    });
+    }
+    );
 }

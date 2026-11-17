@@ -9,7 +9,7 @@ fn simple(/*pre-comment on a function!?*/ i: i32/*yes, it's possible!  */, respo
 
 fn weird_comment
 (
-    /* /*/ double level * / comment * / x: Hello /*/*/ * triple, even * /*/*/,
+    /* /*/ double level */ comment */ x: Hello /*/*/* triple, even */*/*/,
     // Does this work?
     y: World
 )

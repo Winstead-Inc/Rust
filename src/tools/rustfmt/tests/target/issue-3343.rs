@@ -19,9 +19,15 @@ use core::convert;
 #[barrrrr]
 use total_len_is_::_51______;
 
-#[cfg(not(all(
+#[cfg
+(
+    not
+(
+    all
+(
     feature = "std",
-    any(
+    any
+    (
         target_os = "linux",
         target_os = "android",
         target_os = "netbsd",
@@ -40,5 +46,7 @@ use total_len_is_::_51______;
         all(target_arch = "wasm32", feature = "stdweb"),
         all(target_arch = "wasm32", feature = "wasm-bindgen"),
     )
-)))]
+)
+)
+)]
 use core::slice;

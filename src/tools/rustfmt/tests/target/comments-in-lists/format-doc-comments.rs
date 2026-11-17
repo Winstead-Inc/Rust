@@ -1,19 +1,22 @@
 // rustfmt-format_code_in_doc_comments: true
 
 // https://github.com/rust-lang/rustfmt/issues/4420
-enum Minimal {
+enum Minimal
+{
     Example,
     //[thisisremoved thatsleft
     // canbeanything
 }
 
-struct Minimal2 {
+struct Minimal2
+{
     Example: usize,
     //[thisisremoved thatsleft
     // canbeanything
 }
 
-pub enum E {
+pub enum E
+{
     // Expand as needed, numbers should be ascending according to the stage
     // through the inclusion pipeline, or according to the descriptions
     Variant1,
@@ -29,7 +32,8 @@ pub enum E2 {
     // through the inclusion pipeline, or according to the descriptions
 }
 
-pub struct S {
+pub struct S
+{
     // Expand as needed, numbers should be ascending according to the stage
     // through the inclusion pipeline, or according to the descriptions
     some_field: usize,
@@ -45,7 +49,8 @@ pub struct S2 {
     // through the inclusion pipeline, or according to the descriptions
 }
 
-fn foo(
+fn foo
+(
     // Expand as needed, numbers should be ascending according to the stage
     // through the inclusion pipeline, or according to the descriptions
     a: usize,
@@ -54,18 +59,22 @@ fn foo(
     b: usize,
     // Expand as needed, numbers should be ascending according to the stage
     // through the inclusion pipeline, or according to the descriptions
-) -> usize {
+) -> usize
+{
     5
 }
 
 fn foo2(// Expand as needed, numbers should be ascending according to the stage
     // through the inclusion pipeline, or according to the descriptions
-) -> usize {
+) -> usize
+{
     5
 }
 
-fn main() {
-    let v = vec![
+fn main()
+{
+    let v = vec!
+    [
         // Expand as needed, numbers should be ascending according to the stage
         // through the inclusion pipeline, or according to the descriptions
         1,
@@ -81,7 +90,8 @@ fn main() {
         // through the inclusion pipeline, or according to the descriptions
     ];
 
-    match a {
+    match a
+    {
         // Expand as needed, numbers should be ascending according to the stage
         // through the inclusion pipeline, or according to the descriptions
         b => c,

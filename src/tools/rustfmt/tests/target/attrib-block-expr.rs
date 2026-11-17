@@ -1,4 +1,5 @@
-fn issue_2073() {
+fn issue_2073()
+{
     let x = {
         #![my_attr]
         do_something()
@@ -29,7 +30,8 @@ fn issue_2073() {
     x = |y| #[outer]
     {};
 
-    x = |y| {
+    x = |y|
+    {
         //! ynot
     };
 
@@ -50,7 +52,8 @@ fn issue_2073() {
     let x = #[my_attr]
     unsafe {};
 
-    x = |y| #[outer]
+    x = |y|
+    #[outer]
     #[outer2]
     unsafe {
         //! Comment

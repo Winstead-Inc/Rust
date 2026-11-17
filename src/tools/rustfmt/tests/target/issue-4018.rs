@@ -1,8 +1,9 @@
-fn main() {
-    /* extra comment */
+fn main()
+{ /* extra comment */
 }
 
-fn main() {
+fn main()
+{
     println!("");
     // comment 1
     // comment 2

@@ -1,6 +1,7 @@
 // rustfmt-edition: 2021
 
-fn test_break() {
+fn test_break()
+{
     'r#if: {
         break 'r#if;
     }
@@ -10,7 +11,8 @@ fn test_break() {
     }
 }
 
-fn test_continue() {
+fn test_continue()
+{
     'r#if: {
         continue 'r#if;
     }

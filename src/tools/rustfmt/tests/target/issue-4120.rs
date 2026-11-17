@@ -1,74 +1,98 @@
-fn main() {
-    let x = if true {
+fn main()
+{
+    let x = if true
+    {
         1
         // In if
-    } else {
+    }
+    else
+    {
         0
         // In else
     };
 
-    let x = if true {
-        1
-        /* In if */
-    } else {
-        0
-        /* In else */
+    let x = if true
+    {
+        1 /* In if */
+    }
+    else
+    {
+        0 /* In else */
     };
 
-    let z = if true {
-        if true {
+    let z = if true
+    {
+        if true
+        {
             1
 
             // In if level 2
-        } else {
+        }
+        else
+        {
             2
         }
-    } else {
+    }
+    else
+    {
         3
     };
 
-    let a = if true {
+    let a = if true
+    {
         1
-    // In if
-    } else {
+        // In if
+    }
+    else
+    {
         0
         // In else
     };
 
-    let a = if true {
-        1
-
-    // In if
-    } else {
-        0
-        // In else
-    };
-
-    let b = if true {
-        1
-
-    // In if
-    } else {
-        0
-        // In else
-    };
-
-    let c = if true {
+    let a = if true
+    {
         1
 
         // In if
-    } else {
+    }
+    else
+    {
         0
         // In else
     };
-    for i in 0..2 {
+
+    let b = if true
+    {
+        1
+
+        // In if
+    }
+    else
+    {
+        0
+        // In else
+    };
+
+    let c = if true
+    {
+        1
+
+        // In if
+    }
+    else
+    {
+        0
+        // In else
+    };
+    for i in 0..2
+    {
         println!("Something");
         // In for
     }
 
-    for i in 0..2 {
-        println!("Something");
-        /* In for */
+    for i in 0..2
+    {
+        println!("Something"); /* In for */
     }
 
     extern "C" {
@@ -78,8 +102,6 @@ fn main() {
     }
 
     extern "C" {
-        fn first();
-
-        /* In foreign mod */
+        fn first(); /* In foreign mod */
     }
 }

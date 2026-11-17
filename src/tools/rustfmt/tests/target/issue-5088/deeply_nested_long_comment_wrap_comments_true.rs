@@ -1,6 +1,7 @@
 // rustfmt-wrap_comments: true
 
-fn main() {
+fn main()
+{
     {
         {
             {

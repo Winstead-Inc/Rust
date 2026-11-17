@@ -1,4 +1,5 @@
-pub(crate) struct ASlash(
+pub(crate) struct ASlash
+(
     // hello
     i32,
 );

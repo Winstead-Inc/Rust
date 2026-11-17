@@ -1,12 +1,18 @@
 // rustfmt-use_small_heuristics: Max
 
-enum Lorem {
+enum Lorem
+{
     Ipsum,
     Dolor(bool),
-    Sit { amet: Consectetur, adipiscing: Elit },
+    Sit
+    {
+        amet: Consectetur,
+        adipiscing: Elit,
+    },
 }
 
-fn main() {
+fn main()
+{
     lorem("lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing");
 
     let lorem = Lorem { ipsum: dolor, sit: amet };
@@ -14,7 +20,8 @@ fn main() {
     let lorem = if ipsum { dolor } else { sit };
 }
 
-fn format_let_else() {
+fn format_let_else()
+{
     let Some(a) = opt else {};
 
     let Some(b) = opt else { return };

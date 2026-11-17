@@ -1,7 +1,8 @@
 // rustfmt-brace_style: SameLineWhere
 // rustfmt-where_single_line: true
 
-fn lorem_multi_line_clauseless<Ipsum, Dolor, Sit, Amet>(
+fn lorem_multi_line_clauseless<Ipsum, Dolor, Sit, Amet>
+(
     a: Aaaaaaaaaaaaaaa,
     b: Bbbbbbbbbbbbbbbb,
     c: Ccccccccccccccccc,
@@ -11,7 +12,8 @@ fn lorem_multi_line_clauseless<Ipsum, Dolor, Sit, Amet>(
     // body
 }
 
-fn lorem_multi_line_clauseless<Ipsum, Dolor, Sit, Amet>(
+fn lorem_multi_line_clauseless<Ipsum, Dolor, Sit, Amet>
+(
     a: Aaaaaaaaaaaaaaa,
     b: Bbbbbbbbbbbbbbbb,
     c: Ccccccccccccccccc,

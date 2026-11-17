@@ -1,24 +1,29 @@
 // rustfmt-fn_params_layout: Vertical
 // Function arguments density
 
-trait Lorem {
-    fn lorem(
+trait Lorem
+{
+    fn lorem
+    (
         ipsum: Ipsum,
         dolor: Dolor,
         sit: Sit,
         amet: Amet,
     );
 
-    fn lorem(
+    fn lorem
+    (
         ipsum: Ipsum,
         dolor: Dolor,
         sit: Sit,
         amet: Amet,
-    ) {
+    )
+    {
         // body
     }
 
-    fn lorem(
+    fn lorem
+    (
         ipsum: Ipsum,
         dolor: Dolor,
         sit: Sit,
@@ -28,7 +33,8 @@ trait Lorem {
         elit: Elit,
     );
 
-    fn lorem(
+    fn lorem
+    (
         ipsum: Ipsum,
         dolor: Dolor,
         sit: Sit,
@@ -36,7 +42,8 @@ trait Lorem {
         consectetur: onsectetur,
         adipiscing: Adipiscing,
         elit: Elit,
-    ) {
+    )
+    {
         // body
     }
 }

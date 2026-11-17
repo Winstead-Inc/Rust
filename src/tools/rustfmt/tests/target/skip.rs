@@ -11,13 +11,15 @@ fn foo(
 );
 }
 
-impl LateLintPass for UsedUnderscoreBinding {
+impl LateLintPass for UsedUnderscoreBinding
+{
     #[cfg_attr(rustfmt, rustfmt::skip)]
     fn check_expr() { // comment
     }
 }
 
-fn issue1346() {
+fn issue1346()
+{
     #[cfg_attr(rustfmt, rustfmt::skip)]
     Box::new(self.inner.call(req).then(move |result| {
         match result {
@@ -30,7 +32,8 @@ fn issue1346() {
     }))
 }
 
-fn skip_on_statements() {
+fn skip_on_statements()
+{
     // Outside block
     #[rustfmt::skip]
     {

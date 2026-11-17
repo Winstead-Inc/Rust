@@ -1,5 +1,6 @@
 // rustfmt-group_imports: StdExternalCrate
-mod test {
+mod test
+{
     use std::path;
 
     use crate::foo::bar;

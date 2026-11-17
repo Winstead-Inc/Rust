@@ -2,7 +2,8 @@
 
 impl<T> JSTraceable for SmallVec<[T; 1]> {}
 
-impl<K, V, NodeRef: Deref<Target = Node<K, V>>> Handle<NodeRef, handle::Edge, handle::Internal> {
+impl<K, V, NodeRef: Deref<Target = Node<K, V>>> Handle<NodeRef, handle::Edge, handle::Internal>
+{
     // Keep this.
 }
 
@@ -10,11 +11,9 @@ impl<V> Test<V>
 where
     V: Clone, // This comment is NOT removed by formatting!
 {
-    pub fn new(value: V) -> Self {
-        Test {
-            cloned_value: value.clone(),
-            value,
-        }
+    pub fn new(value: V) -> Self
+    {
+        Test { cloned_value: value.clone(), value }
     }
 }
 
@@ -43,6 +42,7 @@ default unsafe impl Trait for Y {}
 pub default unsafe impl Trait for Z {}
 
 // #2212
-impl ConstWithDefault {
+impl ConstWithDefault
+{
     default const CAN_RECONSTRUCT_QUERY_KEY: bool = false;
 }

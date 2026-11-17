@@ -11,7 +11,8 @@ const {
     // bar
     assert!(false)
     // baz
-} // 123
+}
+// 123
 
 #[expect(unused)]
 const {

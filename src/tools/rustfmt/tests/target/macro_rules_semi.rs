@@ -1,19 +1,26 @@
-macro_rules! expr {
-    (no_semi) => {
+macro_rules! expr
+{
+    (no_semi) =>
+    {
         return true
     };
-    (semi) => {
+    (semi) =>
+    {
         return true;
     };
 }
 
-fn foo() -> bool {
-    match true {
+fn foo() -> bool
+{
+    match true
+    {
         true => expr!(no_semi),
-        false if false => {
+        false if false =>
+        {
             expr!(semi)
         }
-        false => {
+        false =>
+        {
             expr!(semi);
         }
     }

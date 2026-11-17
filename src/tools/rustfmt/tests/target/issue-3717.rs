@@ -1,7 +1,8 @@
-fn main() {
+fn main()
+{
     {
         #[rustfmt::skip]
-        let _ = 
+        let _ =
         [1];
     }
 }

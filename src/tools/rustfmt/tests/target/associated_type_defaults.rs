@@ -1,4 +1,5 @@
 #![feature(associated_type_defaults)]
-trait Foo {
+trait Foo
+{
     type Bar = ();
 }

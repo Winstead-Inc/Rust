@@ -1,9 +1,12 @@
-mod M {
-    enum A {
+mod M
+{
+    enum A
+    {
         A,
     }
 
-    struct B {
+    struct B
+    {
         b: i32,
     }
 
@@ -19,7 +22,8 @@ mod M {
         A,
     }
 
-    struct B<T>
+    struct B
+    <T>
     where
         T: Copy,
     {
@@ -31,7 +35,8 @@ mod M {
     where
         T: Copy, {}
 
-    struct D<T>
+    struct D
+    <T>
     where
         T: Copy, {}
 }

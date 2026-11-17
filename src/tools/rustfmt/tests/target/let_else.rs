@@ -1,6 +1,7 @@
 // rustfmt-single_line_let_else_max_width: 100
 
-fn main() {
+fn main()
+{
     // Although this won't compile it still parses so make sure we can format empty else blocks
     let Some(x) = opt else {};
 
@@ -10,50 +11,33 @@ fn main() {
 
     let Some(x) = opt else { return };
 
-    let Some(x) = opt else {
-        return;
-    };
+    let Some(x) = opt else { return; };
 
-    let Some(x) = opt else {
+    let Some(x) = opt else
+    {
         // nope
         return;
     };
 
-    let Some(x) = opt else {
-        let y = 1;
-        return y;
-    };
+    let Some(x) = opt else { let y = 1; return y };
 
-    let Some(x) = y.foo(
-        "abc",
-        fairly_long_identifier,
-        "def",
-        "123456",
-        "string",
-        "cheese",
-    ) else {
+    let Some(x) = y.foo("abc", fairly_long_identifier, "def", "123456", "string", "cheese") else
+    {
         bar()
     };
 
-    let Some(x) = abcdef()
-        .foo(
-            "abc",
-            some_really_really_really_long_ident,
-            "ident",
-            "123456",
-        )
-        .bar()
-        .baz()
-        .qux("fffffffffffffffff")
-    else {
+    let Some(x) = abcdef().foo("abc", some_really_really_really_long_ident, "ident", "123456").bar().baz().qux("fffffffffffffffff") else
+    {
         foo_bar()
     };
 }
 
-fn with_comments_around_else_keyword() {
+fn with_comments_around_else_keyword()
+{
     let Some(x) = opt
     /* pre else keyword block-comment */
-    else {
+    else
+    {
         return;
     };
 
@@ -73,7 +57,8 @@ fn with_comments_around_else_keyword() {
 
     let Some(x) = opt
     // pre else keyword line-comment
-    else {
+    else
+    {
         return;
     };
 
@@ -92,7 +77,8 @@ fn with_comments_around_else_keyword() {
     };
 }
 
-fn unbreakable_initializer_expr_pre_formatting_let_else_length_near_max_width() {
+fn unbreakable_initializer_expr_pre_formatting_let_else_length_near_max_width()
+{
     // Pre Formatting:
     // The length of `(indent)let pat = init else block;` is 100 (max_width)
     // Post Formatting:
@@ -105,9 +91,7 @@ fn unbreakable_initializer_expr_pre_formatting_let_else_length_near_max_width() 
     // The else keyword and opening brace remain on the same line as the initializer expr,
     // and the else block is formatted over multiple lines because we can't fit the
     // else block on the same line as the initializer expr.
-    let Some(x) = some_really_really_really_really_really_really_really_long_name___B else {
-        return;
-    };
+    let Some(x) = some_really_really_really_really_really_really_really_long_name___B else { return };
 
     // Pre Formatting:
     // The length of `(indent)let pat = init else block;` is 100 (max_width)
@@ -115,9 +99,7 @@ fn unbreakable_initializer_expr_pre_formatting_let_else_length_near_max_width() 
     // The else keyword and opening brace remain on the same line as the initializer expr,
     // and the else block is formatted over multiple lines because we can't fit the
     // else block on the same line as the initializer expr.
-    let Some(x) = some_really_really_really_really_long_name_____C else {
-        some_divergent_function()
-    };
+    let Some(x) = some_really_really_really_really_long_name_____C else { some_divergent_function() };
 
     // Pre Formatting:
     // The length of `(indent)let pat = init else block;` is 101 (> max_width)
@@ -125,19 +107,19 @@ fn unbreakable_initializer_expr_pre_formatting_let_else_length_near_max_width() 
     // The else keyword and opening brace remain on the same line as the initializer expr,
     // and the else block is formatted over multiple lines because we can't fit the
     // else block on the same line as the initializer expr.
-    let Some(x) = some_really_really_really_really_really_really_really_long_name__D else {
-        return;
-    };
+    let Some(x) = some_really_really_really_really_really_really_really_long_name__D else { return };
 }
 
-fn unbreakable_initializer_expr_pre_formatting_length_up_to_opening_brace_near_max_width() {
+fn unbreakable_initializer_expr_pre_formatting_length_up_to_opening_brace_near_max_width()
+{
     // Pre Formatting:
     // The length of `(indent)let pat = init else {` is 99 (< max_width)
     // Post Formatting:
     // The else keyword and opening brace remain on the same line as the initializer expr,
     // and the else block is formatted over multiple lines because we can't fit the
     // else block on the same line as the initializer expr.
-    let Some(x) = some_really_really_really_really_really_really_really_really_long_name___E else {
+    let Some(x) = some_really_really_really_really_really_really_really_really_long_name___E else
+    {
         return;
     };
 
@@ -146,20 +128,21 @@ fn unbreakable_initializer_expr_pre_formatting_length_up_to_opening_brace_near_m
     // Post Formatting:
     // The else keyword and opening brace cannot fit on the same line as the initializer expr.
     // They are formatted on the next line.
-    let Some(x) = some_really_really_really_really_really_really_really_really_long_name_____F
-    else {
+    let Some(x) = some_really_really_really_really_really_really_really_really_long_name_____F else
+    {
         return;
     };
 }
 
-fn unbreakable_initializer_expr_pre_formatting_length_through_initializer_expr_near_max_width() {
+fn unbreakable_initializer_expr_pre_formatting_length_through_initializer_expr_near_max_width()
+{
     // Pre Formatting:
     // The length of `(indent)let pat = init` is 99 (< max_width)
     // Post Formatting:
     // The else keyword and opening brace cannot fit on the same line as the initializer expr.
     // They are formatted on the next line.
-    let Some(x) = some_really_really_really_really_really_really_really_really_really_long_name___G
-    else {
+    let Some(x) = some_really_really_really_really_really_really_really_really_really_long_name___G else
+    {
         return;
     };
 
@@ -168,9 +151,8 @@ fn unbreakable_initializer_expr_pre_formatting_length_through_initializer_expr_n
     // Post Formatting:
     // Break after the `=` and put the initializer expr on it's own line.
     // Because the initializer expr is multi-lined the else is placed on it's own line.
-    let Some(x) =
-        some_really_really_really_really_really_really_really_really_really_long_name____H
-    else {
+    let Some(x) = some_really_really_really_really_really_really_really_really_really_long_name____H else
+    {
         return;
     };
 
@@ -183,9 +165,8 @@ fn unbreakable_initializer_expr_pre_formatting_length_through_initializer_expr_n
     // The `(indent)init` line has a length of 99. This is the max length that the `init` can be
     // before we start running into max_width issues. I suspect this is because the shape is
     // accounting for the `;` at the end of the `let-else` statement.
-    let Some(x) =
-        some_really_really_really_really_really_really_really_really_really_really_long_name______I
-    else {
+    let Some(x) = some_really_really_really_really_really_really_really_really_really_really_long_name______I else
+    {
         return;
     };
 
@@ -197,80 +178,71 @@ fn unbreakable_initializer_expr_pre_formatting_length_through_initializer_expr_n
     // the `(indent)init` line has a length of 100 which == max_width of 100.
     // One might expect formatting to succeed, but I suspect the reason we hit max_width issues is
     // because the Shape is accounting for the `;` at the end of the `let-else` statement.
-    let Some(x) = some_really_really_really_really_really_really_really_really_really_really_really_long_nameJ else {return};
-}
-
-fn long_patterns() {
-    let Foo {
-        x: Bar(..),
-        y: FooBar(..),
-        z: Baz(..),
-    } = opt
-    else {
+    let Some(x) = some_really_really_really_really_really_really_really_really_really_really_really_long_nameJ else
+    {
         return;
     };
+}
+
+fn long_patterns()
+{
+    let Foo { x: Bar(..), y: FooBar(..), z: Baz(..) } = opt else { return; };
 
     // with version=One we don't wrap long array patterns
-    let [aaaaaaaaaaaaaaaa, bbbbbbbbbbbbbbb, cccccccccccccccccc, dddddddddddddddddd] = opt else {
+    let [aaaaaaaaaaaaaaaa, bbbbbbbbbbbbbbb, cccccccccccccccccc, dddddddddddddddddd] = opt else
+    {
         return;
     };
 
-    let ("aaaaaaaaaaaaaaaaaaa"
-    | "bbbbbbbbbbbbbbbbb"
-    | "cccccccccccccccccccccccc"
-    | "dddddddddddddddd"
-    | "eeeeeeeeeeeeeeee") = opt
-    else {
+    let ("aaaaaaaaaaaaaaaaaaa" | "bbbbbbbbbbbbbbbbb" | "cccccccccccccccccccccccc" | "dddddddddddddddd" | "eeeeeeeeeeeeeeee") = opt else
+    {
         return;
     };
 
-    let Some(Ok((Message::ChangeColor(super::color::Color::Rgb(r, g, b)), Point { x, y, z }))) =
-        opt
-    else {
+    let Some(Ok((Message::ChangeColor(super::color::Color::Rgb(r, g, b)), Point { x, y, z }))) = opt else
+    {
         return;
     };
 }
 
-fn with_trailing_try_operator() {
+fn with_trailing_try_operator()
+{
     // Currently the trailing ? forces the else on the next line
     // This may be revisited in style edition 2024
-    let Some(next_bucket) = ranking_rules[cur_ranking_rule_index].next_bucket(
-        ctx,
-        logger,
-        &ranking_rule_universes[cur_ranking_rule_index],
-    )?
-    else {
+    let Some(next_bucket) = ranking_rules[cur_ranking_rule_index].next_bucket(ctx, logger, &ranking_rule_universes[cur_ranking_rule_index])? else
+    {
         return;
     };
 
     // Maybe this is a workaround?
-    let Ok(Some(next_bucket)) = ranking_rules[cur_ranking_rule_index].next_bucket(
-        ctx,
-        logger,
-        &ranking_rule_universes[cur_ranking_rule_index],
-    ) else {
+    let Ok(Some(next_bucket)) = ranking_rules[cur_ranking_rule_index].next_bucket(ctx, logger, &ranking_rule_universes[cur_ranking_rule_index]) else
+    {
         return;
     };
 }
 
-fn issue5901() {
+fn issue5901()
+{
     #[cfg(target_os = "linux")]
     let Some(x) = foo
-    else {
+    else
+    {
         todo!()
     };
 
     #[cfg(target_os = "linux")]
     // Some comments between attributes and let-else statement
     let Some(x) = foo
-    else {
+    else
+    {
         todo!()
     };
 
     #[cfg(target_os = "linux")]
     #[cfg(target_arch = "x86_64")]
     let Some(x) = foo
-    else {
+    else
+    {
         todo!()
     };
 
@@ -279,7 +251,8 @@ fn issue5901() {
     #[cfg(target_os = "linux")]
     #[cfg(target_arch = "x86_64")]
     // Some comments between attributes and let-else statement
-    let Some(x) = foo() else {
+    let Some(x) = foo() else
+    {
         todo!()
     };
 }

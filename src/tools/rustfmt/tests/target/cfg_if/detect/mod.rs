@@ -20,42 +20,19 @@
 #[macro_use]
 mod error_macros;
 
-cfg_if! {
-    if #[cfg(any(target_arch = "x86", target_arch = "x86_64"))] {
-        #[path = "arch/x86.rs"]
-        #[macro_use]
-        mod arch;
-    } else if #[cfg(target_arch = "arm")] {
-        #[path = "arch/arm.rs"]
-        #[macro_use]
-        mod arch;
-    } else if #[cfg(target_arch = "aarch64")] {
-        #[path = "arch/aarch64.rs"]
-        #[macro_use]
-        mod arch;
-    } else if #[cfg(target_arch = "powerpc")] {
-        #[path = "arch/powerpc.rs"]
-        #[macro_use]
-        mod arch;
-    } else if #[cfg(target_arch = "powerpc64")] {
-        #[path = "arch/powerpc64.rs"]
-        #[macro_use]
-        mod arch;
-    } else if #[cfg(target_arch = "mips")] {
-        #[path = "arch/mips.rs"]
-        #[macro_use]
-        mod arch;
-    } else if #[cfg(target_arch = "mips64")] {
-        #[path = "arch/mips64.rs"]
-        #[macro_use]
-        mod arch;
-    } else {
+cfg_if!
+{
+    if #[cfg(any(target_arch = "x86", target_arch = "x86_64"))] {#[path = "arch/x86.rs"]#[macro_use] mod arch; }
+    else if #[cfg(target_arch = "arm")] {#[path = "arch/arm.rs"]#[macro_use] mod arch; }
+    else if #[cfg(target_arch = "aarch64")] {#[path = "arch/aarch64.rs"]#[macro_use] mod arch; }
+    else if #[cfg(target_arch = "powerpc")] {#[path = "arch/powerpc.rs"]#[macro_use] mod arch; }
+    else if #[cfg(target_arch = "powerpc64")] {#[path = "arch/powerpc64.rs"]#[macro_use] mod arch; }
+    else if #[cfg(target_arch = "mips")] {#[path = "arch/mips.rs"]#[macro_use] mod arch; }
+    else if #[cfg(target_arch = "mips64")] {#[path = "arch/mips64.rs"]#[macro_use] mod arch; }
+    else
+    {
         // Unimplemented architecture:
-        mod arch {
-            pub enum Feature {
-                Null
-            }
-        }
+        mod arch { pub enum Feature { Null } }
     }
 }
 pub use self::arch::Feature;
@@ -63,23 +40,23 @@ pub use self::arch::Feature;
 mod bit;
 mod cache;
 
-cfg_if! {
-    if #[cfg(any(target_arch = "x86", target_arch = "x86_64"))] {
+cfg_if!
+{
+    if #[cfg(any(target_arch = "x86", target_arch = "x86_64"))]
+    {
         // On x86/x86_64 no OS specific functionality is required.
         #[path = "os/x86.rs"]
         mod os;
-    } else if #[cfg(all(target_os = "linux", feature = "use_std"))] {
-        #[path = "os/linux/mod.rs"]
-        mod os;
-    } else if #[cfg(target_os = "freebsd")] {
-        #[cfg(target_arch = "aarch64")]
-        #[path = "os/aarch64.rs"]
+    }
+    else if #[cfg(all(target_os = "linux", feature = "use_std"))] {#[path = "os/linux/mod.rs"] mod os; }
+    else if #[cfg(target_os = "freebsd")]
+    {
+       #[cfg(target_arch = "aarch64")]
+       #[path = "os/aarch64.rs"]
         mod aarch64;
-        #[path = "os/freebsd/mod.rs"]
-        mod os;
-    } else {
-        #[path = "os/other.rs"]
+       #[path = "os/freebsd/mod.rs"]
         mod os;
     }
+    else {#[path = "os/other.rs"] mod os; }
 }
 pub use self::os::check_for;

@@ -1,26 +1,38 @@
 // Comments on else block. See #1575.
 
-fn example() {
+fn example()
+{
     // `if` comment
-    if x {
+    if x
+    {
         foo();
     // `else if` comment
-    } else if y {
+    }
+    else if y
+    {
         foo();
     // Comment on `else if`.
     // Comment on `else if`.
-    } else if z {
+    }
+    else if z
+    {
         bar();
     /*
      *  Multi line comment on `else if`
      */
-    } else if xx {
+    }
+    else if xx
+    {
         bar();
     /* Single line comment on `else if` */
-    } else if yy {
+    }
+    else if yy
+    {
         foo();
     // `else` comment
-    } else {
+    }
+    else
+    {
         foo();
         // Comment at the end of `else` block
     };

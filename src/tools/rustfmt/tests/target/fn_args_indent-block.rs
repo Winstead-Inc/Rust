@@ -1,58 +1,41 @@
 // rustfmt-normalize_comments: true
 
-fn foo() {
+fn foo()
+{
     foo();
 }
 
-fn foo(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb) {
+fn foo(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb)
+{
     foo();
 }
 
-fn bar(
-    a: Aaaaaaaaaaaaaa,
-    b: Bbbbbbbbbbbbbb,
-    c: Cccccccccccccccccc,
-    d: Dddddddddddddddd,
-    e: Eeeeeeeeeeeeeee,
-) {
+fn bar(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb, c: Cccccccccccccccccc, d: Dddddddddddddddd, e: Eeeeeeeeeeeeeee)
+{
     bar();
 }
 
-fn foo(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb) -> String {
+fn foo(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb) -> String
+{
     foo();
 }
 
-fn bar(
-    a: Aaaaaaaaaaaaaa,
-    b: Bbbbbbbbbbbbbb,
-    c: Cccccccccccccccccc,
-    d: Dddddddddddddddd,
-    e: Eeeeeeeeeeeeeee,
-) -> String {
+fn bar(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb, c: Cccccccccccccccccc, d: Dddddddddddddddd, e: Eeeeeeeeeeeeeee) -> String
+{
     bar();
 }
 
-fn foo(a: u8 /* Comment 1 */, b: u8 /* Comment 2 */) -> u8 {
+fn foo(a: u8 /* Comment 1 */, b: u8 /* Comment 2 */) -> u8
+{
     bar()
 }
 
-fn foo(
-    a: u8, // Comment 1
-    b: Bbbbbbbbbbbbbb,
-    c: Cccccccccccccccccc,
-    d: Dddddddddddddddd,
-    e: Eeeeeeeeeeeeeee, // Comment 2
-) -> u8 {
+fn foo(a: u8 /* Comment 1 */, b: Bbbbbbbbbbbbbb, c: Cccccccccccccccccc, d: Dddddddddddddddd, e: Eeeeeeeeeeeeeee /* Comment 2 */) -> u8
+{
     bar()
 }
 
-fn bar(
-    a: Aaaaaaaaaaaaaa,
-    b: Bbbbbbbbbbbbbb,
-    c: Cccccccccccccccccc,
-    d: Dddddddddddddddd,
-    e: Eeeeeeeeeeeeeee,
-) -> String
+fn bar(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb, c: Cccccccccccccccccc, d: Dddddddddddddddd, e: Eeeeeeeeeeeeeee) -> String
 where
     X: Fooooo,
     Y: Baaar,
@@ -60,7 +43,8 @@ where
     bar();
 }
 
-fn foo() -> T {
+fn foo() -> T
+{
     foo();
 }
 
@@ -85,59 +69,44 @@ where
 {
 }
 
-fn foo() -> (
-    Loooooooooooooooooooooong,
-    Reeeeeeeeeeeeeeeeeeeeeeeeturn,
-    iiiiiiiiis,
-    Looooooooooooooooong,
-) {
+fn foo() -> (Loooooooooooooooooooooong, Reeeeeeeeeeeeeeeeeeeeeeeeturn, iiiiiiiiis, Looooooooooooooooong)
+{
     foo();
 }
 
-fn foo<g: G>() {
+fn foo<g: G>()
+{
     foo();
 }
 
-fn foo<
-    L: Loooooooooooooooooooooong,
-    G: Geeeeeeeeeeeneric,
-    I: iiiiiiiiis,
-    L: Looooooooooooooooong,
->() {
+fn foo<L: Loooooooooooooooooooooong, G: Geeeeeeeeeeeneric, I: iiiiiiiiis, L: Looooooooooooooooong>()
+{
     foo();
 }
 
-fn foo<L: Loooooooooooooooooooong, G: Geeeeeeeeeeneric, I: iiiiiiiiis, L: Loooooooooooooooong>() {
+fn foo<L: Loooooooooooooooooooong, G: Geeeeeeeeeeneric, I: iiiiiiiiis, L: Loooooooooooooooong>()
+{
     foo();
 }
 
-trait Test {
+trait Test
+{
     fn foo(a: u8) {}
-
-    fn bar(
-        a: Aaaaaaaaaaaaaa,
-        b: Bbbbbbbbbbbbbb,
-        c: Cccccccccccccccccc,
-        d: Dddddddddddddddd,
-        e: Eeeeeeeeeeeeeee,
-    ) -> String {
-    }
+    fn bar(a: Aaaaaaaaaaaaaa, b: Bbbbbbbbbbbbbb, c: Cccccccccccccccccc, d: Dddddddddddddddd, e: Eeeeeeeeeeeeeee) -> String {}
 }
 
-fn foo<L: Loooooooooooooooooooong, G: Geeeeeeeeeeneric, I: iiiiiiiiis, L: Loooooooooooooooong>(
+fn foo<L: Loooooooooooooooooooong, G: Geeeeeeeeeeneric, I: iiiiiiiiis, L: Loooooooooooooooong>
+(
     a: Aaaaaaaaaaaaaaaaaaaa,
     b: Bbbbbbbbbbbbbbbbb,
     c: Cccccccccccccccccc,
     d: Dddddddddddddddd,
-) {
+)
+{
     foo();
 }
 
-fn foo() -> (
-    Looooooooooooooooooooooooooong,
-    Reeeeeeeeeeeeeeeeeeeeeeeeeeeeeturn,
-    iiiiiiiiiiiiiis,
-    Loooooooooooooooooooooong,
-) {
+fn foo() -> (Looooooooooooooooooooooooooong, Reeeeeeeeeeeeeeeeeeeeeeeeeeeeeturn, iiiiiiiiiiiiiis, Loooooooooooooooooooooong)
+{
     foo();
 }

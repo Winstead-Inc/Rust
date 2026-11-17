@@ -1,22 +1,20 @@
 // rustfmt-style_edition: 2024
-fn main() {
+fn main()
+{
     // sample 1
     {
         {
             {
                 {
                     {
-                        let push_ident = if let Some(&node_id) =
-                            subgraph_nodes.get(pull_to_push_idx)
+                        let push_ident = if let Some(&node_id) = subgraph_nodes.get(pull_to_push_idx)
                         {
                             self.node_id_as_ident(node_id, false)
-                        } else {
+                        }
+                        else
+                        {
                             // Entire subgraph is pull (except for a single send/push handoff output).
-                            assert_eq!(
-                                1,
-                                send_ports.len(),
-                                "If entire subgraph is pull, should have only one handoff output."
-                            );
+                            assert_eq!(1, send_ports.len(), "If entire subgraph is pull, should have only one handoff output.");
                             send_ports[0].clone()
                         };
                     }
@@ -31,17 +29,14 @@ fn main() {
             {
                 {
                     {
-                        let push_ident = if let Some(&node_id) =
-                            subgraph_nodes.get(pull_to_push_idx)
+                        let push_ident = if let Some(&node_id) = subgraph_nodes.get(pull_to_push_idx)
                         {
                             self.node_id_as_ident(node_id, false)
-                        } else {
+                        }
+                        else
+                        {
                             // Entire subgraph is pull (except for a single send/push handoff output).
-                            assert_eq!(
-                                1,
-                                send_ports.len(),
-                                "If entire subgraph is pull, should have only one handoff output."
-                            );
+                            assert_eq!(1, send_ports.len(), "If entire subgraph is pull, should have only one handoff output.");
                             send_ports[0].clone()
                         };
                     }
@@ -56,17 +51,14 @@ fn main() {
             {
                 {
                     {
-                        let push_ident = if let Some(&node_id) =
-                            subgraph_nodes.get(pull_to_push_idx)
+                        let push_ident = if let Some(&node_id) = subgraph_nodes.get(pull_to_push_idx)
                         {
                             self.node_id_as_ident(node_id, false)
-                        } else {
+                        }
+                        else
+                        {
                             // Entire subgraph is pull (except for a single send/push handoff output).
-                            assert_eq!(
-                                1,
-                                send_ports.len(),
-                                "If entire subgraph is pull, should have only one handoff output."
-                            );
+                            assert_eq!(1, send_ports.len(), "If entire subgraph is pull, should have only one handoff output.");
                             send_ports[0].clone()
                         };
                     }
@@ -81,17 +73,14 @@ fn main() {
             {
                 {
                     {
-                        let push_ident = if let Some(&node_id) =
-                            subgraph_nodes.get(pull_to_push_idx)
+                        let push_ident = if let Some(&node_id) = subgraph_nodes.get(pull_to_push_idx)
                         {
                             self.node_id_as_ident(node_id, false)
-                        } else {
+                        }
+                        else
+                        {
                             // Entire subgraph is pull (except for a single send/push handoff output).
-                            assert_eq!(
-                                1,
-                                send_ports.len(),
-                                "If entire subgraph is pull, should have only one handoff output."
-                            );
+                            assert_eq!(1, send_ports.len(), "If entire subgraph is pull, should have only one handoff output.");
                             send_ports[0].clone()
                         };
                     }
@@ -106,17 +95,14 @@ fn main() {
             {
                 {
                     {
-                        let push_ident = if let Some(&node_id) =
-                            subgraph_nodes.get(pull_to_push_idx)
+                        let push_ident = if let Some(&node_id) = subgraph_nodes.get(pull_to_push_idx)
                         {
                             self.node_id_as_ident(node_id, false)
-                        } else {
+                        }
+                        else
+                        {
                             // Entire subgraph is pull (except for a single send/push handoff output).
-                            assert_eq!(
-                                1,
-                                send_ports.len(),
-                                "If entire subgraph is pull, should have only one handoff output."
-                            );
+                            assert_eq!(1, send_ports.len(), "If entire subgraph is pull, should have only one handoff output.");
                             send_ports[0].clone()
                         };
                     }
@@ -131,17 +117,14 @@ fn main() {
             {
                 {
                     {
-                        let push_ident = if let Some(&node_id) =
-                            subgraph_nodes.get(pull_to_push_idx)
+                        let push_ident = if let Some(&node_id) = subgraph_nodes.get(pull_to_push_idx)
                         {
                             self.node_id_as_ident(node_id, false)
-                        } else {
+                        }
+                        else
+                        {
                             // Entire subgraph is pull (except for a single send/push handoff output).
-                            assert_eq!(
-                                1,
-                                send_ports.len(),
-                                "If entire subgraph is pull, should have only one handoff output."
-                            );
+                            assert_eq!(1, send_ports.len(), "If entire subgraph is pull, should have only one handoff output.");
                             send_ports[0].clone()
                         };
                     }
@@ -156,17 +139,14 @@ fn main() {
             {
                 {
                     {
-                        let push_ident = if let Some(&node_id) =
-                            subgraph_nodes.get(pull_to_push_idx)
+                        let push_ident = if let Some(&node_id) = subgraph_nodes.get(pull_to_push_idx)
                         {
                             self.node_id_as_ident(node_id, false)
-                        } else {
+                        }
+                        else
+                        {
                             // Entire subgraph is pull (except for a single send/push handoff output).
-                            assert_eq!(
-                                1,
-                                send_ports.len(),
-                                "If entire subgraph is pull, should have only one handoff output."
-                            );
+                            assert_eq!(1, send_ports.len(), "If entire subgraph is pull, should have only one handoff output.");
                             send_ports[0].clone()
                         };
                     }

@@ -1,5 +1,6 @@
 // rustfmt-trailing_comma: Never
 
-fn main() {
+fn main()
+{
     let Foo { a, .. } = b;
 }

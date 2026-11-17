@@ -82,159 +82,95 @@
 #[macro_export]
 #[stable(feature = "simd_x86", since = "1.27.0")]
 #[allow_internal_unstable(stdsimd_internal, stdsimd)]
-macro_rules! is_x86_feature_detected {
-    ("aes") => {
-        cfg!(target_feature = "aes") || $crate::detect::check_for($crate::detect::Feature::aes)
-    };
-    ("pclmulqdq") => {
-        cfg!(target_feature = "pclmulqdq")
-            || $crate::detect::check_for($crate::detect::Feature::pclmulqdq)
-    };
-    ("rdrand") => {
-        cfg!(target_feature = "rdrand")
-            || $crate::detect::check_for($crate::detect::Feature::rdrand)
-    };
-    ("rdseed") => {
-        cfg!(target_feature = "rdseed")
-            || $crate::detect::check_for($crate::detect::Feature::rdseed)
-    };
-    ("tsc") => {
-        cfg!(target_feature = "tsc") || $crate::detect::check_for($crate::detect::Feature::tsc)
-    };
-    ("mmx") => {
-        cfg!(target_feature = "mmx") || $crate::detect::check_for($crate::detect::Feature::mmx)
-    };
-    ("sse") => {
-        cfg!(target_feature = "sse") || $crate::detect::check_for($crate::detect::Feature::sse)
-    };
-    ("sse2") => {
-        cfg!(target_feature = "sse2") || $crate::detect::check_for($crate::detect::Feature::sse2)
-    };
-    ("sse3") => {
-        cfg!(target_feature = "sse3") || $crate::detect::check_for($crate::detect::Feature::sse3)
-    };
-    ("ssse3") => {
-        cfg!(target_feature = "ssse3") || $crate::detect::check_for($crate::detect::Feature::ssse3)
-    };
-    ("sse4.1") => {
-        cfg!(target_feature = "sse4.1")
-            || $crate::detect::check_for($crate::detect::Feature::sse4_1)
-    };
-    ("sse4.2") => {
-        cfg!(target_feature = "sse4.2")
-            || $crate::detect::check_for($crate::detect::Feature::sse4_2)
-    };
-    ("sse4a") => {
-        cfg!(target_feature = "sse4a") || $crate::detect::check_for($crate::detect::Feature::sse4a)
-    };
-    ("sha") => {
-        cfg!(target_feature = "sha") || $crate::detect::check_for($crate::detect::Feature::sha)
-    };
-    ("avx") => {
-        cfg!(target_feature = "avx") || $crate::detect::check_for($crate::detect::Feature::avx)
-    };
-    ("avx2") => {
-        cfg!(target_feature = "avx2") || $crate::detect::check_for($crate::detect::Feature::avx2)
-    };
-    ("avx512f") => {
-        cfg!(target_feature = "avx512f")
-            || $crate::detect::check_for($crate::detect::Feature::avx512f)
-    };
-    ("avx512cd") => {
-        cfg!(target_feature = "avx512cd")
-            || $crate::detect::check_for($crate::detect::Feature::avx512cd)
-    };
-    ("avx512er") => {
-        cfg!(target_feature = "avx512er")
-            || $crate::detect::check_for($crate::detect::Feature::avx512er)
-    };
-    ("avx512pf") => {
-        cfg!(target_feature = "avx512pf")
-            || $crate::detect::check_for($crate::detect::Feature::avx512pf)
-    };
-    ("avx512bw") => {
-        cfg!(target_feature = "avx512bw")
-            || $crate::detect::check_for($crate::detect::Feature::avx512bw)
-    };
-    ("avx512dq") => {
-        cfg!(target_feature = "avx512dq")
-            || $crate::detect::check_for($crate::detect::Feature::avx512dq)
-    };
-    ("avx512vl") => {
-        cfg!(target_Feature = "avx512vl")
-            || $crate::detect::check_for($crate::detect::Feature::avx512vl)
-    };
-    ("avx512ifma") => {
-        cfg!(target_feature = "avx512ifma")
-            || $crate::detect::check_for($crate::detect::Feature::avx512_ifma)
-    };
-    ("avx512vbmi") => {
-        cfg!(target_feature = "avx512vbmi")
-            || $crate::detect::check_for($crate::detect::Feature::avx512_vbmi)
-    };
-    ("avx512vpopcntdq") => {
-        cfg!(target_feature = "avx512vpopcntdq")
-            || $crate::detect::check_for($crate::detect::Feature::avx512_vpopcntdq)
-    };
-    ("f16c") => {
-        cfg!(target_feature = "f16c") || $crate::detect::check_for($crate::detect::Feature::f16c)
-    };
-    ("fma") => {
-        cfg!(target_feature = "fma") || $crate::detect::check_for($crate::detect::Feature::fma)
-    };
-    ("bmi1") => {
-        cfg!(target_feature = "bmi1") || $crate::detect::check_for($crate::detect::Feature::bmi)
-    };
-    ("bmi2") => {
-        cfg!(target_feature = "bmi2") || $crate::detect::check_for($crate::detect::Feature::bmi2)
-    };
-    ("abm") => {
-        cfg!(target_feature = "abm") || $crate::detect::check_for($crate::detect::Feature::abm)
-    };
-    ("lzcnt") => {
-        cfg!(target_feature = "lzcnt") || $crate::detect::check_for($crate::detect::Feature::abm)
-    };
-    ("tbm") => {
-        cfg!(target_feature = "tbm") || $crate::detect::check_for($crate::detect::Feature::tbm)
-    };
-    ("popcnt") => {
-        cfg!(target_feature = "popcnt")
-            || $crate::detect::check_for($crate::detect::Feature::popcnt)
-    };
-    ("fxsr") => {
-        cfg!(target_feature = "fxsr") || $crate::detect::check_for($crate::detect::Feature::fxsr)
-    };
-    ("xsave") => {
-        cfg!(target_feature = "xsave") || $crate::detect::check_for($crate::detect::Feature::xsave)
-    };
-    ("xsaveopt") => {
-        cfg!(target_feature = "xsaveopt")
-            || $crate::detect::check_for($crate::detect::Feature::xsaveopt)
-    };
-    ("xsaves") => {
-        cfg!(target_feature = "xsaves")
-            || $crate::detect::check_for($crate::detect::Feature::xsaves)
-    };
-    ("xsavec") => {
-        cfg!(target_feature = "xsavec")
-            || $crate::detect::check_for($crate::detect::Feature::xsavec)
-    };
-    ("cmpxchg16b") => {
-        cfg!(target_feature = "cmpxchg16b")
-            || $crate::detect::check_for($crate::detect::Feature::cmpxchg16b)
-    };
-    ("adx") => {
-        cfg!(target_feature = "adx") || $crate::detect::check_for($crate::detect::Feature::adx)
-    };
-    ("rtm") => {
-        cfg!(target_feature = "rtm") || $crate::detect::check_for($crate::detect::Feature::rtm)
-    };
-    ($t:tt,) => {
-        is_x86_feature_detected!($t);
-    };
-    ($t:tt) => {
-        compile_error!(concat!("unknown target feature: ", $t))
-    };
+macro_rules! is_x86_feature_detected
+{
+    ("aes") => { cfg!(target_feature = "aes") || $crate::detect::check_for($crate::detect::Feature::aes) };
+
+    ("pclmulqdq") => { cfg!(target_feature = "pclmulqdq") || $crate::detect::check_for($crate::detect::Feature::pclmulqdq) };
+
+    ("rdrand") => { cfg!(target_feature = "rdrand") || $crate::detect::check_for($crate::detect::Feature::rdrand) };
+
+    ("rdseed") => { cfg!(target_feature = "rdseed") || $crate::detect::check_for($crate::detect::Feature::rdseed) };
+
+    ("tsc") => { cfg!(target_feature = "tsc") || $crate::detect::check_for($crate::detect::Feature::tsc) };
+
+    ("mmx") => { cfg!(target_feature = "mmx") || $crate::detect::check_for($crate::detect::Feature::mmx) };
+
+    ("sse") => { cfg!(target_feature = "sse") || $crate::detect::check_for($crate::detect::Feature::sse) };
+
+    ("sse2") => { cfg!(target_feature = "sse2") || $crate::detect::check_for($crate::detect::Feature::sse2) };
+
+    ("sse3") => { cfg!(target_feature = "sse3") || $crate::detect::check_for($crate::detect::Feature::sse3) };
+
+    ("ssse3") => { cfg!(target_feature = "ssse3") || $crate::detect::check_for($crate::detect::Feature::ssse3) };
+
+    ("sse4.1") => { cfg!(target_feature = "sse4.1") || $crate::detect::check_for($crate::detect::Feature::sse4_1) };
+
+    ("sse4.2") => { cfg!(target_feature = "sse4.2") || $crate::detect::check_for($crate::detect::Feature::sse4_2) };
+
+    ("sse4a") => { cfg!(target_feature = "sse4a") || $crate::detect::check_for($crate::detect::Feature::sse4a) };
+
+    ("sha") => { cfg!(target_feature = "sha") || $crate::detect::check_for($crate::detect::Feature::sha) };
+
+    ("avx") => { cfg!(target_feature = "avx") || $crate::detect::check_for($crate::detect::Feature::avx) };
+
+    ("avx2") => { cfg!(target_feature = "avx2") || $crate::detect::check_for($crate::detect::Feature::avx2) };
+
+    ("avx512f") => { cfg!(target_feature = "avx512f") || $crate::detect::check_for($crate::detect::Feature::avx512f) };
+
+    ("avx512cd") => { cfg!(target_feature = "avx512cd") || $crate::detect::check_for($crate::detect::Feature::avx512cd) };
+
+    ("avx512er") => { cfg!(target_feature = "avx512er") || $crate::detect::check_for($crate::detect::Feature::avx512er) };
+
+    ("avx512pf") => { cfg!(target_feature = "avx512pf") || $crate::detect::check_for($crate::detect::Feature::avx512pf) };
+
+    ("avx512bw") => { cfg!(target_feature = "avx512bw") || $crate::detect::check_for($crate::detect::Feature::avx512bw) };
+
+    ("avx512dq") => { cfg!(target_feature = "avx512dq") || $crate::detect::check_for($crate::detect::Feature::avx512dq) };
+
+    ("avx512vl") => { cfg!(target_Feature = "avx512vl") || $crate::detect::check_for($crate::detect::Feature::avx512vl) };
+
+    ("avx512ifma") => { cfg!(target_feature = "avx512ifma") || $crate::detect::check_for($crate::detect::Feature::avx512_ifma) };
+
+    ("avx512vbmi") => { cfg!(target_feature = "avx512vbmi") || $crate::detect::check_for($crate::detect::Feature::avx512_vbmi) };
+
+    ("avx512vpopcntdq") => { cfg!(target_feature = "avx512vpopcntdq") || $crate::detect::check_for($crate::detect::Feature::avx512_vpopcntdq) };
+
+    ("f16c") => { cfg!(target_feature = "f16c") || $crate::detect::check_for($crate::detect::Feature::f16c) };
+
+    ("fma") => { cfg!(target_feature = "fma") || $crate::detect::check_for($crate::detect::Feature::fma) };
+
+    ("bmi1") => { cfg!(target_feature = "bmi1") || $crate::detect::check_for($crate::detect::Feature::bmi) };
+
+    ("bmi2") => { cfg!(target_feature = "bmi2") || $crate::detect::check_for($crate::detect::Feature::bmi2) };
+
+    ("abm") => { cfg!(target_feature = "abm") || $crate::detect::check_for($crate::detect::Feature::abm) };
+
+    ("lzcnt") => { cfg!(target_feature = "lzcnt") || $crate::detect::check_for($crate::detect::Feature::abm) };
+
+    ("tbm") => { cfg!(target_feature = "tbm") || $crate::detect::check_for($crate::detect::Feature::tbm) };
+
+    ("popcnt") => { cfg!(target_feature = "popcnt") || $crate::detect::check_for($crate::detect::Feature::popcnt) };
+
+    ("fxsr") => { cfg!(target_feature = "fxsr") || $crate::detect::check_for($crate::detect::Feature::fxsr) };
+
+    ("xsave") => { cfg!(target_feature = "xsave") || $crate::detect::check_for($crate::detect::Feature::xsave) };
+
+    ("xsaveopt") => { cfg!(target_feature = "xsaveopt") || $crate::detect::check_for($crate::detect::Feature::xsaveopt) };
+
+    ("xsaves") => { cfg!(target_feature = "xsaves") || $crate::detect::check_for($crate::detect::Feature::xsaves) };
+
+    ("xsavec") => { cfg!(target_feature = "xsavec") || $crate::detect::check_for($crate::detect::Feature::xsavec) };
+
+    ("cmpxchg16b") => { cfg!(target_feature = "cmpxchg16b") || $crate::detect::check_for($crate::detect::Feature::cmpxchg16b) };
+
+    ("adx") => { cfg!(target_feature = "adx") || $crate::detect::check_for($crate::detect::Feature::adx) };
+
+    ("rtm") => { cfg!(target_feature = "rtm") || $crate::detect::check_for($crate::detect::Feature::rtm) };
+
+    ($t: tt,) => { is_x86_feature_detected!($t); };
+
+    ($t: tt) => { compile_error!(concat!("unknown target feature: ", $t)) };
 }
 
 /// X86 CPU Feature enum. Each variant denotes a position in a bitset for a
@@ -245,7 +181,8 @@ macro_rules! is_x86_feature_detected {
 #[repr(u8)]
 #[doc(hidden)]
 #[unstable(feature = "stdsimd_internal", issue = "0")]
-pub enum Feature {
+pub enum Feature
+{
     /// AES (Advanced Encryption Standard New Instructions AES-NI)
     aes,
     /// CLMUL (Carry-less Multiplication)

@@ -1,8 +1,10 @@
 #[path = "."]
-mod a {
+mod a
+{
     mod b;
 }
 
-mod c {
+mod c
+{
     mod d;
 }

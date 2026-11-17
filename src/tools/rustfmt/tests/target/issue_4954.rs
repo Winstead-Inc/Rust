@@ -1,4 +1,5 @@
-trait Foo {
+trait Foo
+{
     type Arg<'a>;
 }
 

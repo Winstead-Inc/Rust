@@ -1,8 +1,11 @@
-struct Foo {
+struct Foo
+{
     a: (),
     // spaces ^^^ to be removed
 }
-enum Foo {
+
+enum Foo
+{
     Bar,
     // spaces ^^^ to be removed
 }

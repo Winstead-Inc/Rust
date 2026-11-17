@@ -4,11 +4,13 @@
 
 #![feature(min_generic_const_args)]
 
-trait Trait {
+trait Trait
+{
     type const TYPE_CONST: usize;
 }
 
 struct S<const N: usize>;
 
 fn parsed_as_expr_kind<T: Trait>(_: S<{ core::direct_const_arg!(T::TYPE_CONST) }>) {}
+
 fn parsed_as_ty_kind<T: Trait>(_: S<core::direct_const_arg!(T::TYPE_CONST)>) {}

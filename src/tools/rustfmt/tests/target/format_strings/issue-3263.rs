@@ -2,7 +2,8 @@
 // rustfmt-newline_style: Windows
 
 #[test]
-fn compile_empty_program() {
+fn compile_empty_program()
+{
     let result = get_result();
     let expected = "; ModuleID = \'foo\'
 

@@ -1,8 +1,13 @@
-fn main() {
-    match 3 {
-        t if match t {
+fn main()
+{
+    match 3
+    {
+        t if match t
+        {
             _ => true,
-        } => {}
-        _ => {}
+        } =>
+        {}
+        _ =>
+        {}
     }
 }

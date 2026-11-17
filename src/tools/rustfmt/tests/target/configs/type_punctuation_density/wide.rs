@@ -1,11 +1,13 @@
 // rustfmt-type_punctuation_density: Wide
 // Type punctuation density
 
-fn lorem<Ipsum: Dolor + Sit = Amet>() {
+fn lorem<Ipsum: Dolor + Sit = Amet>()
+{
     // body
 }
 
-struct Foo<T: Eq + Clone, U>
+struct Foo
+<T: Eq + Clone, U>
 where
     U: Eq + Clone, {
     // body
@@ -18,7 +20,8 @@ where
     type Bar: Eq + Clone;
 }
 
-trait Foo: Eq + Clone {
+trait Foo: Eq + Clone
+{
     // body
 }
 
@@ -36,6 +39,7 @@ where
     // body
 }
 
-fn Foo<T = Foo, Output = Expr<'tcx> + Foo>() {
+fn Foo<T = Foo, Output = Expr<'tcx> + Foo>()
+{
     let i = 6;
 }

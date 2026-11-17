@@ -5,6 +5,7 @@ where
 {
 }
 
-fn test() {
+fn test()
+{
     let x: T::method(..);
 }

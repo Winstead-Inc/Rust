@@ -17,10 +17,12 @@ use syn::parse_macro_input;
 pub fn config_type(_args: TokenStream, input: TokenStream) -> TokenStream
 {
     let input = parse_macro_input!(input as syn::Item);
-    let output = config_type::define_config_type( & input);
+    let output = config_type::define_config_type(&input);
 
-   #[cfg(feature = "debug-with-rustfmt")]
-    { utils::debug_with_rustfmt( & output); }
+    #[cfg(feature = "debug-with-rustfmt")]
+    {
+        utils::debug_with_rustfmt(&output);
+    }
 
     TokenStream::from(output)
 }
@@ -40,7 +42,10 @@ pub fn config_type(_args: TokenStream, input: TokenStream) -> TokenStream
 pub fn nightly_only_test(_args: TokenStream, input: TokenStream) -> TokenStream
 {
     // if CFG_RELEASE_CHANNEL is not set we default to nightly, hence why the default is true
-    if option_env!("CFG_RELEASE_CHANNEL").map_or(true, | c | c == "nightly" || c == "dev") { input }
+    if option_env!("CFG_RELEASE_CHANNEL").map_or(true, |c| c == "nightly" || c == "dev")
+    {
+        input
+    }
     else
     {
         // output an empty token stream if CFG_RELEASE_CHANNEL is not set to "nightly" or "dev"
@@ -63,7 +68,10 @@ pub fn nightly_only_test(_args: TokenStream, input: TokenStream) -> TokenStream
 pub fn stable_only_test(_args: TokenStream, input: TokenStream) -> TokenStream
 {
     // if CFG_RELEASE_CHANNEL is not set we default to nightly, hence why the default is false
-    if option_env!("CFG_RELEASE_CHANNEL").map_or(false, | c | c == "stable") { input }
+    if option_env!("CFG_RELEASE_CHANNEL").map_or(false, |c| c == "stable")
+    {
+        input
+    }
     else
     {
         // output an empty token stream if CFG_RELEASE_CHANNEL is not set or is not 'stable'
@@ -76,6 +84,14 @@ pub fn stable_only_test(_args: TokenStream, input: TokenStream) -> TokenStream
 #[proc_macro_attribute]
 pub fn rustfmt_only_ci_test(_args: TokenStream, input: TokenStream) -> TokenStream
 {
-    if option_env!("RUSTFMT_CI").is_some() { input }
-    else { let mut token_stream = TokenStream::from_str("#[ignore]").unwrap(); token_stream.extend(input); token_stream }
+    if option_env!("RUSTFMT_CI").is_some()
+    {
+        input
+    }
+    else
+    {
+        let mut token_stream = TokenStream::from_str("#[ignore]").unwrap();
+        token_stream.extend(input);
+        token_stream
+    }
 }

@@ -52,32 +52,26 @@ Where to put a binary operator when a binary expression goes multiline.
 #### `"Front"` (default):
 
 ```rust
-fn main() {
-    let or = foofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoo
-        || barbarbarbarbarbarbarbarbarbarbarbarbarbarbarbar;
+fn main()
+{
+    let or = foofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoo || barbarbarbarbarbarbarbarbarbarbarbarbarbarbarbar;
 
-    let sum = 123456789012345678901234567890
-        + 123456789012345678901234567890
-        + 123456789012345678901234567890;
+    let sum = 123456789012345678901234567890 + 123456789012345678901234567890 + 123456789012345678901234567890;
 
-    let range = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-        ..bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb;
+    let range = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb;
 }
 ```
 
 #### `"Back"`:
 
 ```rust
-fn main() {
-    let or = foofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoo ||
-        barbarbarbarbarbarbarbarbarbarbarbarbarbarbarbar;
+fn main()
+{
+    let or = foofoofoofoofoofoofoofoofoofoofoofoofoofoofoofoo || barbarbarbarbarbarbarbarbarbarbarbarbarbarbarbar;
 
-    let sum = 123456789012345678901234567890 +
-        123456789012345678901234567890 +
-        123456789012345678901234567890;
+    let sum = 123456789012345678901234567890 + 123456789012345678901234567890 + 123456789012345678901234567890;
 
-    let range = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..
-        bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb;
+    let range = aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa..bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb;
 }
 ```
 
@@ -107,12 +101,14 @@ fn bar() {
 
 #### `1`
 ```rust
-fn foo() {
+fn foo()
+{
 
     println!("a");
 }
 
-fn bar() {
+fn bar()
+{
 
     println!("b");
 
@@ -152,11 +148,13 @@ fn bar() {
 
 #### `1` (default):
 ```rust
-fn foo() {
+fn foo()
+{
     println!("a");
 }
 
-fn bar() {
+fn bar()
+{
     println!("b");
 
     println!("c");
@@ -165,12 +163,14 @@ fn bar() {
 
 #### `2`:
 ```rust
-fn foo() {
+fn foo()
+{
     println!("a");
 }
 
 
-fn bar() {
+fn bar()
+{
     println!("b");
 
 
@@ -253,11 +253,13 @@ where
 #### `"SameLineWhere"` (default):
 
 ```rust
-struct Lorem {
+struct Lorem
+{
     ipsum: bool,
 }
 
-struct Dolor<T>
+struct Dolor
+<T>
 where
     T: Eq,
 {
@@ -273,7 +275,8 @@ struct Lorem
     ipsum: bool,
 }
 
-struct Dolor<T>
+struct Dolor
+<T>
 where
     T: Eq,
 {
@@ -284,11 +287,13 @@ where
 #### `"PreferSameLine"`:
 
 ```rust
-struct Lorem {
+struct Lorem
+{
     ipsum: bool,
 }
 
-struct Dolor<T>
+struct Dolor
+<T>
 where
     T: Eq, {
     sit: T,
@@ -326,96 +331,142 @@ Combine control expressions with function calls.
 #### `true` (default):
 
 ```rust
-fn example() {
+fn example()
+{
     // If
-    foo!(if x {
+    foo!
+    (
+        if x
+    {
         foo();
-    } else {
+    }
+    else
+    {
         bar();
-    });
+    }
+    );
 
     // IfLet
-    foo!(if let Some(..) = x {
+    foo!
+    (
+        if let Some(..) = x
+    {
         foo();
-    } else {
+    }
+    else
+    {
         bar();
-    });
+    }
+    );
 
     // While
-    foo!(while x {
+    foo!
+    (
+        while x
+    {
         foo();
         bar();
-    });
+    }
+    );
 
     // WhileLet
-    foo!(while let Some(..) = x {
+    foo!
+    (
+        while let Some(..) = x
+    {
         foo();
         bar();
-    });
+    }
+    );
 
     // ForLoop
-    foo!(for x in y {
+    foo!
+    (
+        for x in y
+    {
         foo();
         bar();
-    });
+    }
+    );
 
     // Loop
-    foo!(loop {
+    foo!
+    (
+        loop
+    {
         foo();
         bar();
-    });
+    }
+    );
 }
 ```
 
 #### `false`:
 
 ```rust
-fn example() {
+fn example()
+{
     // If
-    foo!(
-        if x {
+    foo!
+    (
+        if x
+        {
             foo();
-        } else {
+        }
+        else
+        {
             bar();
         }
     );
 
     // IfLet
-    foo!(
-        if let Some(..) = x {
+    foo!
+    (
+        if let Some(..) = x
+        {
             foo();
-        } else {
+        }
+        else
+        {
             bar();
         }
     );
 
     // While
-    foo!(
-        while x {
+    foo!
+    (
+        while x
+        {
             foo();
             bar();
         }
     );
 
     // WhileLet
-    foo!(
-        while let Some(..) = x {
+    foo!
+    (
+        while let Some(..) = x
+        {
             foo();
             bar();
         }
     );
 
     // ForLoop
-    foo!(
-        for x in y {
+    foo!
+    (
+        for x in y
+        {
             foo();
             bar();
         }
     );
 
     // Loop
-    foo!(
-        loop {
+    foo!
+    (
+        loop
+        {
             foo();
             bar();
         }
@@ -457,7 +508,8 @@ Replace strings of _ wildcards by a single .. in tuple patterns
 #### `false` (default):
 
 ```rust
-fn main() {
+fn main()
+{
     let (lorem, ipsum, _, _) = (1, 2, 3, 4);
     let (lorem, ipsum, ..) = (1, 2, 3, 4);
 }
@@ -466,7 +518,8 @@ fn main() {
 #### `true`:
 
 ```rust
-fn main() {
+fn main()
+{
     let (lorem, ipsum, ..) = (1, 2, 3, 4);
 }
 ```
@@ -482,7 +535,8 @@ Brace style for control flow constructs
 #### `"AlwaysSameLine"` (default):
 
 ```rust
-fn main() {
+fn main()
+{
     if lorem {
         println!("ipsum!");
     } else {
@@ -494,7 +548,8 @@ fn main() {
 #### `"AlwaysNextLine"`:
 
 ```rust
-fn main() {
+fn main()
+{
     if lorem
     {
         println!("ipsum!");
@@ -509,7 +564,8 @@ fn main() {
 #### `"ClosingNextLine"`:
 
 ```rust
-fn main() {
+fn main()
+{
     if lorem {
         println!("ipsum!");
     }
@@ -567,10 +623,12 @@ impl Lorem {}
 #### `false`:
 
 ```rust
-fn lorem() {
+fn lorem()
+{
 }
 
-impl Lorem {
+impl Lorem
+{
 }
 ```
 
@@ -592,14 +650,16 @@ doesn't get ignored when aligning.
 #### `0` (default):
 
 ```rust
-enum Foo {
+enum Foo
+{
     A = 0,
     Bb = 1,
     RandomLongVariantGoesHere = 10,
     Ccc = 71,
 }
 
-enum Bar {
+enum Bar
+{
     VeryLongVariantNameHereA = 0,
     VeryLongVariantNameHereBb = 1,
     VeryLongVariantNameHereCcc = 2,
@@ -609,14 +669,16 @@ enum Bar {
 #### `20`:
 
 ```rust
-enum Foo {
+enum Foo
+{
     A   = 0,
     Bb  = 1,
     RandomLongVariantGoesHere = 10,
     Ccc = 2,
 }
 
-enum Bar {
+enum Bar
+{
     VeryLongVariantNameHereA = 0,
     VeryLongVariantNameHereBb = 1,
     VeryLongVariantNameHereCcc = 2,
@@ -658,32 +720,19 @@ it affects the layout of parameters in function signatures.
 #### `"Tall"` (default):
 
 ```rust
-trait Lorem {
+trait Lorem
+{
     fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet);
 
-    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet) {
+    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet)
+    {
         // body
     }
 
-    fn lorem(
-        ipsum: Ipsum,
-        dolor: Dolor,
-        sit: Sit,
-        amet: Amet,
-        consectetur: Consectetur,
-        adipiscing: Adipiscing,
-        elit: Elit,
-    );
+    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet, consectetur: Consectetur, adipiscing: Adipiscing, elit: Elit);
 
-    fn lorem(
-        ipsum: Ipsum,
-        dolor: Dolor,
-        sit: Sit,
-        amet: Amet,
-        consectetur: Consectetur,
-        adipiscing: Adipiscing,
-        elit: Elit,
-    ) {
+    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet, consectetur: Consectetur, adipiscing: Adipiscing, elit: Elit)
+    {
         // body
     }
 }
@@ -692,22 +741,19 @@ trait Lorem {
 #### `"Compressed"`:
 
 ```rust
-trait Lorem {
+trait Lorem
+{
     fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet);
 
-    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet) {
+    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet)
+    {
         // body
     }
 
-    fn lorem(
-        ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet, consectetur: Consectetur,
-        adipiscing: Adipiscing, elit: Elit,
-    );
+    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet, consectetur: Consectetur, adipiscing: Adipiscing, elit: Elit);
 
-    fn lorem(
-        ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet, consectetur: Consectetur,
-        adipiscing: Adipiscing, elit: Elit,
-    ) {
+    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet, consectetur: Consectetur, adipiscing: Adipiscing, elit: Elit)
+    {
         // body
     }
 }
@@ -716,24 +762,29 @@ trait Lorem {
 #### `"Vertical"`:
 
 ```rust
-trait Lorem {
-    fn lorem(
+trait Lorem
+{
+    fn lorem
+    (
         ipsum: Ipsum,
         dolor: Dolor,
         sit: Sit,
         amet: Amet,
     );
 
-    fn lorem(
+    fn lorem
+    (
         ipsum: Ipsum,
         dolor: Dolor,
         sit: Sit,
         amet: Amet,
-    ) {
+    )
+    {
         // body
     }
 
-    fn lorem(
+    fn lorem
+    (
         ipsum: Ipsum,
         dolor: Dolor,
         sit: Sit,
@@ -743,7 +794,8 @@ trait Lorem {
         elit: Elit,
     );
 
-    fn lorem(
+    fn lorem
+    (
         ipsum: Ipsum,
         dolor: Dolor,
         sit: Sit,
@@ -751,7 +803,8 @@ trait Lorem {
         consectetur: Consectetur,
         adipiscing: Adipiscing,
         elit: Elit,
-    ) {
+    )
+    {
         // body
     }
 }
@@ -782,32 +835,19 @@ Control the layout of parameters in function signatures.
 #### `"Tall"` (default):
 
 ```rust
-trait Lorem {
+trait Lorem
+{
     fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet);
 
-    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet) {
+    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet)
+    {
         // body
     }
 
-    fn lorem(
-        ipsum: Ipsum,
-        dolor: Dolor,
-        sit: Sit,
-        amet: Amet,
-        consectetur: Consectetur,
-        adipiscing: Adipiscing,
-        elit: Elit,
-    );
+    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet, consectetur: Consectetur, adipiscing: Adipiscing, elit: Elit);
 
-    fn lorem(
-        ipsum: Ipsum,
-        dolor: Dolor,
-        sit: Sit,
-        amet: Amet,
-        consectetur: Consectetur,
-        adipiscing: Adipiscing,
-        elit: Elit,
-    ) {
+    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet, consectetur: Consectetur, adipiscing: Adipiscing, elit: Elit)
+    {
         // body
     }
 }
@@ -816,22 +856,19 @@ trait Lorem {
 #### `"Compressed"`:
 
 ```rust
-trait Lorem {
+trait Lorem
+{
     fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet);
 
-    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet) {
+    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet)
+    {
         // body
     }
 
-    fn lorem(
-        ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet, consectetur: Consectetur,
-        adipiscing: Adipiscing, elit: Elit,
-    );
+    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet, consectetur: Consectetur, adipiscing: Adipiscing, elit: Elit);
 
-    fn lorem(
-        ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet, consectetur: Consectetur,
-        adipiscing: Adipiscing, elit: Elit,
-    ) {
+    fn lorem(ipsum: Ipsum, dolor: Dolor, sit: Sit, amet: Amet, consectetur: Consectetur, adipiscing: Adipiscing, elit: Elit)
+    {
         // body
     }
 }
@@ -840,24 +877,29 @@ trait Lorem {
 #### `"Vertical"`:
 
 ```rust
-trait Lorem {
-    fn lorem(
+trait Lorem
+{
+    fn lorem
+    (
         ipsum: Ipsum,
         dolor: Dolor,
         sit: Sit,
         amet: Amet,
     );
 
-    fn lorem(
+    fn lorem
+    (
         ipsum: Ipsum,
         dolor: Dolor,
         sit: Sit,
         amet: Amet,
-    ) {
+    )
+    {
         // body
     }
 
-    fn lorem(
+    fn lorem
+    (
         ipsum: Ipsum,
         dolor: Dolor,
         sit: Sit,
@@ -867,7 +909,8 @@ trait Lorem {
         elit: Elit,
     );
 
-    fn lorem(
+    fn lorem
+    (
         ipsum: Ipsum,
         dolor: Dolor,
         sit: Sit,
@@ -875,7 +918,8 @@ trait Lorem {
         consectetur: Consectetur,
         adipiscing: Adipiscing,
         elit: Elit,
-    ) {
+    )
+    {
         // body
     }
 }
@@ -893,11 +937,13 @@ Put single-expression functions on a single line
 #### `false` (default):
 
 ```rust
-fn lorem() -> usize {
+fn lorem() -> usize
+{
     42
 }
 
-fn lorem() -> usize {
+fn lorem() -> usize
+{
     let ipsum = 42;
     ipsum
 }
@@ -908,7 +954,8 @@ fn lorem() -> usize {
 ```rust
 fn lorem() -> usize { 42 }
 
-fn lorem() -> usize {
+fn lorem() -> usize
+{
     let ipsum = 42;
     ipsum
 }
@@ -954,14 +1001,21 @@ Force multiline closure and match arm bodies to be wrapped in a block
 #### `false` (default):
 
 ```rust
-fn main() {
-    result.and_then(|maybe_value| match maybe_value {
+fn main()
+{
+    result.and_then
+    (
+        |maybe_value| match maybe_value
+    {
         None => foo(),
         Some(value) => bar(),
-    });
+    }
+    );
 
-    match lorem {
-        None => |ipsum| {
+    match lorem
+    {
+        None => |ipsum|
+        {
             println!("Hello World");
         },
         Some(dolor) => foo(),
@@ -972,17 +1026,26 @@ fn main() {
 #### `true`:
 
 ```rust
-fn main() {
-    result.and_then(|maybe_value| {
-        match maybe_value {
+fn main()
+{
+    result.and_then
+    (
+        |maybe_value|
+    {
+        match maybe_value
+        {
             None => foo(),
             Some(value) => bar(),
         }
-    });
+    }
+    );
 
-    match lorem {
-        None => {
-            |ipsum| {
+    match lorem
+    {
+        None =>
+        {
+            |ipsum|
+            {
                 println!("Hello World");
             }
         }
@@ -1018,7 +1081,8 @@ Format code snippet included in doc comments.
 /// #     x + 1
 /// # }
 /// ```
-fn add_one(x: i32) -> i32 {
+fn add_one(x: i32) -> i32
+{
     x + 1
 }
 ```
@@ -1038,7 +1102,8 @@ fn add_one(x: i32) -> i32 {
 /// #     x + 1
 /// # }
 /// ```
-fn add_one(x: i32) -> i32 {
+fn add_one(x: i32) -> i32
+{
     x + 1
 }
 ```
@@ -1091,11 +1156,14 @@ Format the metavariable matching patterns in macros.
 #### `false` (default):
 
 ```rust
-macro_rules! foo {
-    ($a: ident : $b: ty) => {
+macro_rules! foo
+{
+    ($a: ident : $b: ty) =>
+    {
         $a(42): $b;
     };
-    ($a: ident $b: ident $c: ident) => {
+    ($a: ident $b: ident $c: ident) =>
+    {
         $a = $b + $c;
     };
 }
@@ -1104,11 +1172,14 @@ macro_rules! foo {
 #### `true`:
 
 ```rust
-macro_rules! foo {
-    ($a:ident : $b:ty) => {
+macro_rules! foo
+{
+    ($a:ident : $b:ty) =>
+    {
         $a(42): $b;
     };
-    ($a:ident $b:ident $c:ident) => {
+    ($a:ident $b:ident $c:ident) =>
+    {
         $a = $b + $c;
     };
 }
@@ -1128,11 +1199,14 @@ Format the bodies of declarative macro definitions.
 #### `true` (default):
 
 ```rust
-macro_rules! foo {
-    ($a: ident : $b: ty) => {
+macro_rules! foo
+{
+    ($a: ident : $b: ty) =>
+    {
         $a(42): $b;
     };
-    ($a: ident $b: ident $c: ident) => {
+    ($a: ident $b: ident $c: ident) =>
+    {
         $a = $b + $c;
     };
 }
@@ -1141,7 +1215,8 @@ macro_rules! foo {
 #### `false`:
 
 ```rust
-macro_rules! foo {
+macro_rules! foo
+{
     ($a: ident : $b: ty) => { $a(42): $b; };
     ($a: ident $b: ident $c: ident) => { $a=$b+$c; };
 }
@@ -1217,7 +1292,8 @@ Format string literals where necessary
 #### `false` (default):
 
 ```rust
-fn main() {
+fn main()
+{
     let lorem = "ipsum dolor sit amet consectetur adipiscing elit lorem ipsum dolor sit amet consectetur adipiscing";
 }
 ```
@@ -1225,9 +1301,9 @@ fn main() {
 #### `true`:
 
 ```rust
-fn main() {
-    let lorem = "ipsum dolor sit amet consectetur adipiscing elit lorem ipsum dolor sit amet \
-                 consectetur adipiscing";
+fn main()
+{
+    let lorem = "ipsum dolor sit amet consectetur adipiscing elit lorem ipsum dolor sit amet consectetur adipiscing";
 }
 ```
 
@@ -1244,7 +1320,8 @@ Use tab characters for indentation, spaces for alignment
 #### `false` (default):
 
 ```rust
-fn lorem() -> usize {
+fn lorem() -> usize
+{
     42 // spaces before 42
 }
 ```
@@ -1252,7 +1329,8 @@ fn lorem() -> usize {
 #### `true`:
 
 ```rust
-fn lorem() -> usize {
+fn lorem() -> usize
+{
 	42 // tabs before 42
 }
 ```
@@ -1280,7 +1358,8 @@ Control the presence of trailing zero in floating-point literal values
 Leave the literal as-is.
 
 ```rust
-fn main() {
+fn main()
+{
     let values = [1.0, 2., 3.0e10, 4f32];
 }
 ```
@@ -1290,7 +1369,8 @@ fn main() {
 Add a trailing zero to the literal:
 
 ```rust
-fn main() {
+fn main()
+{
     let values = [1.0, 2.0, 3.0e10, 4.0f32];
 }
 ```
@@ -1301,7 +1381,8 @@ Add a trailing zero by default. If the literal contains an exponent or a suffix,
 and the preceding period are removed:
 
 ```rust
-fn main() {
+fn main()
+{
     let values = [1.0, 2.0, 3e10, 4f32];
 }
 ```
@@ -1312,7 +1393,8 @@ Remove the trailing zero. If the literal contains an exponent or a suffix, the p
 period is also removed:
 
 ```rust
-fn main() {
+fn main()
+{
     let values = [1., 2., 3e10, 4f32];
 }
 ```
@@ -1387,17 +1469,13 @@ Indent style of imports
 #### `"Block"` (default):
 
 ```rust
-use foo::{
-    xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx, yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy,
-    zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz,
-};
+use foo::{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx, yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy, zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz};
 ```
 
 #### `"Visual"`:
 
 ```rust
-use foo::{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx, yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy,
-          zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz};
+use foo::{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx, yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy, zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz};
 ```
 
 See also: [`imports_layout`](#imports_layout).
@@ -1415,10 +1493,7 @@ Item layout inside a imports block
 ```rust
 use foo::{xxxxxxxxxxxxxxxxxx, yyyyyyyyyyyyyyyyyy, zzzzzzzzzzzzzzzzzz};
 
-use foo::{
-    aaaaaaaaaaaaaaaaaa, bbbbbbbbbbbbbbbbbb, cccccccccccccccccc, dddddddddddddddddd,
-    eeeeeeeeeeeeeeeeee, ffffffffffffffffff,
-};
+use foo::{aaaaaaaaaaaaaaaaaa, bbbbbbbbbbbbbbbbbb, cccccccccccccccccc, dddddddddddddddddd, eeeeeeeeeeeeeeeeee, ffffffffffffffffff};
 ```
 
 #### `"Horizontal"`:
@@ -1436,14 +1511,7 @@ use foo::{aaa, bbb, ccc, ddd, eee, fff};
 ```rust
 use foo::{xxxxxxxxxxxxxxxxxx, yyyyyyyyyyyyyyyyyy, zzzzzzzzzzzzzzzzzz};
 
-use foo::{
-    aaaaaaaaaaaaaaaaaa,
-    bbbbbbbbbbbbbbbbbb,
-    cccccccccccccccccc,
-    dddddddddddddddddd,
-    eeeeeeeeeeeeeeeeee,
-    ffffffffffffffffff,
-};
+use foo::{aaaaaaaaaaaaaaaaaa, bbbbbbbbbbbbbbbbbb, cccccccccccccccccc, dddddddddddddddddd, eeeeeeeeeeeeeeeeee, ffffffffffffffffff};
 ```
 
 #### `"Vertical"`:
@@ -1478,30 +1546,18 @@ Indent on expressions or items.
 #### `"Block"` (default):
 
 ```rust
-fn main() {
-    let lorem = vec![
-        "ipsum",
-        "dolor",
-        "sit",
-        "amet",
-        "consectetur",
-        "adipiscing",
-        "elit",
-    ];
+fn main()
+{
+    let lorem = vec!["ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit"];
 }
 ```
 
 #### `"Visual"`:
 
 ```rust
-fn main() {
-    let lorem = vec!["ipsum",
-                     "dolor",
-                     "sit",
-                     "amet",
-                     "consectetur",
-                     "adipiscing",
-                     "elit"];
+fn main()
+{
+    let lorem = vec!["ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit"];
 }
 ```
 
@@ -1510,14 +1566,9 @@ fn main() {
 #### `"Block"` (default):
 
 ```rust
-fn main() {
-    if lorem_ipsum
-        && dolor_sit
-        && amet_consectetur
-        && lorem_sit
-        && dolor_consectetur
-        && amet_ipsum
-        && lorem_consectetur
+fn main()
+{
+    if lorem_ipsum && dolor_sit && amet_consectetur && lorem_sit && dolor_consectetur && amet_ipsum && lorem_consectetur
     {
         // ...
     }
@@ -1527,14 +1578,9 @@ fn main() {
 #### `"Visual"`:
 
 ```rust
-fn main() {
-    if lorem_ipsum
-       && dolor_sit
-       && amet_consectetur
-       && lorem_sit
-       && dolor_consectetur
-       && amet_ipsum
-       && lorem_consectetur
+fn main()
+{
+    if lorem_ipsum && dolor_sit && amet_consectetur && lorem_sit && dolor_consectetur && amet_ipsum && lorem_consectetur
     {
         // ...
     }
@@ -1552,15 +1598,8 @@ fn lorem() {}
 
 fn lorem(ipsum: usize) {}
 
-fn lorem(
-    ipsum: usize,
-    dolor: usize,
-    sit: usize,
-    amet: usize,
-    consectetur: usize,
-    adipiscing: usize,
-    elit: usize,
-) {
+fn lorem(ipsum: usize, dolor: usize, sit: usize, amet: usize, consectetur: usize, adipiscing: usize, elit: usize)
+{
     // body
 }
 ```
@@ -1572,13 +1611,8 @@ fn lorem() {}
 
 fn lorem(ipsum: usize) {}
 
-fn lorem(ipsum: usize,
-         dolor: usize,
-         sit: usize,
-         amet: usize,
-         consectetur: usize,
-         adipiscing: usize,
-         elit: usize) {
+fn lorem(ipsum: usize, dolor: usize, sit: usize, amet: usize, consectetur: usize, adipiscing: usize, elit: usize)
+{
     // body
 }
 ```
@@ -1588,32 +1622,18 @@ fn lorem(ipsum: usize,
 #### `"Block"` (default):
 
 ```rust
-fn main() {
-    lorem(
-        "lorem",
-        "ipsum",
-        "dolor",
-        "sit",
-        "amet",
-        "consectetur",
-        "adipiscing",
-        "elit",
-    );
+fn main()
+{
+    lorem("lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit");
 }
 ```
 
 #### `"Visual"`:
 
 ```rust
-fn main() {
-    lorem("lorem",
-          "ipsum",
-          "dolor",
-          "sit",
-          "amet",
-          "consectetur",
-          "adipiscing",
-          "elit");
+fn main()
+{
+    lorem("lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit");
 }
 ```
 
@@ -1622,15 +1642,8 @@ fn main() {
 #### `"Block"` (default):
 
 ```rust
-fn lorem<
-    Ipsum: Eq = usize,
-    Dolor: Eq = usize,
-    Sit: Eq = usize,
-    Amet: Eq = usize,
-    Adipiscing: Eq = usize,
-    Consectetur: Eq = usize,
-    Elit: Eq = usize,
->(
+fn lorem<Ipsum: Eq = usize, Dolor: Eq = usize, Sit: Eq = usize, Amet: Eq = usize, Adipiscing: Eq = usize, Consectetur: Eq = usize, Elit: Eq = usize>
+(
     ipsum: Ipsum,
     dolor: Dolor,
     sit: Sit,
@@ -1638,7 +1651,8 @@ fn lorem<
     adipiscing: Adipiscing,
     consectetur: Consectetur,
     elit: Elit,
-) -> T {
+) -> T
+{
     // body
 }
 ```
@@ -1646,21 +1660,15 @@ fn lorem<
 #### `"Visual"`:
 
 ```rust
-fn lorem<Ipsum: Eq = usize,
-         Dolor: Eq = usize,
-         Sit: Eq = usize,
-         Amet: Eq = usize,
-         Adipiscing: Eq = usize,
-         Consectetur: Eq = usize,
-         Elit: Eq = usize>(
-    ipsum: Ipsum,
-    dolor: Dolor,
-    sit: Sit,
-    amet: Amet,
-    adipiscing: Adipiscing,
-    consectetur: Consectetur,
-    elit: Elit)
-    -> T {
+fn lorem<Ipsum: Eq = usize, Dolor: Eq = usize, Sit: Eq = usize, Amet: Eq = usize, Adipiscing: Eq = usize, Consectetur: Eq = usize, Elit: Eq = usize>(ipsum: Ipsum,
+                                                                                                                                                     dolor: Dolor,
+                                                                                                                                                     sit: Sit,
+                                                                                                                                                     amet: Amet,
+                                                                                                                                                     adipiscing: Adipiscing,
+                                                                                                                                                     consectetur: Consectetur,
+                                                                                                                                                     elit: Elit)
+                                                                                                                                                     -> T
+{
     // body
 }
 ```
@@ -1670,20 +1678,18 @@ fn lorem<Ipsum: Eq = usize,
 #### `"Block"` (default):
 
 ```rust
-fn main() {
-    let lorem = Lorem {
-        ipsum: dolor,
-        sit: amet,
-    };
+fn main()
+{
+    let lorem = Lorem { ipsum: dolor, sit: amet };
 }
 ```
 
 #### `"Visual"`:
 
 ```rust
-fn main() {
-    let lorem = Lorem { ipsum: dolor,
-                        sit: amet };
+fn main()
+{
+    let lorem = Lorem { ipsum: dolor, sit: amet };
 }
 ```
 
@@ -1752,18 +1758,13 @@ The Style Guide requires that bodies are block wrapped by default if a line brea
 #### `true` (default):
 
 ```rust
-fn main() {
-    match lorem {
-        ipsum => {
-            foooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo(x)
-        }
+fn main()
+{
+    match lorem
+    {
+        ipsum => foooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo(x),
         dolor => println!("{}", sit),
-        sit => foo(
-            "foooooooooooooooooooooooo",
-            "baaaaaaaaaaaaaaaaaaaaaaaarr",
-            "baaaaaaaaaaaaaaaaaaaazzzzzzzzzzzzz",
-            "qqqqqqqqquuuuuuuuuuuuuuuuuuuuuuuuuuxxx",
-        ),
+        sit => foo("foooooooooooooooooooooooo", "baaaaaaaaaaaaaaaaaaaaaaaarr", "baaaaaaaaaaaaaaaaaaaazzzzzzzzzzzzz", "qqqqqqqqquuuuuuuuuuuuuuuuuuuuuuuuuuxxx"),
     }
 }
 ```
@@ -1771,17 +1772,13 @@ fn main() {
 #### `false`:
 
 ```rust
-fn main() {
-    match lorem {
-        lorem =>
-            foooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo(x),
+fn main()
+{
+    match lorem
+    {
+        lorem => foooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo(x),
         ipsum => println!("{}", sit),
-        sit => foo(
-            "foooooooooooooooooooooooo",
-            "baaaaaaaaaaaaaaaaaaaaaaaarr",
-            "baaaaaaaaaaaaaaaaaaaazzzzzzzzzzzzz",
-            "qqqqqqqqquuuuuuuuuuuuuuuuuuuuuuuuuuxxx",
-        ),
+        sit => foo("foooooooooooooooooooooooo", "baaaaaaaaaaaaaaaaaaaaaaaarr", "baaaaaaaaaaaaaaaaaaaazzzzzzzzzzzzz", "qqqqqqqqquuuuuuuuuuuuuuuuuuuuuuuuuuxxx"),
     }
 }
 ```
@@ -1811,14 +1808,16 @@ Controls whether to include a leading pipe on match arms
 // }
 
 // Becomes
-fn foo() {
-    match foo {
-        "foo" | "bar" => {}
-        "baz"
-        | "something relatively long"
-        | "something really really really realllllllllllllly long" => println!("x"),
+fn foo()
+{
+    match foo
+    {
+        "foo" | "bar" =>
+        {}
+        "baz" | "something relatively long" | "something really really really realllllllllllllly long" => println!("x"),
         "qux" => println!("y"),
-        _ => {}
+        _ =>
+        {}
     }
 }
 ```
@@ -1838,34 +1837,42 @@ fn foo() {
 // }
 
 // Becomes:
-fn foo() {
-    match foo {
-        | "foo" | "bar" => {}
-        | "baz"
-        | "something relatively long"
-        | "something really really really realllllllllllllly long" => println!("x"),
+fn foo()
+{
+    match foo
+    {
+        | "foo" | "bar" =>
+        {}
+        | "baz" | "something relatively long" | "something really really really realllllllllllllly long" => println!("x"),
         | "qux" => println!("y"),
-        | _ => {}
+        | _ =>
+        {}
     }
 }
 ```
 
 #### `Preserve`:
 ```rust
-fn foo() {
-    match foo {
-        | "foo" | "bar" => {}
-        | "baz"
-        | "something relatively long"
-        | "something really really really realllllllllllllly long" => println!("x"),
+fn foo()
+{
+    match foo
+    {
+        | "foo" | "bar" =>
+        {}
+        | "baz" | "something relatively long" | "something really really really realllllllllllllly long" => println!("x"),
         | "qux" => println!("y"),
-        _ => {}
+        _ =>
+        {}
     }
 
-    match baz {
-        "qux" => {}
-        "foo" | "bar" => {}
-        _ => {}
+    match baz
+    {
+        "qux" =>
+        {}
+        "foo" | "bar" =>
+        {}
+        _ =>
+        {}
     }
 }
 ```
@@ -1881,9 +1888,12 @@ Controls whether match arms are indented.  If disabled, match arms will be forma
 #### `true` (default):
 
 ```rust
-fn main() {
-    match value {
-        Enum::A => {
+fn main()
+{
+    match value
+    {
+        Enum::A =>
+        {
             let mut work = first();
             work += second();
         }
@@ -1895,9 +1905,12 @@ fn main() {
 #### `false`:
 
 ```rust
-fn main() {
-    match value {
-    Enum::A => {
+fn main()
+{
+    match value
+    {
+    Enum::A =>
+    {
         let mut work = first();
         work += second();
     }
@@ -1917,9 +1930,12 @@ Put a trailing comma after a block based match arm (non-block arms are not affec
 #### `false` (default):
 
 ```rust
-fn main() {
-    match lorem {
-        Lorem::Ipsum => {
+fn main()
+{
+    match lorem
+    {
+        Lorem::Ipsum =>
+        {
             println!("ipsum");
         }
         Lorem::Dolor => println!("dolor"),
@@ -1930,9 +1946,12 @@ fn main() {
 #### `true`:
 
 ```rust
-fn main() {
-    match lorem {
-        Lorem::Ipsum => {
+fn main()
+{
+    match lorem
+    {
+        Lorem::Ipsum =>
+        {
             println!("ipsum");
         },
         Lorem::Dolor => println!("dolor"),
@@ -2181,73 +2200,30 @@ instead of being indented on a new line.
 #### `false` (default):
 
 ```rust
-fn example() {
-    foo(ctx, |param| {
-        action();
-        foo(param)
-    });
+fn example()
+{
+    foo(ctx, |param| { action(); foo(param) });
 
-    foo(
-        ctx,
-        Bar {
-            x: value,
-            y: value2,
-        },
-    );
+    foo(ctx, Bar { x: value, y: value2 });
 
-    foo(
-        ctx,
-        &[
-            MAROON_TOMATOES,
-            PURPLE_POTATOES,
-            ORGANE_ORANGES,
-            GREEN_PEARS,
-            RED_APPLES,
-        ],
-    );
+    foo(ctx, &[MAROON_TOMATOES, PURPLE_POTATOES, ORGANE_ORANGES, GREEN_PEARS, RED_APPLES]);
 
-    foo(
-        ctx,
-        vec![
-            MAROON_TOMATOES,
-            PURPLE_POTATOES,
-            ORGANE_ORANGES,
-            GREEN_PEARS,
-            RED_APPLES,
-        ],
-    );
+    foo(ctx, vec![MAROON_TOMATOES, PURPLE_POTATOES, ORGANE_ORANGES, GREEN_PEARS, RED_APPLES]);
 }
 ```
 
 #### `true`:
 
 ```rust
-fn example() {
-    foo(ctx, |param| {
-        action();
-        foo(param)
-    });
+fn example()
+{
+    foo(ctx, |param| { action(); foo(param) });
 
-    foo(ctx, Bar {
-        x: value,
-        y: value2,
-    });
+    foo(ctx, Bar { x: value, y: value2 });
 
-    foo(ctx, &[
-        MAROON_TOMATOES,
-        PURPLE_POTATOES,
-        ORGANE_ORANGES,
-        GREEN_PEARS,
-        RED_APPLES,
-    ]);
+    foo(ctx, &[MAROON_TOMATOES, PURPLE_POTATOES, ORGANE_ORANGES, GREEN_PEARS, RED_APPLES]);
 
-    foo(ctx, vec![
-        MAROON_TOMATOES,
-        PURPLE_POTATOES,
-        ORGANE_ORANGES,
-        GREEN_PEARS,
-        RED_APPLES,
-    ]);
+    foo(ctx, vec![MAROON_TOMATOES, PURPLE_POTATOES, ORGANE_ORANGES, GREEN_PEARS, RED_APPLES]);
 }
 ```
 
@@ -2262,14 +2238,16 @@ Remove nested parens.
 
 #### `true` (default):
 ```rust
-fn main() {
+fn main()
+{
     (foo());
 }
 ```
 
 #### `false`:
 ```rust
-fn main() {
+fn main()
+{
     (foo());
 
     ((((foo()))));
@@ -2290,18 +2268,22 @@ Reorder impl items. `type` and `const` are put first, then macros and methods.
 ```rust
 struct Dummy;
 
-impl Iterator for Dummy {
-    fn next(&mut self) -> Option<Self::Item> {
+impl Iterator for Dummy
+{
+    fn next(&mut self) -> Option<Self::Item>
+    {
         None
     }
 
     type Item = i32;
 }
 
-impl Iterator for Dummy {
+impl Iterator for Dummy
+{
     type Item = i32;
 
-    fn next(&mut self) -> Option<Self::Item> {
+    fn next(&mut self) -> Option<Self::Item>
+    {
         None
     }
 }
@@ -2312,10 +2294,12 @@ impl Iterator for Dummy {
 ```rust
 struct Dummy;
 
-impl Iterator for Dummy {
+impl Iterator for Dummy
+{
     type Item = i32;
 
-    fn next(&mut self) -> Option<Self::Item> {
+    fn next(&mut self) -> Option<Self::Item>
+    {
         None
     }
 }
@@ -2530,23 +2514,16 @@ If the length of every element in an array is below this threshold (all elements
 
 #### `10` (default):
 ```rust
-fn main() {
-    pub const FORMAT_TEST: [u64; 5] = [
-        0x0000000000000000,
-        0xaaaaaaaaaaaaaaaa,
-        0xbbbbbbbbbbbbbbbb,
-        0xcccccccccccccccc,
-        0xdddddddddddddddd,
-    ];
+fn main()
+{
+    pub const FORMAT_TEST: [u64; 5] = [0x0000000000000000, 0xaaaaaaaaaaaaaaaa, 0xbbbbbbbbbbbbbbbb, 0xcccccccccccccccc, 0xdddddddddddddddd];
 }
 ```
 #### `20`:
 ```rust
-fn main() {
-    pub const FORMAT_TEST: [u64; 5] = [
-        0x0000000000000000, 0xaaaaaaaaaaaaaaaa, 0xbbbbbbbbbbbbbbbb, 0xcccccccccccccccc,
-        0xdddddddddddddddd,
-    ];
+fn main()
+{
+    pub const FORMAT_TEST: [u64; 5] = [0x0000000000000000, 0xaaaaaaaaaaaaaaaa, 0xbbbbbbbbbbbbbbbb, 0xcccccccccccccccc, 0xdddddddddddddddd];
 }
 ```
 See also [`max_width`](#max_width).
@@ -2587,16 +2564,16 @@ By default this option is set as a percentage of [`max_width`](#max_width) provi
 #### `50` (default):
 
 ```rust
-fn main() {
+fn main()
+{
     let Some(w) = opt else { return Ok(()) };
 
     let Some(x) = opt else { return };
 
-    let Some(y) = opt else {
-        return;
-    };
+    let Some(y) = opt else { return; };
 
-    let Some(z) = some_very_very_very_very_long_name else {
+    let Some(z) = some_very_very_very_very_long_name else
+    {
         return;
     };
 }
@@ -2605,20 +2582,25 @@ fn main() {
 #### `0`:
 
 ```rust
-fn main() {
-    let Some(w) = opt else {
+fn main()
+{
+    let Some(w) = opt else
+    {
         return Ok(());
     };
 
-    let Some(x) = opt else {
+    let Some(x) = opt else
+    {
         return;
     };
 
-    let Some(y) = opt else {
+    let Some(y) = opt else
+    {
         return;
     };
 
-    let Some(z) = some_very_very_very_very_long_name else {
+    let Some(z) = some_very_very_very_very_long_name else
+    {
         return;
     };
 }
@@ -2627,14 +2609,13 @@ fn main() {
 #### `100`:
 
 ```rust
-fn main() {
+fn main()
+{
     let Some(w) = opt else { return Ok(()) };
 
     let Some(x) = opt else { return };
 
-    let Some(y) = opt else {
-        return;
-    };
+    let Some(y) = opt else { return; };
 
     let Some(z) = some_very_very_very_very_long_name else { return };
 }
@@ -2654,22 +2635,18 @@ Leave a space after the colon.
 #### `true` (default):
 
 ```rust
-fn lorem<T: Eq>(t: T) {
-    let lorem: Dolor = Lorem {
-        ipsum: dolor,
-        sit: amet,
-    };
+fn lorem<T: Eq>(t: T)
+{
+    let lorem: Dolor = Lorem { ipsum: dolor, sit: amet };
 }
 ```
 
 #### `false`:
 
 ```rust
-fn lorem<T:Eq>(t:T) {
-    let lorem:Dolor = Lorem {
-        ipsum:dolor,
-        sit:amet,
-    };
+fn lorem<T:Eq>(t:T)
+{
+    let lorem:Dolor = Lorem { ipsum:dolor, sit:amet };
 }
 ```
 
@@ -2686,22 +2663,18 @@ Leave a space before the colon.
 #### `false` (default):
 
 ```rust
-fn lorem<T: Eq>(t: T) {
-    let lorem: Dolor = Lorem {
-        ipsum: dolor,
-        sit: amet,
-    };
+fn lorem<T: Eq>(t: T)
+{
+    let lorem: Dolor = Lorem { ipsum: dolor, sit: amet };
 }
 ```
 
 #### `true`:
 
 ```rust
-fn lorem<T : Eq>(t : T) {
-    let lorem : Dolor = Lorem {
-        ipsum : dolor,
-        sit : amet,
-    };
+fn lorem<T : Eq>(t : T)
+{
+    let lorem : Dolor = Lorem { ipsum : dolor, sit : amet };
 }
 ```
 
@@ -2718,21 +2691,25 @@ Put spaces around the .., ..=, and ... range operators
 #### `false` (default):
 
 ```rust
-fn main() {
+fn main()
+{
     let lorem = 0..10;
     let ipsum = 0..=10;
 
-    match lorem {
+    match lorem
+    {
         1..5 => foo(),
         _ => bar,
     }
 
-    match lorem {
+    match lorem
+    {
         1..=5 => foo(),
         _ => bar,
     }
 
-    match lorem {
+    match lorem
+    {
         1...5 => foo(),
         _ => bar,
     }
@@ -2742,21 +2719,25 @@ fn main() {
 #### `true`:
 
 ```rust
-fn main() {
+fn main()
+{
     let lorem = 0 .. 10;
     let ipsum = 0 ..= 10;
 
-    match lorem {
+    match lorem
+    {
         1 .. 5 => foo(),
         _ => bar,
     }
 
-    match lorem {
+    match lorem
+    {
         1 ..= 5 => foo(),
         _ => bar,
     }
 
-    match lorem {
+    match lorem
+    {
         1 ... 5 => foo(),
         _ => bar,
     }
@@ -2774,7 +2755,8 @@ The maximum diff of width between struct fields to be aligned with each other.
 #### `0` (default):
 
 ```rust
-struct Foo {
+struct Foo
+{
     x: u32,
     yy: u32,
     zzz: u32,
@@ -2784,7 +2766,8 @@ struct Foo {
 #### `20`:
 
 ```rust
-struct Foo {
+struct Foo
+{
     x:   u32,
     yy:  u32,
     zzz: u32,
@@ -2802,7 +2785,8 @@ Put small struct literals on a single line
 #### `true` (default):
 
 ```rust
-fn main() {
+fn main()
+{
     let lorem = Lorem { foo: bar, baz: ofo };
 }
 ```
@@ -2810,8 +2794,10 @@ fn main() {
 #### `false`:
 
 ```rust
-fn main() {
-    let lorem = Lorem {
+fn main()
+{
+    let lorem = Lorem
+    {
         foo: bar,
         baz: ofo,
     };
@@ -2882,24 +2868,20 @@ Number of spaces per tab
 #### `4` (default):
 
 ```rust
-fn lorem() {
+fn lorem()
+{
     let ipsum = dolor();
-    let sit = vec![
-        "amet consectetur adipiscing elit amet",
-        "consectetur adipiscing elit amet consectetur.",
-    ];
+    let sit = vec!["amet consectetur adipiscing elit amet", "consectetur adipiscing elit amet consectetur."];
 }
 ```
 
 #### `2`:
 
 ```rust
-fn lorem() {
+fn lorem()
+{
   let ipsum = dolor();
-  let sit = vec![
-    "amet consectetur adipiscing elit amet",
-    "consectetur adipiscing elit amet consectetur.",
-  ];
+  let sit = vec!["amet consectetur adipiscing elit amet", "consectetur adipiscing elit amet consectetur."];
 }
 ```
 
@@ -2917,48 +2899,30 @@ How to handle trailing commas for lists
 #### `"Vertical"` (default):
 
 ```rust
-fn main() {
+fn main()
+{
     let Lorem { ipsum, dolor, sit } = amet;
-    let Lorem {
-        ipsum,
-        dolor,
-        sit,
-        amet,
-        consectetur,
-        adipiscing,
-    } = elit;
+    let Lorem { ipsum, dolor, sit, amet, consectetur, adipiscing } = elit;
 }
 ```
 
 #### `"Always"`:
 
 ```rust
-fn main() {
+fn main()
+{
     let Lorem { ipsum, dolor, sit, } = amet;
-    let Lorem {
-        ipsum,
-        dolor,
-        sit,
-        amet,
-        consectetur,
-        adipiscing,
-    } = elit;
+    let Lorem { ipsum, dolor, sit, amet, consectetur, adipiscing, } = elit;
 }
 ```
 
 #### `"Never"`:
 
 ```rust
-fn main() {
+fn main()
+{
     let Lorem { ipsum, dolor, sit } = amet;
-    let Lorem {
-        ipsum,
-        dolor,
-        sit,
-        amet,
-        consectetur,
-        adipiscing
-    } = elit;
+    let Lorem { ipsum, dolor, sit, amet, consectetur, adipiscing } = elit;
 }
 ```
 
@@ -2974,14 +2938,16 @@ Add trailing semicolon after break, continue and return
 
 #### `true` (default):
 ```rust
-fn foo() -> usize {
+fn foo() -> usize
+{
     return 0;
 }
 ```
 
 #### `false`:
 ```rust
-fn foo() -> usize {
+fn foo() -> usize
+{
     return 0
 }
 ```
@@ -2997,7 +2963,8 @@ Determines if `+` or `=` are wrapped in spaces in the punctuation of types
 #### `"Wide"` (default):
 
 ```rust
-fn lorem<Ipsum: Dolor + Sit = Amet>() {
+fn lorem<Ipsum: Dolor + Sit = Amet>()
+{
     // body
 }
 ```
@@ -3005,7 +2972,8 @@ fn lorem<Ipsum: Dolor + Sit = Amet>() {
 #### `"Compressed"`:
 
 ```rust
-fn lorem<Ipsum: Dolor+Sit=Amet>() {
+fn lorem<Ipsum: Dolor+Sit=Amet>()
+{
     // body
 }
 ```
@@ -3029,13 +2997,15 @@ Use field initialize shorthand if possible.
 #### `false` (default):
 
 ```rust
-struct Foo {
+struct Foo
+{
     x: u32,
     y: u32,
     z: u32,
 }
 
-fn main() {
+fn main()
+{
     let x = 1;
     let y = 2;
     let z = 3;
@@ -3047,13 +3017,15 @@ fn main() {
 #### `true`:
 
 ```rust
-struct Foo {
+struct Foo
+{
     x: u32,
     y: u32,
     z: u32,
 }
 
-fn main() {
+fn main()
+{
     let x = 1;
     let y = 2;
     let z = 3;
@@ -3106,27 +3078,22 @@ and when `max_width` is set to `200`:
 * `single_line_let_else_max_width=100`
 
 ```rust
-enum Lorem {
+enum Lorem
+{
     Ipsum,
     Dolor(bool),
-    Sit { amet: Consectetur, adipiscing: Elit },
+    Sit
+    {
+        amet: Consectetur,
+        adipiscing: Elit,
+    },
 }
 
-fn main() {
-    lorem(
-        "lorem",
-        "ipsum",
-        "dolor",
-        "sit",
-        "amet",
-        "consectetur",
-        "adipiscing",
-    );
+fn main()
+{
+    lorem("lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing");
 
-    let lorem = Lorem {
-        ipsum: dolor,
-        sit: amet,
-    };
+    let lorem = Lorem { ipsum: dolor, sit: amet };
     let lorem = Lorem { ipsum: dolor };
 
     let lorem = if ipsum { dolor } else { sit };
@@ -3137,26 +3104,33 @@ fn main() {
 When `use_small_heuristics` is set to `Off`, the granular width settings are functionally disabled and ignored. See the documentation for the respective width config options for specifics.
 
 ```rust
-enum Lorem {
+enum Lorem
+{
     Ipsum,
     Dolor(bool),
-    Sit {
+    Sit
+    {
         amet: Consectetur,
         adipiscing: Elit,
     },
 }
 
-fn main() {
+fn main()
+{
     lorem("lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing");
 
-    let lorem = Lorem {
+    let lorem = Lorem
+    {
         ipsum: dolor,
         sit: amet,
     };
 
-    let lorem = if ipsum {
+    let lorem = if ipsum
+    {
         dolor
-    } else {
+    }
+    else
+    {
         sit
     };
 }
@@ -3176,13 +3150,19 @@ So if `max_width` is set to `200`, then all the width settings are also set to `
 * `single_line_let_else_max_width=200`
 
 ```rust
-enum Lorem {
+enum Lorem
+{
     Ipsum,
     Dolor(bool),
-    Sit { amet: Consectetur, adipiscing: Elit },
+    Sit
+    {
+        amet: Consectetur,
+        adipiscing: Elit,
+    },
 }
 
-fn main() {
+fn main()
+{
     lorem("lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing");
 
     let lorem = Lorem { ipsum: dolor, sit: amet };
@@ -3214,7 +3194,8 @@ Replace uses of the try! macro by the ? shorthand
 #### `false` (default):
 
 ```rust
-fn main() {
+fn main()
+{
     let lorem = ipsum.map(|dolor| dolor.sit())?;
 
     let lorem = try!(ipsum.map(|dolor| dolor.sit()));
@@ -3224,7 +3205,8 @@ fn main() {
 #### `true`:
 
 ```rust
-fn main() {
+fn main()
+{
     let lorem = ipsum.map(|dolor| dolor.sit())?;
 }
 ```

@@ -1,6 +1,7 @@
 // rustfmt-trailing_comma: Never
 
-pub struct Matrix<T, const R: usize, const C: usize>
+pub struct Matrix
+<T, const R: usize, const C: usize>
 where
     [T; R * C]:
 {

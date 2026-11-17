@@ -1,4 +1,5 @@
-mod test {
+mod test
+{
     extern "C" {
         fn test();
     }

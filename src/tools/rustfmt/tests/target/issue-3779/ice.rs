@@ -1,3 +1,4 @@
-pub fn bar() {
+pub fn bar()
+{
     1x;
 }

@@ -1,4 +1,5 @@
-pub fn main() {
+pub fn main()
+{
     #[cfg(feature = "std")]
     {
         // Comment

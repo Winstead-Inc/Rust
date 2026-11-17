@@ -3,9 +3,11 @@
 // rustfmt-indent_style: Block
 // Tab spaces
 
-fn lorem() {
+fn lorem()
+{
     let ipsum = dolor();
-    let sit = vec![
+    let sit = vec!
+    [
         "amet",
         "consectetur",
         "adipiscing",

@@ -2,7 +2,8 @@
 // rustfmt-max_width: 50
 // Wrap comments
 
-fn main() {
+fn main()
+{
     // Lorem ipsum dolor sit amet, consectetur
     // adipiscing elit, sed do eiusmod tempor
     // incididunt ut labore et dolore magna
@@ -11,7 +12,8 @@ fn main() {
     // ut aliquip ex ea commodo consequat.
 }
 
-fn code_block() {
+fn code_block()
+{
     // ```rust
     // let x = 3;
     //

@@ -2,6 +2,7 @@
 // rustfmt-wrap_comments: false
 // Comment width
 
-fn main() {
+fn main()
+{
     // Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 }

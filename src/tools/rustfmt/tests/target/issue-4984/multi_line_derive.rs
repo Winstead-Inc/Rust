@@ -1,11 +1,6 @@
-#[derive(
-    /* ---------- Some really important comment that just had to go inside the derive --------- */
-    Debug,
-    Clone,
-    Eq,
-    PartialEq,
-)]
-struct Foo {
+#[derive(/* ---------- Some really important comment that just had to go inside the derive --------- */ Debug, Clone, Eq, PartialEq)]
+struct Foo
+{
     a: i32,
     b: T,
 }
@@ -20,7 +15,8 @@ struct Foo {
     Eq,
     PartialEq,
 )]
-struct Bar {
+struct Bar
+{
     a: i32,
     b: T,
 }

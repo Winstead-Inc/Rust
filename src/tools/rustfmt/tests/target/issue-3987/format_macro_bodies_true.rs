@@ -1,21 +1,31 @@
 // rustfmt-format_macro_bodies: true
 
 // with comments
-macro_rules! macros {
-    () => {{
-        Struct {
-            field: (
-                42 + //comment 1
-                42
-                //comment 2
-            ),
-        };
-    }};
+macro_rules! macros
+{
+    () =>
+    {
+        {
+                Struct
+                {
+                    field:
+                    (
+                        42 + //comment 1
+                        42
+                        //comment 2
+                    ),
+                };
+            }
+    };
 }
 
 // without comments
-macro_rules! macros {
-    () => {{
+macro_rules! macros
+{
+    () =>
+    {
+    {
         Struct { field: (42 + 42) };
-    }};
+    }
+    };
 }

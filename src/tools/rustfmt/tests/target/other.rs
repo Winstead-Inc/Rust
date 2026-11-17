@@ -1,5 +1,6 @@
 // Part of multiple.rs
 
-fn bob() {
+fn bob()
+{
     println!("hello other!");
 }

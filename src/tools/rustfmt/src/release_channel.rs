@@ -9,4 +9,7 @@
 /// `CFG_RELEASE_CHANNEL` is not set. As we only support being built against the
 /// nightly compiler when installed from crates.io, default to nightly mode.
 #[macro_export]
-macro_rules! is_nightly_channel { () => { true }; }
+macro_rules! is_nightly_channel
+{
+    () => { true };
+}

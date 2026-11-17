@@ -14,19 +14,13 @@ where
 {
 }
 
-fn foo(
-    a: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,
-    b: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,
-) -> RetType
+fn foo(a: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA, b: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB) -> RetType
 where
     T: Blah,
 {
 }
 
-fn foo<U, T>(
-    a: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,
-    b: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,
-) -> RetType
+fn foo<U, T>(a: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA, b: BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB) -> RetType
 where
     T: Blah,
     U: dsfasdfasdfasd,
@@ -35,7 +29,8 @@ where
 
 fn foo<U: Fn(A) -> B /* paren inside generics */>() {}
 
-impl Foo {
+impl Foo
+{
     fn with_no_errors<T, F>(&mut self, f: F) -> T
     where
         F: FnOnce(&mut Resolver) -> T,
@@ -47,29 +42,25 @@ impl Foo {
     fn bar(self, mut bazz: u32) {}
 }
 
-pub fn render<
-    'a,
-    N: Clone + 'a,
-    E: Clone + 'a,
-    G: Labeller<'a, N, E> + GraphWalk<'a, N, E>,
-    W: Write,
->(
-    g: &'a G,
-    w: &mut W,
-) -> io::Result<()> {
+pub fn render<'a, N: Clone + 'a, E: Clone + 'a, G: Labeller<'a, N, E> + GraphWalk<'a, N, E>, W: Write>(g: &'a G, w: &mut W) -> io::Result<()>
+{
     render_opts(g, w, &[])
 }
 
-const fn foo() {
+const fn foo()
+{
     x;
 }
 
-pub const fn foo() {
+pub const fn foo()
+{
     x;
 }
 
-impl Foo {
-    const fn foo() {
+impl Foo
+{
+    const fn foo()
+    {
         x;
     }
 }
@@ -78,14 +69,16 @@ fn homura<T: Deref<Target = i32>>(_: T) {}
 
 fn issue377() -> (Box<CompositorProxy + Send>, Box<CompositorReceiver>) {}
 
-fn main() {
+fn main()
+{
     let _ = function(move || 5);
     let _ = move || 42;
-    let _ = || unsafe { abort() };
+    let _ = || { abort() };
 }
 
 // With inner attributes.
-fn inner() {
+fn inner()
+{
     #![inline]
     x
 }
@@ -96,25 +89,24 @@ fn foo(a: i32) -> i32 {
     if a > 0 { 1 } else { 2 }
 }
 
-fn ______________________baz(
-    a: i32,
-) -> *mut ::std::option::Option<
-    extern "C" fn(arg1: i32, _____________________a: i32, arg3: i32) -> (),
-> {
-}
+fn ______________________baz(a: i32) -> *mut ::std::option::Option<extern "C" fn(arg1: i32, _____________________a: i32, arg3: i32) -> ()> {}
 
-pub fn check_path<'a, 'tcx>(
+pub fn check_path<'a, 'tcx>
+(
     tcx: TyCtxt<'a, 'tcx, 'tcx>,
     path: &hir::Path,
     id: ast::NodeId,
     cb: &mut FnMut(DefId, Span, &Option<&Stability>, &Option<Depecation>),
-) {
+)
+{
 }
 
-pub fn check_path<'a, 'tcx>(
+pub fn check_path<'a, 'tcx>
+(
     tcx: TyCtxt<'a, 'tcx, 'tcx>,
     path: &hir::Path,
     id: ast::NodeId,
     cb: &mut FnMut(DefId, Span, &Option<&Stability>, &Option<Deprecation>),
-) {
+)
+{
 }

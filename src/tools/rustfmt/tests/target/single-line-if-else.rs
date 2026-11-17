@@ -1,58 +1,61 @@
 // Format if-else expressions on a single line, when possible.
 
-fn main() {
+fn main()
+{
     let a = if 1 > 2 { unreachable!() } else { 10 };
 
-    let a = if x {
+    let a = if x
+    {
         1
-    } else if y {
+    }
+    else if y
+    {
         2
-    } else {
+    }
+    else
+    {
         3
     };
 
-    let b = if cond() {
+    let b = if cond()
+    {
         5
-    } else {
+    }
+    else
+    {
         // Brief comment.
         10
     };
 
-    let c = if cond() {
+    let c = if cond()
+    {
         statement();
-
         5
-    } else {
+    }
+    else
+    {
         10
     };
 
-    let d = if let Some(val) = turbo {
-        "cool"
-    } else {
-        "beans"
-    };
+    let d = if let Some(val) = turbo { "cool" } else { "beans" };
 
-    if cond() {
+    if cond()
+    {
         statement();
-    } else {
+    }
+    else
+    {
         other_statement();
     }
 
-    if true {
+    if true
+    {
         do_something()
     }
 
-    let x = if veeeeeeeeery_loooooong_condition() {
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-    } else {
-        bbbbbbbbbb
-    };
+    let x = if veeeeeeeeery_loooooong_condition() { aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa } else { bbbbbbbbbb };
 
-    let x = if veeeeeeeeery_loooooong_condition() {
-        aaaaaaaaaaaaaaaaaaaaaaaaa
-    } else {
-        bbbbbbbbbb
-    };
+    let x = if veeeeeeeeery_loooooong_condition() { aaaaaaaaaaaaaaaaaaaaaaaaa } else { bbbbbbbbbb };
 
     funk(if test() { 1 } else { 2 }, arg2);
 }

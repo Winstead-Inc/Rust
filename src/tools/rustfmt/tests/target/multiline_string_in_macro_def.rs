@@ -1,7 +1,11 @@
-macro_rules! assert_approx_eq {
-    ($a:expr, $b:expr, $eps:expr) => {{
+macro_rules! assert_approx_eq
+{
+    ($a:expr, $b:expr, $eps:expr) =>
+    {
+    {
         let (a, b) = (&$a, &$b);
-        assert!(
+        assert!
+        (
             (*a - *b).abs() < $eps,
             "assertion failed: `(left !== right)` \
              (left: `{:?}`, right: `{:?}`, expect diff: `{:?}`, real diff: `{:?}`)",
@@ -10,5 +14,6 @@ macro_rules! assert_approx_eq {
             $eps,
             (*a - *b).abs()
         );
-    }};
+    }
+    };
 }

@@ -1,6 +1,8 @@
 #[discard_params_doc]
-trait Trait {
-    fn foo(
+trait Trait
+{
+    fn foo
+    (
         &self,
         /// some docs
         bar: String,

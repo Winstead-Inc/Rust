@@ -1,11 +1,13 @@
 // rustfmt-use_field_init_shorthand: true
 
 struct MyStruct(u32);
-struct AnotherStruct {
+struct AnotherStruct
+{
     a: u32,
 }
 
-fn main() {
+fn main()
+{
     // Since MyStruct is a tuple struct, it should not be shorthanded to
     // MyStruct { 0 } even if use_field_init_shorthand is enabled.
     let instance = MyStruct { 0: 0 };

@@ -1,16 +1,21 @@
 // rustfmt-style_edition: 2024
-fn main() {
-    match a {
+fn main()
+{
+    match a
+    {
         _ =>
         // comment with =>
         {
-            match b {
+            match b
+            {
                 // one goes to =>
-                one => {
+                one =>
+                {
                     println("1");
                 }
                 // two goes to =>
-                two => {
+                two =>
+                {
                     println("2");
                 }
             }

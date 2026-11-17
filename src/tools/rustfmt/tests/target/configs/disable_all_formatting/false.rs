@@ -1,10 +1,14 @@
 // rustfmt-disable_all_formatting: false
 // Disable all formatting
 
-fn main() {
-    if lorem {
+fn main()
+{
+    if lorem
+    {
         println!("ipsum!");
-    } else {
+    }
+    else
+    {
         println!("dolor!");
     }
 }

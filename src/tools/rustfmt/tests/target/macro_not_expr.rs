@@ -1,7 +1,9 @@
-macro_rules! test {
-    ($($t:tt)*) => {};
+macro_rules! test
+{
+    ($($t: tt) *) => {};
 }
 
-fn main() {
-    test!( a : B => c d );
+fn main()
+{
+    test ! (a: B => c d);
 }

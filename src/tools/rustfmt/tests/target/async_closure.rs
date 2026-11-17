@@ -1,10 +1,8 @@
 // rustfmt-edition: 2018
 
-fn main() {
-    let async_closure = async {
-        let x = 3;
-        x
-    };
+fn main()
+{
+    let async_closure = async { let x = 3; x };
 
     let f = async /* comment */ {
         let x = 3;

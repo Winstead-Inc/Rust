@@ -1,22 +1,22 @@
 use std::collections::HashMap;
 use std::env;
 use std::fs;
-use std::io:: { self, BufRead, BufReader, Read, Write };
+use std::io::{self, BufRead, BufReader, Read, Write};
 use std::iter::Peekable;
 use std::mem;
-use std::path:: { Path, PathBuf };
-use std::process:: { Command, Stdio };
-use std::str:: { Chars, FromStr };
+use std::path::{Path, PathBuf};
+use std::process::{Command, Stdio};
+use std::str::{Chars, FromStr};
 use std::thread;
 
-use crate::config:: { Color, Config, EmitMode, FileName, NewlineStyle };
-use crate::formatting:: { ReportedErrors, SourceFile };
-use crate::rustfmt_diff:: { DiffLine, Mismatch, ModifiedChunk, OutputWriter, make_diff, print_diff };
+use crate::config::{Color, Config, EmitMode, FileName, NewlineStyle};
+use crate::formatting::{ReportedErrors, SourceFile};
+use crate::rustfmt_diff::{DiffLine, Mismatch, ModifiedChunk, OutputWriter, make_diff, print_diff};
 use crate::source_file;
-use crate:: { Edition, FormatReport, FormatReportFormatterBuilder, Input, Session, StyleEdition, Version, is_nightly_channel, };
+use crate::{Edition, FormatReport, FormatReportFormatterBuilder, Input, Session, StyleEdition, Version, is_nightly_channel};
 
 use rustfmt_config_proc_macro::nightly_only_test;
-use tracing:: { debug, warn };
+use tracing::{debug, warn};
 
 mod configuration_snippet;
 mod mod_resolver;
@@ -25,8 +25,7 @@ mod parser;
 const DIFF_CONTEXT_SIZE: usize = 3;
 
 // A list of files on which we want to skip testing.
-const FILE_SKIP_LIST: & [ & str] = &
-[
+const FILE_SKIP_LIST: &[&str] = &[
     // We want to make sure that the `skip_children` is correctly working,
     // so we do not want to test this file directly.
     "configs/skip_children/foo/mod.rs",
@@ -50,7 +49,10 @@ const FILE_SKIP_LIST: & [ & str] = &
     "skip/foo.rs",
 ];
 
-fn init_log() { let _ = tracing_subscriber::fmt().with_test_writer().try_init(); }
+fn init_log()
+{
+    let _ = tracing_subscriber::fmt().with_test_writer().try_init();
+}
 
 struct TestSetting
 {
@@ -62,74 +64,74 @@ impl Default for TestSetting
 {
     fn default() -> Self
     {
-        TestSetting
-        {
-            stack_size: 8_388_608, // 8MB
-        }
+        TestSetting { stack_size: 8_388_608 /* 8MB */ }
     }
 }
 
-fn run_test_with<F>(test_setting: & TestSetting, f: F)
+fn run_test_with<F>(test_setting: &TestSetting, f: F)
 where
-F: FnOnce(),
-F: Send + 'static,
+    F: FnOnce(),
+    F: Send + 'static,
 {
-    thread::Builder:: new ()
-   .stack_size(test_setting.stack_size)
-   .spawn(f)
-   .expect("Failed to create a test thread")
-   .join()
-   .expect("Failed to join a test thread")
+    thread::Builder::new().stack_size(test_setting.stack_size).spawn(f).expect("Failed to create a test thread").join().expect("Failed to join a test thread")
 }
 
-fn is_subpath<P>(path: & Path, subpath: & P) -> bool
+fn is_subpath<P>(path: &Path, subpath: &P) -> bool
 where
-P: AsRef<Path>,
+    P: AsRef<Path>,
 {
-    (0..path.components().count())
-   .map( | i | { path.components().skip(i).take(subpath.as_ref().components().count()) })
-   .any( | c | c.zip(subpath.as_ref().components()).all( | (a, b) | a == b))
+    (0..path.components().count()).map(|i| { path.components().skip(i).take(subpath.as_ref().components().count()) }).any
+    (
+        |c|
+    {
+        c.zip(subpath.as_ref().components()).all(|(a, b)| a == b)
+    }
+    )
 }
 
-fn is_file_skip(path: & Path) -> bool { FILE_SKIP_LIST.iter().any( | file_path | is_subpath(path, file_path)) }
+fn is_file_skip(path: &Path) -> bool
+{
+    FILE_SKIP_LIST.iter().any(|file_path| is_subpath(path, file_path))
+}
 
 // Returns a `Vec` containing `PathBuf`s of files with an  `rs` extension in the
 // given path. The `recursive` argument controls if files from subdirectories
 // are also returned.
-fn get_test_files(path: & Path, recursive: bool) -> Vec<PathBuf>
+fn get_test_files(path: &Path, recursive: bool) -> Vec<PathBuf>
 {
     let mut files = vec![];
     if path.is_dir()
     {
-        for entry in
-        fs::read_dir(path).expect( & format ! ("couldn't read directory {}", path.display()))
+        for entry in fs::read_dir(path).expect(&format!("couldn't read directory {}", path.display()))
         {
             let entry = entry.expect("couldn't get `DirEntry`");
             let path = entry.path();
-            if path.is_dir() && recursive { files.append( & mut get_test_files( & path, recursive)); }
-            else if path.extension().map_or(false, | f | f == "rs") && ! is_file_skip( & path) { files.push(path); }
+            if path.is_dir() && recursive
+            {
+                files.append(&mut get_test_files(&path, recursive));
+            }
+            else if path.extension().map_or(false, |f| f == "rs") && !is_file_skip(&path)
+            {
+                files.push(path);
+            }
         }
     }
     files
 }
 
-fn verify_config_used(path: & Path, config_name: & str)
+fn verify_config_used(path: &Path, config_name: &str)
 {
-    for entry in fs::read_dir(path).expect( & format ! ("couldn't read {} directory", path.display()))
+    for entry in fs::read_dir(path).expect(&format!("couldn't read {} directory", path.display()))
     {
         let entry = entry.expect("couldn't get directory entry");
         let path = entry.path();
-        if path.extension().map_or(false, | f | f == "rs")
+        if path.extension().map_or(false, |f| f == "rs")
         {
             // check if "// rustfmt-<config_name>:" appears in the file.
-            let filebuf = BufReader:: new (fs::File::open( & path).unwrap_or_else( | _ | panic ! ("couldn't read file {}", path.display())),);
+            let filebuf = BufReader::new(fs::File::open(&path).unwrap_or_else(|_| panic!("couldn't read file {}", path.display())));
             assert!
             (
-                filebuf
-               .lines()
-               .map(Result::unwrap)
-               .take_while( | l | l.starts_with("//"))
-               .any( | l | l.starts_with( & format ! ("// rustfmt-{}", config_name))),
+                filebuf.lines().map(Result::unwrap).take_while(|l| l.starts_with("//")).any(|l| l.starts_with(&format!("// rustfmt-{}", config_name))),
                 "config option file {} does not contain expected config name",
                 path.display()
             );
@@ -141,7 +143,7 @@ fn verify_config_used(path: & Path, config_name: & str)
 fn verify_config_test_names()
 {
     init_log();
-    for path in & [Path::new ("tests/source/configs"), Path::new ("tests/target/configs"),]
+    for path in &[Path::new("tests/source/configs"), Path::new("tests/target/configs")]
     {
         for entry in fs::read_dir(path).expect("couldn't read configs directory")
         {
@@ -152,25 +154,28 @@ fn verify_config_test_names()
                 let config_name = path.file_name().unwrap().to_str().unwrap();
 
                 // Make sure that config name is used in the files in the directory.
-                verify_config_used( & path, config_name);
+                verify_config_used(&path, config_name);
             }
         }
     }
 }
 
 // Collects all file and directory paths under `root` (relative to `root`).
-fn collect_paths(root: & Path) -> Vec<PathBuf>
+fn collect_paths(root: &Path) -> Vec<PathBuf>
 {
-    let mut paths = Vec:: new ();
+    let mut paths = Vec::new();
     let mut stack = vec![root.to_path_buf()];
     while let Some(dir) = stack.pop()
     {
-        for entry in fs::read_dir( & dir).expect( & format ! ("couldn't read {}", dir.display()))
+        for entry in fs::read_dir(&dir).expect(&format!("couldn't read {}", dir.display()))
         {
             let entry = entry.expect("couldn't get DirEntry");
             let path = entry.path();
             paths.push(path.strip_prefix(root).unwrap().to_path_buf());
-            if path.is_dir() { stack.push(path); }
+            if path.is_dir()
+            {
+                stack.push(path);
+            }
         }
     }
     paths
@@ -182,23 +187,26 @@ fn no_case_insensitive_path_collisions()
     // Ensure no two paths in test directories differ only by case,
     // which causes warnings when cloning on case-insensitive filesystems
     // (e.g. Windows, macOS).
-    let test_dirs = [Path::new ("tests/source"), Path::new ("tests/target")];
-    let mut collisions = Vec:: new ();
+    let test_dirs = [Path::new("tests/source"), Path::new("tests/target")];
+    let mut collisions = Vec::new();
 
-    for root in & test_dirs
+    for root in &test_dirs
     {
-        let mut seen: HashMap < String, PathBuf > = HashMap:: new ();
+        let mut seen: HashMap<String, PathBuf> = HashMap::new();
         for path in collect_paths(root)
         {
             let key = path.to_string_lossy().to_lowercase();
-            if let Some(existing) = seen. get( & key)
+            if let Some(existing) = seen.get(&key)
             {
-                if * existing != path
+                if *existing != path
                 {
-                    collisions.push(format ! ("{}/{} collides with {}/{}", root.display(), existing.display(), root.display(), path.display(),));
+                    collisions.push(format!("{}/{} collides with {}/{}", root.display(), existing.display(), root.display(), path.display(),));
                 }
             }
-            else { seen.insert(key, path); }
+            else
+            {
+                seen.insert(key, path);
+            }
         }
     }
 
@@ -209,7 +217,11 @@ fn no_case_insensitive_path_collisions()
 // `println!`) that is used by `rustfmt::rustfmt_diff::print_diff`. Writing
 // using only one or the other will cause the output order to differ when
 // `print_diff` selects the approach not used.
-fn write_message(msg: & str) { let mut writer = OutputWriter::new (Color::Auto); writer.writeln(msg, None); }
+fn write_message(msg: &str)
+{
+    let mut writer = OutputWriter::new(Color::Auto);
+    writer.writeln(msg, None);
+}
 
 // Integration tests. The files in `tests/source` are formatted and compared
 // to their equivalent in `tests/target`. The target file and config can be
@@ -221,17 +233,17 @@ fn system_tests()
     init_log();
     run_test_with
     (
-        & TestSetting:: default(), ||
-        {
-            // Get all files in the tests/source directory.
-            let files = get_test_files(Path::new ("tests/source"), true);
-            let (_reports, count, fails) = check_files(files, & None);
+        &TestSetting::default(), ||
+    {
+        // Get all files in the tests/source directory.
+        let files = get_test_files(Path::new("tests/source"), true);
+        let (_reports, count, fails) = check_files(files, &None);
 
-            // Display results.
-            println!("Ran {} system tests.", count);
-            assert_eq!(fails, 0, "{} system tests failed", fails);
-            assert!(count >= 300, "Expected a minimum of {} system tests to be executed", 300)
-        }
+        // Display results.
+        println!("Ran {} system tests.", count);
+        assert_eq!(fails, 0, "{} system tests failed", fails);
+        assert!(count >= 300, "Expected a minimum of {} system tests to be executed", 300)
+    }
     );
 }
 
@@ -241,8 +253,8 @@ fn system_tests()
 fn coverage_tests()
 {
     init_log();
-    let files = get_test_files(Path::new ("tests/coverage/source"), true);
-    let (_reports, count, fails) = check_files(files, & None);
+    let files = get_test_files(Path::new("tests/coverage/source"), true);
+    let (_reports, count, fails) = check_files(files, &None);
 
     println!("Ran {count} tests in coverage mode.");
     assert_eq!(fails, 0, "{fails} tests failed");
@@ -254,7 +266,7 @@ fn checkstyle_test()
     init_log();
     let filename = "tests/writemode/source/fn-single-line.rs";
     let expected_filename = "tests/writemode/target/checkstyle.xml";
-    assert_output(Path::new (filename), Path::new (expected_filename));
+    assert_output(Path::new(filename), Path::new(expected_filename));
 }
 
 #[test]
@@ -263,7 +275,7 @@ fn json_test()
     init_log();
     let filename = "tests/writemode/source/json.rs";
     let expected_filename = "tests/writemode/target/output.json";
-    assert_output(Path::new (filename), Path::new (expected_filename));
+    assert_output(Path::new(filename), Path::new(expected_filename));
 }
 
 #[test]
@@ -274,33 +286,31 @@ fn modified_test()
 
     // Test "modified" output
     let filename = "tests/writemode/source/modified.rs";
-    let mut data = Vec:: new ();
-    let mut config = Config:: default();
-    config
-   . set()
-   .emit_mode(crate::config::EmitMode::ModifiedLines);
+    let mut data = Vec::new();
+    let mut config = Config::default();
+    config.set().emit_mode(crate::config::EmitMode::ModifiedLines);
 
     {
-        let mut session = Session:: new (config, Some( & mut data));
+        let mut session = Session::new(config, Some(&mut data));
         session.format(Input::File(filename.into())).unwrap();
     }
 
     let mut lines = data.lines();
-    let mut chunks = Vec:: new ();
+    let mut chunks = Vec::new();
     while let Some(Ok(header)) = lines.next()
     {
         // Parse the header line
-        let values: Vec < _ > = header
-       .split(' ')
-       .map( | s | s.parse::<u32>().unwrap())
-       .collect();
+        let values: Vec<_> = header.split(' ').map(|s| s.parse::<u32>().unwrap()).collect();
         assert_eq!(values.len(), 3);
         let line_number_orig = values[0];
         let lines_removed = values[1];
         let num_added = values[2];
-        let mut added_lines = Vec:: new ();
-        for _ in 0..num_added { added_lines.push(lines.next().unwrap().unwrap()); }
-        chunks.push(ModifiedChunk { line_number_orig, lines_removed, lines: added_lines, });
+        let mut added_lines = Vec::new();
+        for _ in 0..num_added
+        {
+            added_lines.push(lines.next().unwrap().unwrap());
+        }
+        chunks.push(ModifiedChunk { line_number_orig, lines_removed, lines: added_lines });
     }
 
     assert_eq!
@@ -308,34 +318,32 @@ fn modified_test()
         chunks,
         vec!
         [
-            ModifiedChunk { line_number_orig: 4, lines_removed: 4, lines: vec ! ["fn blah() {}".into()], },
-            ModifiedChunk { line_number_orig: 9, lines_removed: 6, lines: vec ! ["#[cfg(a, b)]".into(), "fn main() {}".into()], },
+            ModifiedChunk { line_number_orig: 4, lines_removed: 3, lines: vec!["fn blah() {}".into()] },
+            ModifiedChunk { line_number_orig: 9, lines_removed: 2, lines: vec!["fn main() {}".into()] },
         ],
     );
 }
 
 // Helper function for comparing the results of rustfmt
 // to a known output file generated by one of the write modes.
-fn assert_output(source: & Path, expected_filename: & Path)
+fn assert_output(source: &Path, expected_filename: &Path)
 {
     let config = read_config(source);
     let (_, source_file, _) = format_file(source, config.clone());
 
     // Populate output by writing to a vec.
     let mut out = vec![];
-    let _ = source_file::write_all_files( & source_file, & mut out, & config);
+    let _ = source_file::write_all_files(&source_file, &mut out, &config);
     let output = String::from_utf8(out).unwrap();
 
-    let mut expected_file = fs::File::open( & expected_filename).expect("couldn't open target");
-    let mut expected_text = String:: new ();
-    expected_file
-   .read_to_string( & mut expected_text)
-   .expect("Failed reading target");
+    let mut expected_file = fs::File::open(&expected_filename).expect("couldn't open target");
+    let mut expected_text = String::new();
+    expected_file.read_to_string(&mut expected_text).expect("Failed reading target");
 
-    let compare = make_diff( & expected_text, & output, DIFF_CONTEXT_SIZE);
-    if ! compare.is_empty()
+    let compare = make_diff(&expected_text, &output, DIFF_CONTEXT_SIZE);
+    if !compare.is_empty()
     {
-        let mut failures = HashMap:: new ();
+        let mut failures = HashMap::new();
         failures.insert(source.to_owned(), compare);
         print_mismatches_default_message(failures);
         panic!("Text does not match expected output");
@@ -344,39 +352,35 @@ fn assert_output(source: & Path, expected_filename: & Path)
 
 // Helper function for comparing the results of rustfmt
 // to a known output generated by one of the write modes.
-fn assert_stdin_output(source: & Path, expected_filename: & Path, emit_mode: EmitMode, has_diff: bool ,)
+fn assert_stdin_output(source: &Path, expected_filename: &Path, emit_mode: EmitMode, has_diff: bool)
 {
-    let mut config = Config:: default();
-    config. set().newline_style(NewlineStyle::Unix);
-    config. set().emit_mode(emit_mode);
+    let mut config = Config::default();
+    config.set().newline_style(NewlineStyle::Unix);
+    config.set().emit_mode(emit_mode);
 
-    let mut source_file = fs::File::open( & source).expect("couldn't open source");
-    let mut source_text = String:: new ();
-    source_file
-   .read_to_string( & mut source_text)
-   .expect("Failed reading target");
+    let mut source_file = fs::File::open(&source).expect("couldn't open source");
+    let mut source_text = String::new();
+    source_file.read_to_string(&mut source_text).expect("Failed reading target");
     let input = Input::Text(source_text);
 
     // Populate output by writing to a vec.
-    let mut buf: Vec < u8 > = vec![];
+    let mut buf: Vec<u8> = vec![];
     {
-        let mut session = Session:: new (config, Some( & mut buf));
+        let mut session = Session::new(config, Some(&mut buf));
         session.format(input).unwrap();
-        let errors = ReportedErrors { has_diff,..Default::default () };
+        let errors = ReportedErrors { has_diff, ..Default::default() };
         assert_eq!(session.errors, errors);
     }
 
-    let mut expected_file = fs::File::open( & expected_filename).expect("couldn't open target");
-    let mut expected_text = String:: new ();
-    expected_file
-   .read_to_string( & mut expected_text)
-   .expect("Failed reading target");
+    let mut expected_file = fs::File::open(&expected_filename).expect("couldn't open target");
+    let mut expected_text = String::new();
+    expected_file.read_to_string(&mut expected_text).expect("Failed reading target");
 
     let output = String::from_utf8(buf).unwrap();
-    let compare = make_diff( & expected_text, & output, DIFF_CONTEXT_SIZE);
-    if ! compare.is_empty()
+    let compare = make_diff(&expected_text, &output, DIFF_CONTEXT_SIZE);
+    if !compare.is_empty()
     {
-        let mut failures = HashMap:: new ();
+        let mut failures = HashMap::new();
         failures.insert(source.to_owned(), compare);
         print_mismatches_default_message(failures);
         panic!("Text does not match expected output");
@@ -392,17 +396,17 @@ fn idempotence_tests()
     init_log();
     run_test_with
     (
-        & TestSetting:: default(), ||
-        {
-            // Get all files in the tests/target directory.
-            let files = get_test_files(Path::new ("tests/target"), true);
-            let (_reports, count, fails) = check_files(files, & None);
+        &TestSetting::default(), ||
+    {
+        // Get all files in the tests/target directory.
+        let files = get_test_files(Path::new("tests/target"), true);
+        let (_reports, count, fails) = check_files(files, &None);
 
-            // Display results.
-            println!("Ran {} idempotent tests.", count);
-            assert_eq!(fails, 0, "{} idempotent tests failed", fails);
-            assert!(count >= 400, "Expected a minimum of {} idempotent tests to be executed", 400)
-        }
+        // Display results.
+        println!("Ran {} idempotent tests.", count);
+        assert_eq!(fails, 0, "{} idempotent tests failed", fails);
+        assert!(count >= 400, "Expected a minimum of {} idempotent tests to be executed", 400)
+    }
     );
 }
 
@@ -414,28 +418,44 @@ fn idempotence_tests()
 fn self_tests()
 {
     init_log();
-    let mut files = get_test_files(Path::new ("tests"), false);
+    let mut files = get_test_files(Path::new("tests"), false);
     let bin_directories = vec!["cargo-fmt", "git-rustfmt", "bin", "format-diff"];
-    for dir in bin_directories { let mut path = PathBuf::from("src"); path.push(dir); path.push("main.rs"); files.push(path); }
+    for dir in bin_directories
+    {
+        let mut path = PathBuf::from("src");
+        path.push(dir);
+        path.push("main.rs");
+        files.push(path);
+    }
     // for crates that need to be included but lies outside src
     let external_crates = vec!["check_diff", "config_proc_macro"];
     for external_crate in external_crates
     {
         let mut path = PathBuf::from(external_crate);
         path.push("src");
-        let directory = fs::read_dir( & path).unwrap();
+        let directory = fs::read_dir(&path).unwrap();
         let search_files = directory.filter_map
         (
-            | file |
+            |file|
+        {
+            file.ok().and_then
+            (
+                |f|
             {
-                file.ok().and_then( | f | { let name = f.file_name(); if matches ! (name.as_os_str().to_str(), Some("main.rs" | "lib.rs")) { Some(f.path()) } else { None } })
+                let name = f.file_name();
+                if matches!(name.as_os_str().to_str(), Some("main.rs" | "lib.rs")) { Some(f.path()) } else { None }
             }
+            )
+        }
         );
-        for file in search_files { files.push(file); }
+        for file in search_files
+        {
+            files.push(file);
+        }
     }
     files.push(PathBuf::from("src/lib.rs"));
 
-    let (reports, count, fails) = check_files(files, & Some(PathBuf::from("rustfmt.toml")));
+    let (reports, count, fails) = check_files(files, &Some(PathBuf::from("rustfmt.toml")));
     let mut warnings = 0;
 
     // Display results.
@@ -444,7 +464,7 @@ fn self_tests()
 
     for format_report in reports
     {
-        println!("{}", FormatReportFormatterBuilder::new ( & format_report).build());
+        println!("{}", FormatReportFormatterBuilder::new(&format_report).build());
         warnings += format_report.warning_count();
     }
 
@@ -457,30 +477,36 @@ fn format_files_find_new_files_via_cfg_if()
     init_log();
     run_test_with
     (
-        & TestSetting:: default(), ||
+        &TestSetting::default(), ||
+    {
+        // To repro issue-4656, it is necessary that these files are parsed
+        // as a part of the same session (hence this separate test runner).
+        let files = vec![Path::new("tests/source/issue-4656/lib2.rs"), Path::new("tests/source/issue-4656/lib.rs")];
+
+        let config = Config::default();
+        let mut session = Session::<io::Stdout>::new(config, None);
+
+        let mut write_result = HashMap::new();
+        for file in files
         {
-            // To repro issue-4656, it is necessary that these files are parsed
-            // as a part of the same session (hence this separate test runner).
-            let files = vec![Path::new ("tests/source/issue-4656/lib2.rs"), Path::new ("tests/source/issue-4656/lib.rs"),];
+            assert!(file.exists());
+            let result = session.format(Input::File(file.into())).unwrap();
+            assert!(!session.has_formatting_errors());
+            assert!(!result.has_warnings());
+            let mut source_file = SourceFile::new();
+            mem::swap(&mut session.source_file, &mut source_file);
 
-            let config = Config:: default();
-            let mut session = Session::<io::Stdout>:: new (config, None);
-
-            let mut write_result = HashMap:: new ();
-            for file in files
+            for (filename, text) in source_file
             {
-                assert!(file.exists());
-                let result = session.format(Input::File(file.into())).unwrap();
-                assert!( ! session.has_formatting_errors());
-                assert!( ! result.has_warnings());
-                let mut source_file = SourceFile:: new ();
-                mem::swap( & mut session.source_file, & mut source_file);
-
-                for (filename, text) in source_file { if let FileName::Real(ref filename) = filename { write_result.insert(filename.to_owned(), text); } }
+                if let FileName::Real(ref filename) = filename
+                {
+                    write_result.insert(filename.to_owned(), text);
+                }
             }
-            assert_eq!(3, write_result.len(), "Should have uncovered an extra file (format_me_please.rs) via lib.rs");
-            assert!(handle_result(write_result, None).is_ok());
         }
+        assert_eq!(3, write_result.len(), "Should have uncovered an extra file (format_me_please.rs) via lib.rs");
+        assert!(handle_result(write_result, None).is_ok());
+    }
     );
 }
 
@@ -490,31 +516,37 @@ fn format_files_find_new_files_via_cfg_select()
     init_log();
     run_test_with
     (
-        & TestSetting:: default(), ||
+        &TestSetting::default(), ||
+    {
+        // We load these two files into the same session to test cfg_select!
+        // transparent mod discovery, and to ensure that it does not suffer
+        // from a similar issue as cfg_if! support did with issue-4656.
+        let files = vec![Path::new("tests/source/cfg_select/lib2.rs"), Path::new("tests/source/cfg_select/lib.rs")];
+
+        let config = Config::default();
+        let mut session = Session::<io::Stdout>::new(config, None);
+
+        let mut write_result = HashMap::new();
+        for file in files
         {
-            // We load these two files into the same session to test cfg_select!
-            // transparent mod discovery, and to ensure that it does not suffer
-            // from a similar issue as cfg_if! support did with issue-4656.
-            let files = vec![Path::new ("tests/source/cfg_select/lib2.rs"), Path::new ("tests/source/cfg_select/lib.rs"),];
+            assert!(file.exists());
+            let result = session.format(Input::File(file.into())).unwrap();
+            assert!(!session.has_formatting_errors());
+            assert!(!result.has_warnings());
+            let mut source_file = SourceFile::new();
+            mem::swap(&mut session.source_file, &mut source_file);
 
-            let config = Config:: default();
-            let mut session = Session::<io::Stdout>:: new (config, None);
-
-            let mut write_result = HashMap:: new ();
-            for file in files
+            for (filename, text) in source_file
             {
-                assert!(file.exists());
-                let result = session.format(Input::File(file.into())).unwrap();
-                assert!( ! session.has_formatting_errors());
-                assert!( ! result.has_warnings());
-                let mut source_file = SourceFile:: new ();
-                mem::swap( & mut session.source_file, & mut source_file);
-
-                for (filename, text) in source_file { if let FileName::Real(ref filename) = filename { write_result.insert(filename.to_owned(), text); } }
+                if let FileName::Real(ref filename) = filename
+                {
+                    write_result.insert(filename.to_owned(), text);
+                }
             }
-            assert_eq!(6, write_result.len(), "Should have uncovered an extra file (format_me_please_x.rs) via lib.rs");
-            assert!(handle_result(write_result, None).is_ok());
         }
+        assert_eq!(6, write_result.len(), "Should have uncovered an extra file (format_me_please_x.rs) via lib.rs");
+        assert!(handle_result(write_result, None).is_ok());
+    }
     );
 }
 
@@ -523,18 +555,18 @@ fn stdin_formatting_smoke_test()
 {
     init_log();
     let input = Input::Text("fn main () {}".to_owned());
-    let mut config = Config:: default();
-    config. set().emit_mode(EmitMode::Stdout);
-    let mut buf: Vec < u8 > = vec![];
+    let mut config = Config::default();
+    config.set().emit_mode(EmitMode::Stdout);
+    let mut buf: Vec<u8> = vec![];
     {
-        let mut session = Session:: new (config, Some( & mut buf));
+        let mut session = Session::new(config, Some(&mut buf));
         session.format(input).unwrap();
         assert!(session.has_no_errors());
     }
 
-   #[cfg(not(windows))]
+    #[cfg(not(windows))]
     assert_eq!(buf, "<stdin>:\n\nfn main() {}\n".as_bytes());
-   #[cfg(windows)]
+    #[cfg(windows)]
     assert_eq!(buf, "<stdin>:\n\nfn main() {}\r\n".as_bytes());
 }
 
@@ -546,7 +578,7 @@ fn stdin_parser_panic_caught()
     for text in ["{", "}"].iter().cloned().map(String::from)
     {
         let mut buf = vec![];
-        let mut session = Session:: new (Default::default (), Some( & mut buf));
+        let mut session = Session::new(Default::default(), Some(&mut buf));
         let _ = session.format(Input::Text(text));
 
         assert!(session.has_parsing_errors());
@@ -563,14 +595,14 @@ fn stdin_works_with_modified_lines()
     let output = "1 6 2\nfn some() {}\nfn main() {}\n";
 
     let input = Input::Text(input.to_owned());
-    let mut config = Config:: default();
-    config. set().newline_style(NewlineStyle::Unix);
-    config. set().emit_mode(EmitMode::ModifiedLines);
-    let mut buf: Vec < u8 > = vec![];
+    let mut config = Config::default();
+    config.set().newline_style(NewlineStyle::Unix);
+    config.set().emit_mode(EmitMode::ModifiedLines);
+    let mut buf: Vec<u8> = vec![];
     {
-        let mut session = Session:: new (config, Some( & mut buf));
+        let mut session = Session::new(config, Some(&mut buf));
         session.format(input).unwrap();
-        let errors = ReportedErrors { has_diff: true,..Default::default () };
+        let errors = ReportedErrors { has_diff: true, ..Default::default() };
         assert_eq!(session.errors, errors);
     }
     assert_eq!(buf, output.as_bytes());
@@ -581,7 +613,7 @@ fn stdin_works_with_modified_lines()
 fn stdin_works_with_json()
 {
     init_log();
-    assert_stdin_output(Path::new ("tests/writemode/source/stdin.rs"), Path::new ("tests/writemode/target/stdin.json"), EmitMode::Json, true,);
+    assert_stdin_output(Path::new("tests/writemode/source/stdin.rs"), Path::new("tests/writemode/target/stdin.json"), EmitMode::Json, true);
 }
 
 /// Ensures that `EmitMode::Checkstyle` works with input from `stdin`.
@@ -589,7 +621,7 @@ fn stdin_works_with_json()
 fn stdin_works_with_checkstyle()
 {
     init_log();
-    assert_stdin_output(Path::new ("tests/writemode/source/stdin.rs"), Path::new ("tests/writemode/target/stdin.xml"), EmitMode::Checkstyle, false,);
+    assert_stdin_output(Path::new("tests/writemode/source/stdin.rs"), Path::new("tests/writemode/target/stdin.xml"), EmitMode::Checkstyle, false);
 }
 
 #[test]
@@ -597,18 +629,16 @@ fn stdin_disable_all_formatting_test()
 {
     init_log();
     let input = String::from("fn main() { println!(\"This should not be formatted.\"); }");
-    let mut child = Command:: new (rustfmt().to_str().unwrap())
-   .stdin(Stdio::piped())
-   .stdout(Stdio::piped())
-   .arg("--config-path=./tests/config/disable_all_formatting.toml")
-   .spawn()
-   .expect("failed to execute child");
+    let mut child = Command::new(rustfmt().to_str().unwrap())
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .arg("--config-path=./tests/config/disable_all_formatting.toml")
+        .spawn()
+        .expect("failed to execute child");
 
     {
         let stdin = child.stdin.as_mut().expect("failed to get stdin");
-        stdin
-       .write_all(input.as_bytes())
-       .expect("failed to write stdin");
+        stdin.write_all(input.as_bytes()).expect("failed to write stdin");
     }
 
     let output = child.wait_with_output().expect("failed to wait on child");
@@ -622,13 +652,13 @@ fn stdin_generated_files_issue_5172()
 {
     init_log();
     let input = Input::Text("//@generated\nfn   main() {}".to_owned());
-    let mut config = Config:: default();
-    config. set().emit_mode(EmitMode::Stdout);
-    config. set().format_generated_files(false);
-    config. set().newline_style(NewlineStyle::Unix);
-    let mut buf: Vec < u8 > = vec![];
+    let mut config = Config::default();
+    config.set().emit_mode(EmitMode::Stdout);
+    config.set().format_generated_files(false);
+    config.set().newline_style(NewlineStyle::Unix);
+    let mut buf: Vec<u8> = vec![];
     {
-        let mut session = Session:: new (config, Some( & mut buf));
+        let mut session = Session::new(config, Some(&mut buf));
         session.format(input).unwrap();
         assert!(session.has_no_errors());
     }
@@ -642,17 +672,11 @@ fn stdin_handles_mod_inner_ignore_attr()
     // see https://github.com/rust-lang/rustfmt/issues/5368
     init_log();
     let input = String::from("#![rustfmt::skip]\n\nfn    main() {  }");
-    let mut child = Command:: new (rustfmt().to_str().unwrap())
-   .stdin(Stdio::piped())
-   .stdout(Stdio::piped())
-   .spawn()
-   .expect("failed to execute child");
+    let mut child = Command::new(rustfmt().to_str().unwrap()).stdin(Stdio::piped()).stdout(Stdio::piped()).spawn().expect("failed to execute child");
 
     {
         let stdin = child.stdin.as_mut().expect("failed to get stdin");
-        stdin
-       .write_all(input.as_bytes())
-       .expect("failed to write stdin");
+        stdin.write_all(input.as_bytes()).expect("failed to write stdin");
     }
 
     let output = child.wait_with_output().expect("failed to wait on child");
@@ -665,11 +689,11 @@ fn stdin_handles_mod_inner_ignore_attr()
 fn format_lines_errors_are_reported()
 {
     init_log();
-    let long_identifier = String::from_utf8(vec ! [b'a'; 239]).unwrap();
-    let input = Input::Text(format ! ("fn {long_identifier}() {{}}"));
-    let mut config = Config:: default();
-    config. set().error_on_line_overflow(true);
-    let mut session = Session::<io::Stdout>:: new (config, None);
+    let long_identifier = String::from_utf8(vec![b'a'; 239]).unwrap();
+    let input = Input::Text(format!("fn {long_identifier}() {{}}"));
+    let mut config = Config::default();
+    config.set().error_on_line_overflow(true);
+    let mut session = Session::<io::Stdout>::new(config, None);
     session.format(input).unwrap();
     assert!(session.has_formatting_errors());
 }
@@ -678,19 +702,19 @@ fn format_lines_errors_are_reported()
 fn format_lines_errors_are_reported_with_tabs()
 {
     init_log();
-    let long_identifier = String::from_utf8(vec ! [b'a'; 97]).unwrap();
-    let input = Input::Text(format ! ("fn a() {{\n\t{long_identifier}\n}}"));
-    let mut config = Config:: default();
-    config. set().error_on_line_overflow(true);
-    config. set().hard_tabs(true);
-    let mut session = Session::<io::Stdout>:: new (config, None);
+    let long_identifier = String::from_utf8(vec![b'a'; 157]).unwrap();
+    let input = Input::Text(format!("fn a() {{\n\t{long_identifier}\n}}"));
+    let mut config = Config::default();
+    config.set().error_on_line_overflow(true);
+    config.set().hard_tabs(true);
+    let mut session = Session::<io::Stdout>::new(config, None);
     session.format(input).unwrap();
     assert!(session.has_formatting_errors());
 }
 
 // For each file, run rustfmt and collect the output.
 // Returns the number of files checked and the number of failures.
-fn check_files(files: Vec<PathBuf>, opt_config: & Option<PathBuf>) -> (Vec<FormatReport>, u32, u32)
+fn check_files(files: Vec<PathBuf>, opt_config: &Option<PathBuf>) -> (Vec<FormatReport>, u32, u32)
 {
     let mut count = 0;
     let mut fails = 0;
@@ -698,8 +722,8 @@ fn check_files(files: Vec<PathBuf>, opt_config: & Option<PathBuf>) -> (Vec<Forma
 
     for file_name in files
     {
-        let sig_comments = read_significant_comments( & file_name);
-        if sig_comments.contains_key("unstable") && ! is_nightly_channel!()
+        let sig_comments = read_significant_comments(&file_name);
+        if sig_comments.contains_key("unstable") && !is_nightly_channel!()
         {
             debug!
             (
@@ -723,11 +747,22 @@ fn check_files(files: Vec<PathBuf>, opt_config: & Option<PathBuf>) -> (Vec<Forma
 
         debug!("Testing '{}'...", file_name.display());
 
-        match idempotent_check( & file_name, opt_config)
+        match idempotent_check(&file_name, opt_config)
         {
-            Ok(ref report) if report.has_warnings() => { print ! ("{}", FormatReportFormatterBuilder::new (report).build()); fails += 1; }
+            Ok(ref report) if report.has_warnings() =>
+            {
+                print!("{}", FormatReportFormatterBuilder::new(report).build());
+                fails += 1;
+            }
             Ok(report) => reports.push(report),
-            Err(err) => { if let IdempotentCheckError::Mismatch(msg) = err { print_mismatches_default_message(msg); } fails += 1; }
+            Err(err) =>
+            {
+                if let IdempotentCheckError::Mismatch(msg) = err
+                {
+                    print_mismatches_default_message(msg);
+                }
+                fails += 1;
+            }
         }
 
         count += 1;
@@ -740,93 +775,123 @@ fn print_mismatches_default_message(result: HashMap<PathBuf, Vec<Mismatch>>)
 {
     for (file_name, diff) in result
     {
-        let mismatch_msg_formatter =
-        | line_num | format!("\nMismatch at {}:{}:", file_name.display(), line_num);
-        print_diff(diff, & mismatch_msg_formatter, & Default::default ());
+        let mismatch_msg_formatter = |line_num| format!("\nMismatch at {}:{}:", file_name.display(), line_num);
+        print_diff(diff, &mismatch_msg_formatter, &Default::default());
     }
 
-    if let Some(mut t) = term::stdout() { t.reset().unwrap_or(()); }
+    if let Some(mut t) = term::stdout()
+    {
+        t.reset().unwrap_or(());
+    }
 }
 
-fn print_mismatches < T: Fn(u32) -> String > (result: HashMap<PathBuf, Vec<Mismatch>>, mismatch_msg_formatter: T,)
+fn print_mismatches<T: Fn(u32) -> String>(result: HashMap<PathBuf, Vec<Mismatch>>, mismatch_msg_formatter: T)
 {
-    for (_file_name, diff) in result { print_diff(diff, & mismatch_msg_formatter, & Default::default ()); }
+    for (_file_name, diff) in result
+    {
+        print_diff(diff, &mismatch_msg_formatter, &Default::default());
+    }
 
-    if let Some(mut t) = term::stdout() { t.reset().unwrap_or(()); }
+    if let Some(mut t) = term::stdout()
+    {
+        t.reset().unwrap_or(());
+    }
 }
 
-fn read_config(filename: & Path) -> Config
+fn read_config(filename: &Path) -> Config
 {
     let sig_comments = read_significant_comments(filename);
-    let (edition, style_edition, version) = get_editions_from_comments( & sig_comments);
+    let (edition, style_edition, version) = get_editions_from_comments(&sig_comments);
     // Look for a config file. If there is a 'config' property in the significant comments, use
     // that. Otherwise, if there are no significant comments at all, look for a config file with
     // the same name as the test file.
-    let mut config = if ! sig_comments.is_empty() { get_config(sig_comments.get ("config").map(Path::new), edition, style_edition, version,) }
-    else { get_config(filename.with_extension("toml").file_name().map(Path::new), edition, style_edition, version,) };
+    let mut config = if !sig_comments.is_empty()
+    {
+        get_config(sig_comments.get("config").map(Path::new), edition, style_edition, version)
+    }
+    else
+    {
+        get_config(filename.with_extension("toml").file_name().map(Path::new), edition, style_edition, version)
+    };
 
-    for (key, val) in & sig_comments
+    for (key, val) in &sig_comments
     {
         if key != "target" && key != "config" && key != "unstable" && key != "stable"
         {
             config.override_value(key, val);
-            if config.is_default(key) { warn ! ("Default value {} used explicitly for {}", val, key); }
+            if config.is_default(key)
+            {
+                warn!("Default value {} used explicitly for {}", val, key);
+            }
         }
     }
 
     config
 }
 
-fn format_file<P: Into<PathBuf>>(filepath: P, config: Config) -> (bool , SourceFile, FormatReport)
+fn format_file<P: Into<PathBuf>>(filepath: P, config: Config) -> (bool, SourceFile, FormatReport)
 {
     let filepath = filepath.into();
     let input = Input::File(filepath);
-    let mut session = Session::<io::Stdout>:: new (config, None);
+    let mut session = Session::<io::Stdout>::new(config, None);
     let result = session.format(input).unwrap();
     let parsing_errors = session.has_parsing_errors();
-    let mut source_file = SourceFile:: new ();
-    mem::swap( & mut session.source_file, & mut source_file);
+    let mut source_file = SourceFile::new();
+    mem::swap(&mut session.source_file, &mut source_file);
     (parsing_errors, source_file, result)
 }
 
-enum IdempotentCheckError { Mismatch(HashMap<PathBuf, Vec<Mismatch>>), Parse, }
+enum IdempotentCheckError
+{
+    Mismatch(HashMap<PathBuf, Vec<Mismatch>>),
+    Parse,
+}
 
-fn get_editions_from_comments(comments: & HashMap<String, String>,) -> (Option<Edition>, Option<StyleEdition>, Option<Version>)
-{(
-    comments
-   . get("edition")
-   .map( | e | Edition::from_str(e).expect( & format ! ("invalid edition value: '{}'", e))),
-    comments. get("style_edition").map( | se | { StyleEdition::from_str(se).expect( & format ! ("invalid style_edition value: '{}'", se)) }),
-    comments
-   . get("version")
-   .map( | v | Version::from_str(v).expect( & format ! ("invalid version value: '{}'", v))),
-)}
+fn get_editions_from_comments(comments: &HashMap<String, String>) -> (Option<Edition>, Option<StyleEdition>, Option<Version>)
+{
+    (
+        comments.get("edition").map(|e| Edition::from_str(e).expect(&format!("invalid edition value: '{}'", e))),
+        comments.get("style_edition").map(|se| { StyleEdition::from_str(se).expect(&format!("invalid style_edition value: '{}'", se)) }),
+        comments.get("version").map(|v| Version::from_str(v).expect(&format!("invalid version value: '{}'", v))),
+    )
+}
 
-fn idempotent_check(filename: & PathBuf, opt_config: & Option<PathBuf>,) -> Result<FormatReport, IdempotentCheckError>
+fn idempotent_check(filename: &PathBuf, opt_config: &Option<PathBuf>) -> Result<FormatReport, IdempotentCheckError>
 {
     let sig_comments = read_significant_comments(filename);
     let config = if let Some(ref config_file_path) = opt_config
     {
-        let (edition, style_edition, version) = get_editions_from_comments( & sig_comments);
-        Config::from_toml_path(config_file_path, edition, style_edition, version)
-       .expect("`rustfmt.toml` not found")
+        let (edition, style_edition, version) = get_editions_from_comments(&sig_comments);
+        Config::from_toml_path(config_file_path, edition, style_edition, version).expect("`rustfmt.toml` not found")
     }
-    else { read_config(filename) };
+    else
+    {
+        read_config(filename)
+    };
     let (parsing_errors, source_file, format_report) = format_file(filename, config);
-    if parsing_errors { return Err(IdempotentCheckError::Parse); }
+    if parsing_errors
+    {
+        return Err(IdempotentCheckError::Parse);
+    }
 
-    let mut write_result = HashMap:: new ();
-    for (filename, text) in source_file { if let FileName::Real(ref filename) = filename { write_result.insert(filename.to_owned(), text); } }
+    let mut write_result = HashMap::new();
+    for (filename, text) in source_file
+    {
+        if let FileName::Real(ref filename) = filename
+        {
+            write_result.insert(filename.to_owned(), text);
+        }
+    }
 
-    let target = sig_comments. get("target").map( | x | & ( * x)[..]);
+    let target = sig_comments.get("target").map(|x| &(*x)[..]);
 
-    handle_result(write_result, target).map( | _ | format_report)
+    handle_result(write_result, target).map(|_| format_report)
 }
 
 // Reads test config file using the supplied (optional) file name. If there's no file name or the
 // file doesn't exist, just return the default config. Otherwise, the file must be read
 // successfully.
-fn get_config(config_file: Option< & Path>, edition: Option<Edition>, style_edition: Option<StyleEdition>, version: Option<Version>,) -> Config
+fn get_config(config_file: Option<&Path>, edition: Option<Edition>, style_edition: Option<StyleEdition>, version: Option<Version>) -> Config
 {
     let config_file_name = match config_file
     {
@@ -835,86 +900,79 @@ fn get_config(config_file: Option< & Path>, edition: Option<Edition>, style_edit
         {
             let mut full_path = PathBuf::from("tests/config/");
             full_path.push(file_name);
-            if ! full_path.exists() { return Config::default_for_possible_style_edition(style_edition, edition, version); };
+            if !full_path.exists()
+            {
+                return Config::default_for_possible_style_edition(style_edition, edition, version);
+            };
             full_path
         }
     };
 
     let mut def_config_file = fs::File::open(config_file_name).expect("couldn't open config");
-    let mut def_config = String:: new ();
-    def_config_file
-   .read_to_string( & mut def_config)
-   .expect("Couldn't read config");
+    let mut def_config = String::new();
+    def_config_file.read_to_string(&mut def_config).expect("Couldn't read config");
 
-    Config::from_toml_for_style_edition( & def_config, Path::new ("tests/config/"), edition, style_edition, version,)
-   .expect("invalid TOML")
+    Config::from_toml_for_style_edition(&def_config, Path::new("tests/config/"), edition, style_edition, version).expect("invalid TOML")
 }
 
 // Reads significant comments of the form: `// rustfmt-key: value` into a hash map.
-fn read_significant_comments(file_name: & Path) -> HashMap<String, String>
+fn read_significant_comments(file_name: &Path) -> HashMap<String, String>
 {
-    let file = fs::File::open(file_name)
-   .unwrap_or_else( | _ | panic ! ("couldn't read file {}", file_name.display()));
-    let reader = BufReader:: new (file);
+    let file = fs::File::open(file_name).unwrap_or_else(|_| panic!("couldn't read file {}", file_name.display()));
+    let reader = BufReader::new(file);
     let pattern = r"^\s*//\s*rustfmt-([^:]+):\s*(\S+)";
-    let regex = regex::Regex:: new (pattern).expect("failed creating pattern 1");
+    let regex = regex::Regex::new(pattern).expect("failed creating pattern 1");
 
     // Matches lines containing significant comments or whitespace.
-    let line_regex = regex::Regex:: new (r"(^\s*$)|(^\s*//\s*rustfmt-[^:]+:\s*\S+)")
-   .expect("failed creating pattern 2");
+    let line_regex = regex::Regex::new(r"(^\s*$)|(^\s*//\s*rustfmt-[^:]+:\s*\S+)").expect("failed creating pattern 2");
 
     reader
-   .lines()
-   .map( | line | line.expect("failed getting line"))
-   .filter( | line | line_regex.is_match(line))
-   .filter_map
-    (
-        | line |
+        .lines()
+        .map(|line| line.expect("failed getting line"))
+        .filter(|line| line_regex.is_match(line))
+        .filter_map
+        (
+            |line|
         {
-            regex.captures_iter( & line).next().map
+            regex.captures_iter(&line).next().map
             (
-                | capture |
-                {(
-                    capture
-                   . get(1)
-                   .expect("couldn't unwrap capture")
-                   .as_str()
-                   .to_owned(),
-                    capture
-                   . get(2)
-                   .expect("couldn't unwrap capture")
-                   .as_str()
-                   .to_owned(),
-                )}
+                |capture|
+            {
+                (capture.get(1).expect("couldn't unwrap capture").as_str().to_owned(), capture.get(2).expect("couldn't unwrap capture").as_str().to_owned())
+            }
             )
         }
-    )
-   .collect()
+        )
+        .collect()
 }
 
 // Compares output to input.
 // TODO: needs a better name, more explanation.
-fn handle_result(result: HashMap<PathBuf, String>, target: Option< & str>,) -> Result < (), IdempotentCheckError >
+fn handle_result(result: HashMap<PathBuf, String>, target: Option<&str>) -> Result<(), IdempotentCheckError>
 {
-    let mut failures = HashMap:: new ();
+    let mut failures = HashMap::new();
 
     for (file_name, fmt_text) in result
     {
         // If file is in tests/source, compare to file with same name in tests/target.
-        let target = get_target( & file_name, target);
+        let target = get_target(&file_name, target);
         let open_error = format!("couldn't open target {target:?}");
-        let mut f = fs::File::open( & target).expect( & open_error);
+        let mut f = fs::File::open(&target).expect(&open_error);
 
-        let mut text = String:: new ();
+        let mut text = String::new();
         let read_error = format!("failed reading target {target:?}");
-        f.read_to_string( & mut text).expect( & read_error);
+        f.read_to_string(&mut text).expect(&read_error);
 
         // Ignore LF and CRLF difference for Windows.
-        if ! string_eq_ignore_newline_repr( & fmt_text, & text)
+        if !string_eq_ignore_newline_repr(&fmt_text, &text)
         {
-            if std::env::var_os("RUSTC_BLESS").is_some_and( | v | v != "0") { std::fs::write(target, fmt_text).unwrap(); continue ; }
-            let diff = make_diff( & text, & fmt_text, DIFF_CONTEXT_SIZE);
-            assert!( ! diff.is_empty(), "Empty diff? Maybe due to a missing a newline at the end of a file?");
+            if std::env::var_os("RUSTC_BLESS").is_some_and(|v| v != "0")
+            {
+                std::fs::write(target, fmt_text).unwrap();
+                continue;
+            }
+            let diff = make_diff(&text, &fmt_text, DIFF_CONTEXT_SIZE);
+            assert!(!diff.is_empty(), "Empty diff? Maybe due to a missing a newline at the end of a file?");
             failures.insert(file_name, diff);
         }
     }
@@ -923,14 +981,22 @@ fn handle_result(result: HashMap<PathBuf, String>, target: Option< & str>,) -> R
 }
 
 // Maps source file paths to their target paths.
-fn get_target(file_name: & Path, target: Option< & str>) -> PathBuf
+fn get_target(file_name: &Path, target: Option<&str>) -> PathBuf
 {
-    if let Some(n) = file_name
-   .components()
-   .position( | c | c.as_os_str() == "source")
+    if let Some(n) = file_name.components().position(|c| c.as_os_str() == "source")
     {
-        let mut target_file_name = PathBuf:: new ();
-        for (i, c) in file_name.components().enumerate() { if i == n { target_file_name.push("target"); } else { target_file_name.push(c.as_os_str()); } }
+        let mut target_file_name = PathBuf::new();
+        for (i, c) in file_name.components().enumerate()
+        {
+            if i == n
+            {
+                target_file_name.push("target");
+            }
+            else
+            {
+                target_file_name.push(c.as_os_str());
+            }
+        }
         if let Some(replace_name) = target { target_file_name.with_file_name(replace_name) } else { target_file_name }
     }
     else
@@ -951,27 +1017,32 @@ fn rustfmt_diff_make_diff_tests()
         vec!
         [
             Mismatch
-            {
-                line_number: 1,
-                line_number_orig: 1,
-                lines: vec!
-                [
-                    DiffLine::Context("a".into()),
-                    DiffLine::Resulting("b".into()),
-                    DiffLine::Expected("e".into()),
-                    DiffLine::Context("c".into()),
-                    DiffLine::Context("d".into()),
-                ],
-            }
+        {
+            line_number: 1,
+            line_number_orig: 1,
+            lines: vec!
+            [
+                DiffLine::Context("a".into()),
+                DiffLine::Resulting("b".into()),
+                DiffLine::Expected("e".into()),
+                DiffLine::Context("c".into()),
+                DiffLine::Context("d".into()),
+            ],
+        }
         ]
     );
 }
 
 #[test]
-fn rustfmt_diff_no_diff_test() { init_log(); let diff = make_diff("a\nb\nc\nd", "a\nb\nc\nd", 3); assert_eq ! (diff, vec ! []); }
+fn rustfmt_diff_no_diff_test()
+{
+    init_log();
+    let diff = make_diff("a\nb\nc\nd", "a\nb\nc\nd", 3);
+    assert_eq!(diff, vec![]);
+}
 
 // Compare strings without distinguishing between CRLF and LF
-fn string_eq_ignore_newline_repr(left: & str, right: & str) -> bool
+fn string_eq_ignore_newline_repr(left: &str, right: &str) -> bool
 {
     let left = CharsIgnoreNewlineRepr(left.chars().peekable());
     let right = CharsIgnoreNewlineRepr(right.chars().peekable());
@@ -980,18 +1051,33 @@ fn string_eq_ignore_newline_repr(left: & str, right: & str) -> bool
 
 struct CharsIgnoreNewlineRepr<'a>(Peekable<Chars<'a>>);
 
-impl <'a> Iterator for CharsIgnoreNewlineRepr<'a>
+impl<'a> Iterator for CharsIgnoreNewlineRepr<'a>
 {
     type Item = char;
 
-    fn next( & mut self) -> Option<char>
+    fn next(&mut self) -> Option<char>
     {
-        self.0 .next().map
+        self.0.next().map
         (
-            | c |
+            |c|
+        {
+            if c == '\r'
             {
-                if c == '\r' { if * self.0 .peek().unwrap_or( & '\0') == '\n' { self.0 .next(); '\n' } else { '\r' } } else { c }
+                if *self.0.peek().unwrap_or(&'\0') == '\n'
+                {
+                    self.0.next();
+                    '\n'
+                }
+                else
+                {
+                    '\r'
+                }
             }
+            else
+            {
+                c
+            }
+        }
         )
     }
 }
@@ -1001,32 +1087,41 @@ fn string_eq_ignore_newline_repr_test()
 {
     init_log();
     assert!(string_eq_ignore_newline_repr("", ""));
-    assert!( ! string_eq_ignore_newline_repr("", "abc"));
-    assert!( ! string_eq_ignore_newline_repr("abc", ""));
+    assert!(!string_eq_ignore_newline_repr("", "abc"));
+    assert!(!string_eq_ignore_newline_repr("abc", ""));
     assert!(string_eq_ignore_newline_repr("a\nb\nc\rd", "a\nb\r\nc\rd"));
     assert!(string_eq_ignore_newline_repr("a\r\n\r\n\r\nb", "a\n\n\nb"));
-    assert!( ! string_eq_ignore_newline_repr("a\r\nbcd", "a\nbcdefghijk"));
+    assert!(!string_eq_ignore_newline_repr("a\r\nbcd", "a\nbcdefghijk"));
 }
 
-struct TempFile { path: PathBuf, }
-
-fn make_temp_file(file_name: & 'static str) -> TempFile
+struct TempFile
 {
-    use std::env:: var;
+    path: PathBuf,
+}
+
+fn make_temp_file(file_name: &'static str) -> TempFile
+{
+    use std::env::var;
     use std::fs::File;
 
     // Used in the Rust build system.
-    let target_dir = var("RUSTFMT_TEST_DIR").unwrap_or_else( | _ | ".".to_owned());
-    let path = Path:: new ( & target_dir).join(file_name);
+    let target_dir = var("RUSTFMT_TEST_DIR").unwrap_or_else(|_| ".".to_owned());
+    let path = Path::new(&target_dir).join(file_name);
 
-    let mut file = File::create( & path).expect("couldn't create temp file");
+    let mut file = File::create(&path).expect("couldn't create temp file");
     let content = "fn main() {}\n";
-    file.write_all(content.as_bytes())
-   .expect("couldn't write temp file");
+    file.write_all(content.as_bytes()).expect("couldn't write temp file");
     TempFile { path }
 }
 
-impl Drop for TempFile { fn drop( & mut self) { use std::fs::remove_file; remove_file( & self.path).expect("couldn't delete temp file"); } }
+impl Drop for TempFile
+{
+    fn drop(&mut self)
+    {
+        use std::fs::remove_file;
+        remove_file(&self.path).expect("couldn't delete temp file");
+    }
+}
 
 fn rustfmt() -> PathBuf
 {
@@ -1065,11 +1160,7 @@ fn verify_check_works()
     init_log();
     let temp_file = make_temp_file("temp_check.rs");
 
-    Command:: new (rustfmt().to_str().unwrap())
-   .arg("--check")
-   .arg(temp_file.path.to_str().unwrap())
-   .status()
-   .expect("run with check option failed");
+    Command::new(rustfmt().to_str().unwrap()).arg("--check").arg(temp_file.path.to_str().unwrap()).status().expect("run with check option failed");
 }
 
 #[test]
@@ -1077,22 +1168,14 @@ fn verify_check_works_with_stdin()
 {
     init_log();
 
-    let mut child = Command:: new (rustfmt().to_str().unwrap())
-   .arg("--check")
-   .stdin(Stdio::piped())
-   .stderr(Stdio::piped())
-   .spawn()
-   .expect("run with check option failed");
+    let mut child =
+        Command::new(rustfmt().to_str().unwrap()).arg("--check").stdin(Stdio::piped()).stderr(Stdio::piped()).spawn().expect("run with check option failed");
 
     {
         let stdin = child.stdin.as_mut().expect("Failed to open stdin");
-        stdin
-       .write_all("fn main() {}\n".as_bytes())
-       .expect("Failed to write to rustfmt --check");
+        stdin.write_all("fn main() {}\n".as_bytes()).expect("Failed to write to rustfmt --check");
     }
-    let output = child
-   .wait_with_output()
-   .expect("Failed to wait on rustfmt child");
+    let output = child.wait_with_output().expect("Failed to wait on rustfmt child");
     assert!(output.status.success());
 }
 
@@ -1101,24 +1184,20 @@ fn verify_check_l_works_with_stdin()
 {
     init_log();
 
-    let mut child = Command:: new (rustfmt().to_str().unwrap())
-   .arg("--check")
-   .arg("-l")
-   .stdin(Stdio::piped())
-   .stdout(Stdio::piped())
-   .stderr(Stdio::piped())
-   .spawn()
-   .expect("run with check option failed");
+    let mut child = Command::new(rustfmt().to_str().unwrap())
+        .arg("--check")
+        .arg("-l")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::piped())
+        .stderr(Stdio::piped())
+        .spawn()
+        .expect("run with check option failed");
 
     {
         let stdin = child.stdin.as_mut().expect("Failed to open stdin");
-        stdin
-       .write_all("fn main()\n{}\n".as_bytes())
-       .expect("Failed to write to rustfmt --check");
+        stdin.write_all("fn main()\n{}\n".as_bytes()).expect("Failed to write to rustfmt --check");
     }
-    let output = child
-   .wait_with_output()
-   .expect("Failed to wait on rustfmt child");
+    let output = child.wait_with_output().expect("Failed to wait on rustfmt child");
     assert!(output.status.success());
-    assert_eq!(std::str::from_utf8( & output.stdout).unwrap(), "<stdin>\n");
+    assert_eq!(std::str::from_utf8(&output.stdout).unwrap(), "<stdin>\n");
 }

@@ -1,3 +1,4 @@
-fn other() -> &str {
+fn other() -> &str
+{
     "other"
 }

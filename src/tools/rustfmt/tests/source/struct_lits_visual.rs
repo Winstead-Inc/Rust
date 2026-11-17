@@ -29,7 +29,7 @@ fn main()
 
     Baz
     {
-        x: yxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx, z: zzzzz // test
+        x: yxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx, z: zzzzz /* test */
     };
 
     A

@@ -1,11 +1,5 @@
-fn allowed<F>(
-    data: &str,
-    f1: impl Fn(msg: String),
-    f2: impl Fn(_: String),
-    f3: impl Fn(String, msg: String),
-    f4: impl Fn(msg: String, String),
-    fg: F,
-) where
+fn allowed<F>(data: &str, f1: impl Fn(msg: String), f2: impl Fn(_: String), f3: impl Fn(String, msg: String), f4: impl Fn(msg: String, String), fg: F)
+where
     F: Fn(msg: String),
 {
 }

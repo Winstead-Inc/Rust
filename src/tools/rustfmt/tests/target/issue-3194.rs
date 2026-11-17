@@ -1,10 +1,12 @@
-mod m {
+mod m
+{
     struct S
     where
         A: B;
 }
 
-mod n {
+mod n
+{
     struct Foo
     where
         A: B,
@@ -13,7 +15,8 @@ mod n {
     }
 }
 
-mod o {
+mod o
+{
     enum Bar
     where
         A: B,
@@ -22,15 +25,18 @@ mod o {
     }
 }
 
-mod with_comments {
-    mod m {
+mod with_comments
+{
+    mod m
+    {
         struct S
         /* before where */
         where
             A: B; /* after where */
     }
 
-    mod n {
+    mod n
+    {
         struct Foo
         /* before where */
         where
@@ -40,7 +46,8 @@ mod with_comments {
         }
     }
 
-    mod o {
+    mod o
+    {
         enum Bar
         /* before where */
         where

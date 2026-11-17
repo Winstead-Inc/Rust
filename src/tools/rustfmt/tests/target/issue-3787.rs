@@ -8,6 +8,7 @@
 //!   ligula. Duis tincidunt odio sollicitudin quam. Nullam non mauris.
 //!   Phasellus lacinia, velit sit amet bibendum euismod, leo diam interdum
 //!   ligula, eu scelerisque sem purus in tellus.
-fn main() {
+fn main()
+{
     println!("Hello, world!");
 }

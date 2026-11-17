@@ -1,8 +1,10 @@
 // rustfmt-max_width: 119
 // rustfmt-format_code_in_doc_comments: true
 
-mod libs {
-    fn mrbgems_sources() {
+mod libs
+{
+    fn mrbgems_sources()
+    {
         [
             "mrbgems/mruby-compiler/core/codegen.c", // Ruby parser and bytecode generation
             "mrbgems/mruby-compiler/core/y.tab.c",   // Ruby parser and bytecode generation

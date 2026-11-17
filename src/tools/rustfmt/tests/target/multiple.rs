@@ -24,7 +24,7 @@ mod other;
 // sfdgfffffffffffffffffffffffffffffffffffffffffffffffffffffff
 // ffffffffffffffffffffffffffffffffffffffffff
 
-fn foo(a: isize, b: u32 /* blah blah */, c: f64) {}
+fn foo(a: isize, b: u32, /* blah blah */ c: f64) {}
 
 fn foo() -> Box<Write + 'static>
 where
@@ -34,14 +34,13 @@ where
     hello!()
 }
 
-fn baz<
-    'a: 'b,                                                            // comment on 'a
-    T: SomsssssssssssssssssssssssssssssssssssssssssssssssssssssseType, // comment on T
->(
+fn baz<'a: 'b /* comment on 'a */, T: SomsssssssssssssssssssssssssssssssssssssssssssssssssssssseType /* comment on T */>
+(
     a: A,
     b: B, // comment on b
     c: C,
-) -> Bob {
+) -> Bob
+{
     #[attr1]
     extern crate foo;
     #[attr2]
@@ -55,24 +54,30 @@ fn baz<
 }
 
 #[rustfmt::skip]
-fn qux(a: dadsfa,   // Comment 1
-       b: sdfasdfa, // Comment 2
-       c: dsfdsafa) // Comment 3
-{
-
-}
+fn qux
+(
+    a: dadsfa, // Comment 1
+    b: sdfasdfa, // Comment 2
+    c: dsfdsafa
+)
+// Comment 3
+{}
 
 /// Blah blah blah.
-impl Bar {
-    fn foo(
+impl Bar
+{
+    fn foo
+    (
         &mut self,
         a: sdfsdfcccccccccccccccccccccccccccccccccccccccccccccccccc, // comment on a
         b: sdfasdfsdfasfs,                                           // closing comment
-    ) -> isize {
+    ) -> isize
+    {
     }
 
     /// Blah blah blah.
-    pub fn f2(self) {
+    pub fn f2(self)
+    {
         (foo, bar)
     }
 
@@ -85,7 +90,8 @@ impl Bar {
 
 /// entirely new vectors or to pass back slices into internally owned
 /// vectors.
-pub trait GraphWalk<'a, N, E> {
+pub trait GraphWalk<'a, N, E>
+{
     /// Returns all the nodes in this graph.
     fn nodes(&'a self) -> Nodes<'a, N>;
     /// Returns all of the edges in this graph.
@@ -98,9 +104,10 @@ pub trait GraphWalk<'a, N, E> {
 
 /// A Doc comment
 #[AnAttribute]
-pub struct Foo {
+pub struct Foo
+{
     #[rustfmt::skip]
-    f :   SomeType, // Comment beside a field
+    f: SomeType, // Comment beside a field
     f: SomeType, // Comment beside a field
     // Comment on a field
     g: SomeOtherType,
@@ -111,7 +118,8 @@ pub struct Foo {
 struct Bar;
 
 // With a where-clause and generics.
-pub struct Foo<'a, Y: Baz>
+pub struct Foo
+<'a, Y: Baz>
 where
     X: Whatever,
 {
@@ -120,57 +128,29 @@ where
 
 fn foo(ann: &'a (PpAnn + 'a)) {}
 
-fn main() {
-    for i in 0i32..4 {
+fn main()
+{
+    for i in 0i32..4
+    {
         println!("{}", i);
     }
 
-    while true {
+    while true
+    {
         hello();
     }
 
-    let rc = Cell::new(
-        42usize,
-        42usize,
-        Cell::new(
-            42usize,
-            remaining_widthremaining_widthremaining_widthremaining_width,
-        ),
-        42usize,
-    );
-    let rc = RefCell::new(42usize, remaining_width, remaining_width); // a comment
-    let x = "Hello!!!!!!!!! abcd  abcd abcd abcd abcd abcd\n abcd abcd abcd abcd abcd abcd abcd \
-             abcd abcd abcd  abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd \
-             abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd \
-             abcd abcd";
+    let rc = Cell::new(42usize, 42usize, Cell::new(42usize, remaining_widthremaining_widthremaining_widthremaining_width), 42usize);
+    let rc = RefCell::new(42usize, remaining_width, remaining_width);
+    // a comment
+    let x = "Hello!!!!!!!!! abcd  abcd abcd abcd abcd abcd\n abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd  abcd abcd abcd abcd abcd abcd abcd abcd abcd \
+             abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd abcd";
     let s = expand(a, b);
 }
 
-fn deconstruct() -> (
-    SocketAddr,
-    Method,
-    Headers,
-    RequestUri,
-    HttpVersion,
-    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,
-) {
-}
+fn deconstruct() -> (SocketAddr, Method, Headers, RequestUri, HttpVersion, AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) {}
 
-fn deconstruct(
-    foo: Bar,
-) -> (
-    SocketAddr,
-    Method,
-    Headers,
-    RequestUri,
-    HttpVersion,
-    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,
-) {
-}
+fn deconstruct(foo: Bar) -> (SocketAddr, Method, Headers, RequestUri, HttpVersion, AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA) {}
 
 #[rustfmt::skip]
-mod a{
-fn foo(x:    T) {
-    let x:    T = dfasdf;
-}
-}
+mod a { fn foo(x: T) { let x: T = dfasdf; } }

@@ -10,7 +10,8 @@ impl<T: CapnpWrite>
     > for T
 {
     // Incorrectly places the return type on a single line
-    fn into_msg(
+    fn into_msg
+    (
         self,
     ) -> capnp::message::TypedReader<capnp::message::Builder<capnp::message::HeapAllocator>, T::Capnp>
     {
@@ -18,15 +19,18 @@ impl<T: CapnpWrite>
     }
 }
 
-impl<T> Foo for T {
-    fn into_msg_return_type_single_line_99(
+impl<T> Foo for T
+{
+    fn into_msg_return_type_single_line_99
+    (
         self,
     ) -> some::long::path::to::GenericType<long::path::to::GenericType<some::Type>, some::Type____>
     {
         todo!()
     }
 
-    fn into_msg_return_type_single_line_100(
+    fn into_msg_return_type_single_line_100
+    (
         self,
     ) -> some::long::path::to::GenericType<long::path::to::GenericType<some::Type>, some::Type_____>
     {
@@ -34,7 +38,8 @@ impl<T> Foo for T {
     }
 
     // Incorrectly places the return type on a single line
-    fn into_msg_return_type_single_line_101(
+    fn into_msg_return_type_single_line_101
+    (
         self,
     ) -> some::long::path::to::GenericType<long::path::to::GenericType<some::Type>, some::Type______>
     {

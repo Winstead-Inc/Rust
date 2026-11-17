@@ -1,5 +1,6 @@
 // #5215
-struct MyTuple(
+struct MyTuple
+(
     /// Doc Comments
     /* TODO note to add more to Doc Comments */
     u32,
@@ -8,13 +9,15 @@ struct MyTuple(
     u64,
 );
 
-struct MyTuple(
+struct MyTuple
+(
     #[cfg(unix)] // some comment
     u64,
     #[cfg(not(unix))] /*block comment */ u32,
 );
 
-struct MyTuple(
+struct MyTuple
+(
     #[cfg(unix)]
     // some comment
     u64,
@@ -23,13 +26,15 @@ struct MyTuple(
     u32,
 );
 
-struct MyTuple(
+struct MyTuple
+(
     #[cfg(unix)] // some comment
     pub  u64,
     #[cfg(not(unix))] /*block comment */ pub(crate)  u32,
 );
 
-struct MyTuple(
+struct MyTuple
+(
     /// Doc Comments
     /* TODO note to add more to Doc Comments */
     pub  u32,
@@ -38,19 +43,22 @@ struct MyTuple(
     pub(crate)  u64,
 );
 
-struct MyStruct {
+struct MyStruct
+{
     #[cfg(unix)] // some comment
     a: u64,
     #[cfg(not(unix))] /*block comment */ b: u32,
 }
 
-struct MyStruct {
+struct MyStruct
+{
     #[cfg(unix)] // some comment
     pub a: u64,
     #[cfg(not(unix))] /*block comment */ pub(crate) b: u32,
 }
 
-struct MyStruct {
+struct MyStruct
+{
     /// Doc Comments
     /* TODO note to add more to Doc Comments */
     a: u32,
@@ -59,7 +67,8 @@ struct MyStruct {
     b: u64,
 }
 
-struct MyStruct {
+struct MyStruct
+{
     /// Doc Comments
     /* TODO note to add more to Doc Comments */
     pub a: u32,

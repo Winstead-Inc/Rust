@@ -1,14 +1,8 @@
 // rustfmt-trailing_comma: Vertical
 // Trailing comma
 
-fn main() {
+fn main()
+{
     let Lorem { ipsum, dolor, sit } = amet;
-    let Lorem {
-        ipsum,
-        dolor,
-        sit,
-        amet,
-        consectetur,
-        adipiscing,
-    } = elit;
+    let Lorem { ipsum, dolor, sit, amet, consectetur, adipiscing } = elit;
 }

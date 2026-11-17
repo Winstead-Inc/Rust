@@ -1,11 +1,21 @@
-fn issue1518() {
-    Some(Object {
-        field: if a {
+fn issue1518()
+{
+    Some
+    (
+        Object
+    {
+        field: if a
+        {
             a_thing
-        } else if b {
+        }
+        else if b
+        {
             b_thing
-        } else {
+        }
+        else
+        {
             c_thing
         },
-    })
+    }
+    )
 }

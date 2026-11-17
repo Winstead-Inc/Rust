@@ -2,10 +2,11 @@
 
 struct Dummy;
 
-impl Iterator for Dummy {
-    fn next(&mut self) -> Option<Self::Item> {
+impl Iterator for Dummy
+{
+    fn next(&mut self) -> Option<Self::Item>
+    {
         None
     }
-
     type Item = i32;
 }

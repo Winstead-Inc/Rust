@@ -11,51 +11,76 @@
 
 use std::borrow::Cow;
 use std::collections::HashMap;
-use std::panic:: { AssertUnwindSafe, catch_unwind };
+use std::panic::{AssertUnwindSafe, catch_unwind};
 
 use rustc_ast::ast;
-use rustc_ast::token:: { Delimiter, Token, TokenKind };
-use rustc_ast::tokenstream:: { TokenStream, TokenStreamIter, TokenTree };
+use rustc_ast::token::{Delimiter, Token, TokenKind};
+use rustc_ast::tokenstream::{TokenStream, TokenStreamIter, TokenTree};
 use rustc_ast_pretty::pprust;
-use rustc_span:: { BytePos, DUMMY_SP, Ident, Pos, Span, Symbol };
+use rustc_span::{BytePos, DUMMY_SP, Ident, Pos, Span, Symbol};
 use tracing::debug;
 
-use crate::comment:: { CharClasses, FindUncommented, FullCodeCharKind, LineClasses, contains_comment, };
-use crate::config:: { Config, StyleEdition };
-use crate::config::lists:: * ;
-use crate::expr:: { RhsAssignKind, rewrite_array, rewrite_assign_rhs };
-use crate::header:: { HeaderPart, format_header };
+use crate::comment::{CharClasses, FindUncommented, FullCodeCharKind, LineClasses, contains_comment};
+use crate::config::lists::*;
+use crate::config::{Config, StyleEdition};
+use crate::expr::{RhsAssignKind, rewrite_array, rewrite_assign_rhs};
+use crate::header::{HeaderPart, format_header};
 use crate::is_nightly_channel;
-use crate::lists:: { ListFormatting, itemize_list, write_list };
+use crate::lists::{ListFormatting, itemize_list, write_list};
 use crate::overflow;
-use crate::parse::macros::cfg_select:: { CfgSelectFormatPredicate, parse_cfg_select_arms };
+use crate::parse::macros::cfg_select::{CfgSelectFormatPredicate, parse_cfg_select_arms};
 use crate::parse::macros::lazy_static::parse_lazy_static;
-use crate::parse::macros:: { ParsedMacroArgs, parse_expr, parse_macro_args };
-use crate::rewrite:: { MacroErrorKind, Rewrite, RewriteContext, RewriteError, RewriteErrorExt, RewriteResult, };
-use crate::shape:: { Indent, Shape };
+use crate::parse::macros::{ParsedMacroArgs, parse_expr, parse_macro_args};
+use crate::rewrite::{MacroErrorKind, Rewrite, RewriteContext, RewriteError, RewriteErrorExt, RewriteResult};
+use crate::shape::{Indent, Shape};
 use crate::source_map::SpanUtils;
 use crate::spanned::Spanned;
-use crate::utils:: { NodeIdExt, filtered_str_fits, indent_next_line, is_empty_line, mk_sp, remove_trailing_white_spaces, rewrite_ident, trim_left_preserve_layout, };
+use crate::utils::{
+    NodeIdExt, filtered_str_fits, indent_next_line, is_empty_line, mk_sp, remove_trailing_white_spaces, rewrite_ident, trim_left_preserve_layout,
+};
 use crate::visitor::FmtVisitor;
 
-const FORCED_BRACKET_MACROS: & [ & str] = & ["vec!"];
+const FORCED_BRACKET_MACROS: &[&str] = &["vec!"];
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub (crate) enum MacroPosition { Item, Statement, Expression, Pat, }
+pub(crate) enum MacroPosition
+{
+    Item,
+    Statement,
+    Expression,
+    Pat,
+}
 
 #[derive(Debug)]
-pub (crate) enum MacroArg { Expr(Box<ast::Expr>), Ty(Box<ast::Ty>), Pat(Box<ast::Pat>), Item(Box<ast::Item>), Keyword(Ident, Span), }
+pub(crate) enum MacroArg
+{
+    Expr(Box<ast::Expr>),
+    Ty(Box<ast::Ty>),
+    Pat(Box<ast::Pat>),
+    Item(Box<ast::Item>),
+    Keyword(Ident, Span),
+}
 
 impl MacroArg
 {
-    pub (crate) fn is_item( & self) -> bool { match self { MacroArg::Item(..) => true, _ => false, } }
+    pub(crate) fn is_item(&self) -> bool
+    {
+        match self
+        {
+            MacroArg::Item(..) => true,
+            _ => false,
+        }
+    }
 }
 
 impl Rewrite for ast::Item
 {
-    fn rewrite( & self, context: & RewriteContext<'_>, shape: Shape) -> Option<String> { self.rewrite_result(context, shape).ok() }
+    fn rewrite(&self, context: &RewriteContext<'_>, shape: Shape) -> Option<String>
+    {
+        self.rewrite_result(context, shape).ok()
+    }
 
-    fn rewrite_result( & self, context: & RewriteContext<'_>, shape: Shape) -> RewriteResult
+    fn rewrite_result(&self, context: &RewriteContext<'_>, shape: Shape) -> RewriteResult
     {
         let mut visitor = crate::visitor::FmtVisitor::from_context(context);
         visitor.block_indent = shape.indent;
@@ -67,11 +92,14 @@ impl Rewrite for ast::Item
 
 impl Rewrite for MacroArg
 {
-    fn rewrite( & self, context: & RewriteContext<'_>, shape: Shape) -> Option<String> { self.rewrite_result(context, shape).ok() }
-
-    fn rewrite_result( & self, context: & RewriteContext<'_>, shape: Shape) -> RewriteResult
+    fn rewrite(&self, context: &RewriteContext<'_>, shape: Shape) -> Option<String>
     {
-        match * self
+        self.rewrite_result(context, shape).ok()
+    }
+
+    fn rewrite_result(&self, context: &RewriteContext<'_>, shape: Shape) -> RewriteResult
+    {
+        match *self
         {
             MacroArg::Expr(ref expr) => expr.rewrite_result(context, shape),
             MacroArg::Ty(ref ty) => ty.rewrite_result(context, shape),
@@ -83,108 +111,120 @@ impl Rewrite for MacroArg
 }
 
 /// Rewrite macro name without using pretty-printer if possible.
-fn rewrite_macro_name(context: & RewriteContext<'_>, path: & ast::Path) -> String
+fn rewrite_macro_name(context: &RewriteContext<'_>, path: &ast::Path) -> String
 {
     if path.segments.len() == 1
     {
         // Avoid using pretty-printer in the common case.
         format!("{}!", rewrite_ident(context, path.segments[0].ident))
     }
-    else { format ! ("{}!", pprust::path_to_string(path)) }
+    else
+    {
+        format!("{}!", pprust::path_to_string(path))
+    }
 }
 
 // Use this on failing to format the macro call.
 // TODO(ding-young) We should also report macro parse failure to tell users why given snippet
 // is left unformatted. One possible improvement is appending formatting error to context.report
-fn return_macro_parse_failure_fallback(context: & RewriteContext<'_>, indent: Indent, position: MacroPosition, span: Span,) -> RewriteResult
+fn return_macro_parse_failure_fallback(context: &RewriteContext<'_>, indent: Indent, position: MacroPosition, span: Span) -> RewriteResult
 {
     // Mark this as a failure however we format it
     context.macro_rewrite_failure.replace(true);
 
     // Heuristically determine whether the last line of the macro uses "Block" style
     // rather than using "Visual" style, or another indentation style.
-    let is_like_block_indent_style = context
-   .snippet(span)
-   .lines()
-   .last()
-   .map( | closing_line | { closing_line.trim().chars().all( | ch | matches ! (ch, '}' | ')' | ']')) })
-   .unwrap_or(false);
+    let is_like_block_indent_style =
+        context.snippet(span).lines().last().map(|closing_line| { closing_line.trim().chars().all(|ch| matches!(ch, '}' | ')' | ']')) }).unwrap_or(false);
     if is_like_block_indent_style
     {
-        return trim_left_preserve_layout(context.snippet(span), indent, context.config)
-       .macro_error(MacroErrorKind::Unknown, span);
+        return trim_left_preserve_layout(context.snippet(span), indent, context.config).macro_error(MacroErrorKind::Unknown, span);
     }
 
-    context.skipped_range.borrow_mut().push((context.psess.line_of_byte_pos(span.lo()), context.psess.line_of_byte_pos(span.hi()),));
+    context.skipped_range.borrow_mut().push((context.psess.line_of_byte_pos(span.lo()), context.psess.line_of_byte_pos(span.hi())));
 
     // Return the snippet unmodified if the macro is not block-like
     let mut snippet = context.snippet(span).to_owned();
-    if position == MacroPosition::Item { snippet.push(';'); }
+    if position == MacroPosition::Item
+    {
+        snippet.push(';');
+    }
     Ok(snippet)
 }
 
-pub (crate) fn rewrite_macro(mac: & ast::MacCall, context: & RewriteContext<'_>, shape: Shape, position: MacroPosition,) -> RewriteResult
+pub(crate) fn rewrite_macro(mac: &ast::MacCall, context: &RewriteContext<'_>, shape: Shape, position: MacroPosition) -> RewriteResult
 {
-    let should_skip = context
-   .skip_context
-   .macros
-   .skip(context.snippet(mac.path.span));
-    if should_skip { Err(RewriteError::SkipFormatting) }
+    let should_skip = context.skip_context.macros.skip(context.snippet(mac.path.span));
+    if should_skip
+    {
+        Err(RewriteError::SkipFormatting)
+    }
     else
     {
         let guard = context.enter_macro();
-        let result = catch_unwind(AssertUnwindSafe( || { rewrite_macro_inner(mac, context, shape, position, guard.is_nested()) }));
+        let result = catch_unwind(AssertUnwindSafe(|| { rewrite_macro_inner(mac, context, shape, position, guard.is_nested()) }));
         match result
         {
             Err(..) =>
             {
                 context.macro_rewrite_failure.replace(true);
-                Err(RewriteError::MacroFailure { kind: MacroErrorKind::Unknown, span: mac.span(), })
+                Err(RewriteError::MacroFailure { kind: MacroErrorKind::Unknown, span: mac.span() })
             }
-            Ok(Err(e)) => { context.macro_rewrite_failure.replace(true); Err(e) }
+            Ok(Err(e)) =>
+            {
+                context.macro_rewrite_failure.replace(true);
+                Err(e)
+            }
             Ok(rw) => rw,
         }
     }
 }
 
-fn rewrite_macro_inner(mac: & ast::MacCall, context: & RewriteContext<'_>, shape: Shape, position: MacroPosition, is_nested_macro: bool ,) -> RewriteResult
+fn rewrite_macro_inner(mac: &ast::MacCall, context: &RewriteContext<'_>, shape: Shape, position: MacroPosition, is_nested_macro: bool) -> RewriteResult
 {
-    if context.config.use_try_shorthand() { if let Some(expr) = convert_try_mac(mac, context) { context.leave_macro(); return expr.rewrite_result(context, shape); } }
+    if context.config.use_try_shorthand()
+    {
+        if let Some(expr) = convert_try_mac(mac, context)
+        {
+            context.leave_macro();
+            return expr.rewrite_result(context, shape);
+        }
+    }
 
     let original_style = macro_style(mac, context);
 
-    let macro_name = rewrite_macro_name(context, & mac.path);
-    let is_forced_bracket = FORCED_BRACKET_MACROS.contains( && macro_name[..]);
+    let macro_name = rewrite_macro_name(context, &mac.path);
+    let is_forced_bracket = FORCED_BRACKET_MACROS.contains(&&macro_name[..]);
 
-    let style = if is_forced_bracket && ! is_nested_macro { Delimiter::Bracket } else { original_style };
+    let style = if is_forced_bracket && !is_nested_macro { Delimiter::Bracket } else { original_style };
 
     let ts = mac.args.tokens.clone();
     let has_comment = contains_comment(context.snippet(mac.span()));
-    if ts.is_empty() && ! has_comment
+    if ts.is_empty() && !has_comment
     {
         return match style
         {
-            Delimiter::Parenthesis if position == MacroPosition::Item => { Ok(format ! ("{macro_name}();")) }
-            Delimiter::Bracket if position == MacroPosition::Item => Ok(format ! ("{macro_name}[];")),
-            Delimiter::Parenthesis => Ok(format ! ("{macro_name}()")),
-            Delimiter::Bracket => Ok(format ! ("{macro_name}[]")),
-            Delimiter::Brace => Ok(format ! ("{macro_name} {{}}")),
+            Delimiter::Parenthesis if position == MacroPosition::Item => Ok(format!("{macro_name}();")),
+            Delimiter::Bracket if position == MacroPosition::Item => Ok(format!("{macro_name}[];")),
+            Delimiter::Parenthesis => Ok(format!("{macro_name}()")),
+            Delimiter::Bracket => Ok(format!("{macro_name}[]")),
+            Delimiter::Brace => Ok(format!("{macro_name} {{}}")),
             _ => unreachable!(),
         };
     }
     // Format well-known macros which cannot be parsed as a valid AST.
     if (macro_name == "lazy_static!" || (context.config.style_edition() >= StyleEdition::Edition2027 && macro_name == "lazy_static::lazy_static!"))
-    && ! has_comment
+        && !has_comment
     {
-        match format_lazy_static(context, shape, ts.clone(), mac.span(), & macro_name)
+        match format_lazy_static(context, shape, ts.clone(), mac.span(), &macro_name)
         {
             Ok(rw) => return Ok(rw),
             Err(err) => match err
             {
                 // We will move on to parsing macro args just like other macros
                 // if we could not parse lazy_static! with known syntax
-                RewriteError::MacroFailure { kind, span: _ }
-                if kind == MacroErrorKind::ParseFailure => {}
+                RewriteError::MacroFailure { kind, span: _ } if kind == MacroErrorKind::ParseFailure =>
+                {}
                 // If formatting fails even though parsing succeeds, return the err early
                 _ => return Err(err),
             },
@@ -193,15 +233,15 @@ fn rewrite_macro_inner(mac: & ast::MacCall, context: & RewriteContext<'_>, shape
 
     if is_nightly_channel!() && macro_name.ends_with("cfg_select!")
     {
-        match format_cfg_select(context, shape, mac.span(), & macro_name, style, ts.clone())
+        match format_cfg_select(context, shape, mac.span(), &macro_name, style, ts.clone())
         {
             Ok(rw) => return Ok(rw),
             Err(err) => match err
             {
                 // We will move on to parsing macro args just like other macros
                 // if we could not parse cfg_select! with known syntax
-                RewriteError::MacroFailure { kind, span: _ }
-                if kind == MacroErrorKind::ParseFailure => {}
+                RewriteError::MacroFailure { kind, span: _ } if kind == MacroErrorKind::ParseFailure =>
+                {}
                 // If formatting fails even though parsing succeeds, return the err early
                 other => return Err(other),
             },
@@ -211,13 +251,18 @@ fn rewrite_macro_inner(mac: & ast::MacCall, context: & RewriteContext<'_>, shape
     // If we're falling through to default macro handling check that the context is correct
     debug_assert!(context.inside_macro(), "expect `context.inside_macro() == true`");
 
-    let ParsedMacroArgs { args: arg_vec, vec_with_semi, trailing_comma, }
-
-    = match parse_macro_args(context, ts, style, is_forced_bracket) { Some(args) => args, None => { return return_macro_parse_failure_fallback(context, shape.indent, position, mac.span(),); } };
-
-    if ! arg_vec.is_empty() && arg_vec.iter().all(MacroArg::is_item)
+    let ParsedMacroArgs { args: arg_vec, vec_with_semi, trailing_comma } = match parse_macro_args(context, ts, style, is_forced_bracket)
     {
-        return rewrite_macro_with_items(context, & arg_vec, & macro_name, shape, style, original_style, position, mac.span(),);
+        Some(args) => args,
+        None =>
+        {
+            return return_macro_parse_failure_fallback(context, shape.indent, position, mac.span());
+        }
+    };
+
+    if !arg_vec.is_empty() && arg_vec.iter().all(MacroArg::is_item)
+    {
+        return rewrite_macro_with_items(context, &arg_vec, &macro_name, shape, style, original_style, position, mac.span());
     }
 
     match style
@@ -225,7 +270,10 @@ fn rewrite_macro_inner(mac: & ast::MacCall, context: & RewriteContext<'_>, shape
         Delimiter::Parenthesis =>
         {
             // Handle special case: `vec!(expr; expr)`
-            if vec_with_semi { handle_vec_semi(context, shape, arg_vec, macro_name, style, mac.span()) }
+            if vec_with_semi
+            {
+                handle_vec_semi(context, shape, arg_vec, macro_name, style, mac.span())
+            }
             else
             {
                 // Format macro invocation as function call, preserve the trailing
@@ -233,35 +281,52 @@ fn rewrite_macro_inner(mac: & ast::MacCall, context: & RewriteContext<'_>, shape
                 overflow::rewrite_with_parens
                 (
                     context,
-                    & macro_name,
+                    &macro_name,
                     arg_vec.iter(),
                     shape,
                     mac.span(),
                     context.config.fn_call_width(),
                     if trailing_comma { Some(SeparatorTactic::Always) } else { Some(SeparatorTactic::Never) },
                 )
-               .map( | rw | match position { MacroPosition::Item => format ! ("{};", rw), _ => rw, })
+                .map
+                (
+                    |rw| match position
+                {
+                    MacroPosition::Item => format!("{};", rw),
+                    _ => rw,
+                }
+                )
             }
         }
         Delimiter::Bracket =>
         {
             // Handle special case: `vec![expr; expr]`
-            if vec_with_semi { handle_vec_semi(context, shape, arg_vec, macro_name, style, mac.span()) }
+            if vec_with_semi
+            {
+                handle_vec_semi(context, shape, arg_vec, macro_name, style, mac.span())
+            }
             else
             {
                 // If we are rewriting `vec!` macro or other special macros,
                 // then we can rewrite this as a usual array literal.
                 // Otherwise, we must preserve the original existence of trailing comma.
                 let mut force_trailing_comma = if trailing_comma { Some(SeparatorTactic::Always) } else { Some(SeparatorTactic::Never) };
-                if is_forced_bracket && ! is_nested_macro
+                if is_forced_bracket && !is_nested_macro
                 {
                     context.leave_macro();
-                    if context.use_block_indent() { force_trailing_comma = Some(SeparatorTactic::Vertical); };
+                    if context.use_block_indent()
+                    {
+                        force_trailing_comma = Some(SeparatorTactic::Vertical);
+                    };
                 }
-                let rewrite = rewrite_array( & macro_name, arg_vec.iter(), mac.span(), context, shape, force_trailing_comma, Some(original_style),)?;
-                let comma = match position { MacroPosition::Item => ";", _ => "", };
+                let rewrite = rewrite_array(&macro_name, arg_vec.iter(), mac.span(), context, shape, force_trailing_comma, Some(original_style))?;
+                let comma = match position
+                {
+                    MacroPosition::Item => ";",
+                    _ => "",
+                };
 
-                Ok(format ! ("{rewrite}{comma}"))
+                Ok(format!("{rewrite}{comma}"))
             }
         }
         Delimiter::Brace =>
@@ -269,18 +334,28 @@ fn rewrite_macro_inner(mac: & ast::MacCall, context: & RewriteContext<'_>, shape
             // For macro invocations with braces, always put a space between
             // the `macro_name!` and `{ /* macro_body */ }` but skip modifying
             // anything in between the braces (for now).
-            let snippet = context.snippet(mac.span()).trim_start_matches( | c | c != '{');
+            let snippet = context.snippet(mac.span()).trim_start_matches(|c| c != '{');
             let is_multiline = snippet.contains('\n');
             let sep = if is_multiline { shape.indent.to_string_with_newline(context.config) } else { " ".into() };
-            match trim_left_preserve_layout(snippet, shape.indent, context.config) { Some(macro_body) => Ok(format ! ("{macro_name}{sep}{macro_body}")), None => Ok(format ! ("{macro_name}{sep}{snippet}")), }
+            match trim_left_preserve_layout(snippet, shape.indent, context.config)
+            {
+                Some(macro_body) => Ok(format!("{macro_name}{sep}{macro_body}")),
+                None => Ok(format!("{macro_name}{sep}{snippet}")),
+            }
         }
         _ => unreachable!(),
     }
 }
 
-fn handle_vec_semi(context: & RewriteContext<'_>, shape: Shape, arg_vec: Vec<MacroArg>, macro_name: String, delim_token: Delimiter, span: Span,) -> RewriteResult
+fn handle_vec_semi(context: &RewriteContext<'_>, shape: Shape, arg_vec: Vec<MacroArg>, macro_name: String, delim_token: Delimiter, span: Span)
+-> RewriteResult
 {
-    let (left, right) = match delim_token { Delimiter::Parenthesis => ("(", ")"), Delimiter::Bracket => ("[", "]"), _ => unreachable ! (), };
+    let (left, right) = match delim_token
+    {
+        Delimiter::Parenthesis => ("(", ")"),
+        Delimiter::Bracket => ("[", "]"),
+        _ => unreachable!(),
+    };
 
     // Should we return MaxWidthError, Or Macro failure
     let mac_shape = shape.offset_left(macro_name.len(), span)?;
@@ -289,12 +364,10 @@ fn handle_vec_semi(context: & RewriteContext<'_>, shape: Shape, arg_vec: Vec<Mac
     let nested_shape = mac_shape.block_indent(context.config.tab_spaces());
     let lhs = arg_vec[0].rewrite_result(context, nested_shape)?;
     let rhs = arg_vec[1].rewrite_result(context, nested_shape)?;
-    if ! lhs.contains('\n')
-    && ! rhs.contains('\n')
-    && lhs.len() + rhs.len() + total_overhead <= shape.width
+    if !lhs.contains('\n') && !rhs.contains('\n') && lhs.len() + rhs.len() + total_overhead <= shape.width
     {
         // macro_name(lhs; rhs) or macro_name[lhs; rhs]
-        Ok(format ! ("{macro_name}{left}{lhs}; {rhs}{right}"))
+        Ok(format!("{macro_name}{left}{lhs}; {rhs}{right}"))
     }
     else
     {
@@ -302,35 +375,47 @@ fn handle_vec_semi(context: & RewriteContext<'_>, shape: Shape, arg_vec: Vec<Mac
         Ok
         (
             format!
-            (
-                "{}{}{}{};{}{}{}{}",
-                macro_name,
-                left,
-                nested_shape.indent.to_string_with_newline(context.config),
-                lhs,
-                nested_shape.indent.to_string_with_newline(context.config),
-                rhs,
-                shape.indent.to_string_with_newline(context.config),
-                right
-            )
+        (
+            "{}{}{}{};{}{}{}{}",
+            macro_name,
+            left,
+            nested_shape.indent.to_string_with_newline(context.config),
+            lhs,
+            nested_shape.indent.to_string_with_newline(context.config),
+            rhs,
+            shape.indent.to_string_with_newline(context.config),
+            right
+        )
         )
     }
 }
 
-fn rewrite_empty_macro_def_body(context: & RewriteContext<'_>, span: Span, shape: Shape,) -> RewriteResult
+fn rewrite_empty_macro_def_body(context: &RewriteContext<'_>, span: Span, shape: Shape) -> RewriteResult
 {
     // Create an empty, dummy `ast::Block` representing an empty macro body
-    let block = ast::Block { stmts: vec ! [].into(), id: rustc_ast::node_id::DUMMY_NODE_ID, rules: ast::BlockCheckMode::Default, span, };
+    let block = ast::Block { stmts: vec![].into(), id: rustc_ast::node_id::DUMMY_NODE_ID, rules: ast::BlockCheckMode::Default, span };
     block.rewrite_result(context, shape)
 }
 
-pub (crate) fn rewrite_macro_def(context: & RewriteContext<'_>, shape: Shape, indent: Indent, def: & ast::MacroDef, ident: Ident, vis: & ast::Visibility, span: Span,) -> RewriteResult
+pub(crate) fn rewrite_macro_def
+(
+    context: &RewriteContext<'_>,
+    shape: Shape,
+    indent: Indent,
+    def: &ast::MacroDef,
+    ident: Ident,
+    vis: &ast::Visibility,
+    span: Span,
+) -> RewriteResult
 {
     let snippet = Ok(remove_trailing_white_spaces(context.snippet(span)));
-    if snippet.as_ref().map_or(true, | s | s.ends_with(';')) { return snippet; }
+    if snippet.as_ref().map_or(true, |s| s.ends_with(';'))
+    {
+        return snippet;
+    }
 
     let ts = def.body.tokens.clone();
-    let mut parser = MacroParser:: new (ts.iter());
+    let mut parser = MacroParser::new(ts.iter());
     let parsed_def = match parser.parse()
     {
         Some(def) => def,
@@ -340,13 +425,13 @@ pub (crate) fn rewrite_macro_def(context: & RewriteContext<'_>, shape: Shape, in
     let mut header = if def.macro_rules
     {
         let pos = context.snippet_provider.span_after(span, "!");
-        vec![HeaderPart::new ("macro_rules!", span.with_hi(pos))]
+        vec![HeaderPart::new("macro_rules!", span.with_hi(pos))]
     }
     else
     {
         let macro_lo = context.snippet_provider.span_before(span, "macro");
         let macro_hi = macro_lo + BytePos("macro".len() as u32);
-        vec![HeaderPart::visibility(context, vis), HeaderPart::new ("macro", mk_sp(macro_lo, macro_hi)),]
+        vec![HeaderPart::visibility(context, vis), HeaderPart::new("macro", mk_sp(macro_lo, macro_hi))]
     };
 
     header.push(HeaderPart::ident(context, ident));
@@ -361,7 +446,7 @@ pub (crate) fn rewrite_macro_def(context: & RewriteContext<'_>, shape: Shape, in
     {
         let lo = context.snippet_provider.span_before(span, "{");
         result += " ";
-        result += & rewrite_empty_macro_def_body(context, span.with_lo(lo), shape)?;
+        result += &rewrite_empty_macro_def_body(context, span.with_lo(lo), shape)?;
         return Ok(result);
     }
 
@@ -371,9 +456,9 @@ pub (crate) fn rewrite_macro_def(context: & RewriteContext<'_>, shape: Shape, in
         parsed_def.branches.iter(),
         "}",
         ";",
-        | branch | branch.span.lo(),
-        | branch | branch.span.hi(),
-        | branch | match branch.rewrite(context, arm_shape, multi_branch_style)
+        |branch| branch.span.lo(),
+        |branch| branch.span.hi(),
+        |branch| match branch.rewrite(context, arm_shape, multi_branch_style)
         {
             Ok(v) => Ok(v),
             Err(e) => Err(e),
@@ -382,32 +467,36 @@ pub (crate) fn rewrite_macro_def(context: & RewriteContext<'_>, shape: Shape, in
         span.hi(),
         false,
     )
-   .collect::<Vec<_>>();
+    .collect::<Vec<_>>();
 
-    let fmt = ListFormatting:: new (arm_shape, context.config)
-   .separator(if def.macro_rules { ";" } else { "" })
-   .trailing_separator(SeparatorTactic::Always)
-   .preserve_newline(true);
+    let fmt = ListFormatting::new(arm_shape, context.config)
+        .separator(if def.macro_rules { ";" } else { "" })
+        .trailing_separator(SeparatorTactic::Always)
+        .preserve_newline(true);
 
     if multi_branch_style
     {
-        result += & indent.to_string_with_newline(context.config);
+        result += &indent.to_string_with_newline(context.config);
         result += "{\n";
-        result += & arm_shape.indent.to_string(context.config);
+        result += &arm_shape.indent.to_string(context.config);
     }
 
-    match write_list( & branch_items, & fmt)
+    match write_list(&branch_items, &fmt)
     {
         Ok(ref s) => result += s,
         Err(_) => return snippet,
     }
 
-    if multi_branch_style { result += & indent.to_string_with_newline(context.config); result += "}"; }
+    if multi_branch_style
+    {
+        result += &indent.to_string_with_newline(context.config);
+        result += "}";
+    }
 
     Ok(result)
 }
 
-fn register_metavariable(map: & mut HashMap<String, String>, result: & mut String, name: & str, dollar_count: usize,)
+fn register_metavariable(map: &mut HashMap<String, String>, result: &mut String, name: &str, dollar_count: usize)
 {
     let mut new_name = "$".repeat(dollar_count - 1);
     let mut old_name = "$".repeat(dollar_count);
@@ -416,30 +505,39 @@ fn register_metavariable(map: & mut HashMap<String, String>, result: & mut Strin
     new_name.push_str(name);
     old_name.push_str(name);
 
-    result.push_str( & new_name);
+    result.push_str(&new_name);
     map.insert(old_name, new_name);
 }
 
 // Replaces `$foo` with `zfoo`. We must check for name overlap to ensure we
 // aren't causing problems.
 // This should also work for escaped `$` variables, where we leave earlier `$`s.
-fn replace_names(input: & str) -> Option < (String, HashMap<String, String>) >
+fn replace_names(input: &str) -> Option<(String, HashMap<String, String>)>
 {
     // Each substitution will require five or six extra bytes.
     let mut result = String::with_capacity(input.len() + 64);
-    let mut substs = HashMap:: new ();
+    let mut substs = HashMap::new();
     let mut dollar_count = 0;
-    let mut cur_name = String:: new ();
+    let mut cur_name = String::new();
 
-    for (kind, c) in CharClasses:: new (input.chars())
+    for (kind, c) in CharClasses::new(input.chars())
     {
-        if kind != FullCodeCharKind::Normal { result.push(c); }
-        else if c == '$' { dollar_count += 1; }
-        else if dollar_count == 0 { result.push(c); }
-        else if ! c.is_alphanumeric() && ! cur_name.is_empty()
+        if kind != FullCodeCharKind::Normal
+        {
+            result.push(c);
+        }
+        else if c == '$'
+        {
+            dollar_count += 1;
+        }
+        else if dollar_count == 0
+        {
+            result.push(c);
+        }
+        else if !c.is_alphanumeric() && !cur_name.is_empty()
         {
             // Terminates a name following one or more dollars.
-            register_metavariable( & mut substs, & mut result, & cur_name, dollar_count);
+            register_metavariable(&mut substs, &mut result, &cur_name, dollar_count);
 
             result.push(c);
             dollar_count = 0;
@@ -450,10 +548,16 @@ fn replace_names(input: & str) -> Option < (String, HashMap<String, String>) >
             // FIXME: Support macro def with repeat.
             return None;
         }
-        else if c.is_alphanumeric() || c == '_' { cur_name.push(c); }
+        else if c.is_alphanumeric() || c == '_'
+        {
+            cur_name.push(c);
+        }
     }
 
-    if ! cur_name.is_empty() { register_metavariable( & mut substs, & mut result, & cur_name, dollar_count); }
+    if !cur_name.is_empty()
+    {
+        register_metavariable(&mut substs, &mut result, &cur_name, dollar_count);
+    }
 
     debug!("replace_names `{}` {:?}", result, substs);
 
@@ -486,89 +590,115 @@ enum MacroArgKind
     Other(String, String),
 }
 
-fn delim_token_to_str(context: & RewriteContext<'_>, delim_token: Delimiter, shape: Shape, use_multiple_lines: bool , inner_is_empty: bool ,) -> (String, String)
+fn delim_token_to_str(context: &RewriteContext<'_>, delim_token: Delimiter, shape: Shape, use_multiple_lines: bool, inner_is_empty: bool) -> (String, String)
 {
     let (lhs, rhs) = match delim_token
     {
         Delimiter::Parenthesis => ("(", ")"),
         Delimiter::Bracket => ("[", "]"),
-        Delimiter::Brace => { if inner_is_empty || use_multiple_lines { ("{", "}") } else { ("{ ", " }") } }
+        Delimiter::Brace =>
+        {
+            if inner_is_empty || use_multiple_lines
+            {
+                ("{", "}")
+            }
+            else
+            {
+                ("{ ", " }")
+            }
+        }
         Delimiter::Invisible(_) => unreachable!(),
     };
     if use_multiple_lines
     {
         let indent_str = shape.indent.to_string_with_newline(context.config);
-        let nested_indent_str = shape
-       .indent
-       .block_indent(context.config)
-       .to_string_with_newline(context.config);
-        (format ! ("{lhs}{nested_indent_str}"), format ! ("{indent_str}{rhs}"),)
+        let nested_indent_str = shape.indent.block_indent(context.config).to_string_with_newline(context.config);
+        (format!("{lhs}{nested_indent_str}"), format!("{indent_str}{rhs}"))
     }
-    else { (lhs.to_owned(), rhs.to_owned()) }
+    else
+    {
+        (lhs.to_owned(), rhs.to_owned())
+    }
 }
 
 impl MacroArgKind
 {
-    fn starts_with_brace( & self) -> bool { matches ! ( * self, MacroArgKind::Repeat(Delimiter::Brace, _, _, _) | MacroArgKind::Delimited(Delimiter::Brace, _)) }
-
-    fn starts_with_dollar( & self) -> bool { matches ! ( * self, MacroArgKind::Repeat(..) | MacroArgKind::MetaVariable(..)) }
-
-    fn ends_with_space( & self) -> bool { matches ! ( * self, MacroArgKind::Separator(..)) }
-
-    fn has_meta_var( & self) -> bool
+    fn starts_with_brace(&self) -> bool
     {
-        match * self
+        matches!(*self, MacroArgKind::Repeat(Delimiter::Brace, _, _, _) | MacroArgKind::Delimited(Delimiter::Brace, _))
+    }
+
+    fn starts_with_dollar(&self) -> bool
+    {
+        matches!(*self, MacroArgKind::Repeat(..) | MacroArgKind::MetaVariable(..))
+    }
+
+    fn ends_with_space(&self) -> bool
+    {
+        matches!(*self, MacroArgKind::Separator(..))
+    }
+
+    fn has_meta_var(&self) -> bool
+    {
+        match *self
         {
             MacroArgKind::MetaVariable(..) => true,
-            MacroArgKind::Repeat(_, ref args, _, _) => args.iter().any( | a | a.kind.has_meta_var()),
+            MacroArgKind::Repeat(_, ref args, _, _) => args.iter().any(|a| a.kind.has_meta_var()),
             _ => false,
         }
     }
 
-    fn rewrite( & self, context: & RewriteContext<'_>, shape: Shape, use_multiple_lines: bool ,) -> RewriteResult
+    fn rewrite(&self, context: &RewriteContext<'_>, shape: Shape, use_multiple_lines: bool) -> RewriteResult
     {
-        type DelimitedArgsRewrite = Result < (String, String, String), RewriteError > ;
-        let rewrite_delimited_inner = | delim_tok, args | -> DelimitedArgsRewrite
+        type DelimitedArgsRewrite = Result<(String, String, String), RewriteError>;
+        let rewrite_delimited_inner = |delim_tok, args| -> DelimitedArgsRewrite
         {
             let inner = wrap_macro_args(context, args, shape)?;
             let (lhs, rhs) = delim_token_to_str(context, delim_tok, shape, false, inner.is_empty());
-            if lhs.len() + inner.len() + rhs.len() <= shape.width { return Ok((lhs, inner, rhs)); }
+            if lhs.len() + inner.len() + rhs.len() <= shape.width
+            {
+                return Ok((lhs, inner, rhs));
+            }
 
             let (lhs, rhs) = delim_token_to_str(context, delim_tok, shape, true, false);
-            let nested_shape = shape
-           .block_indent(context.config.tab_spaces())
-           .with_max_width(context.config);
+            let nested_shape = shape.block_indent(context.config.tab_spaces()).with_max_width(context.config);
             let inner = wrap_macro_args(context, args, nested_shape)?;
             Ok((lhs, inner, rhs))
         };
 
-        match * self
+        match *self
         {
-            MacroArgKind::MetaVariable(ty, ref name) => Ok(format ! ("${name}:{ty}")),
+            MacroArgKind::MetaVariable(ty, ref name) => Ok(format!("${name}:{ty}")),
             MacroArgKind::Repeat(delim_tok, ref args, ref another, ref tok) =>
             {
                 let (lhs, inner, rhs) = rewrite_delimited_inner(delim_tok, args)?;
-                let another = another
-               .as_ref()
-               .and_then( | a | a.rewrite(context, shape, use_multiple_lines).ok())
-               .unwrap_or_else( || "".to_owned());
+                let another = another.as_ref().and_then(|a| a.rewrite(context, shape, use_multiple_lines).ok()).unwrap_or_else(|| "".to_owned());
                 let repeat_tok = pprust::token_to_string(tok);
 
-                Ok(format ! ("${lhs}{inner}{rhs}{another}{repeat_tok}"))
+                Ok(format!("${lhs}{inner}{rhs}{another}{repeat_tok}"))
             }
-            MacroArgKind::Delimited(delim_tok, ref args) => { rewrite_delimited_inner(delim_tok, args).map( | (lhs, inner, rhs) | format ! ("{}{}{}", lhs, inner, rhs)) }
-            MacroArgKind::Separator(ref sep, ref prefix) => Ok(format ! ("{prefix}{sep} ")),
-            MacroArgKind::Other(ref inner, ref prefix) => Ok(format ! ("{prefix}{inner}")),
+            MacroArgKind::Delimited(delim_tok, ref args) =>
+            {
+                rewrite_delimited_inner(delim_tok, args).map(|(lhs, inner, rhs)| format!("{}{}{}", lhs, inner, rhs))
+            }
+            MacroArgKind::Separator(ref sep, ref prefix) => Ok(format!("{prefix}{sep} ")),
+            MacroArgKind::Other(ref inner, ref prefix) => Ok(format!("{prefix}{inner}")),
         }
     }
 }
 
 #[derive(Debug, Clone)]
-struct ParsedMacroArg { kind: MacroArgKind, }
+struct ParsedMacroArg
+{
+    kind: MacroArgKind,
+}
 
 impl ParsedMacroArg
 {
-    fn rewrite( & self, context: & RewriteContext<'_>, shape: Shape, use_multiple_lines: bool ,) -> RewriteResult { self.kind.rewrite(context, shape, use_multiple_lines) }
+    fn rewrite(&self, context: &RewriteContext<'_>, shape: Shape, use_multiple_lines: bool) -> RewriteResult
+    {
+        self.kind.rewrite(context, shape, use_multiple_lines)
+    }
 }
 
 /// Parses macro arguments on macro def.
@@ -586,52 +716,55 @@ struct MacroArgParser
     result: Vec<ParsedMacroArg>,
 }
 
-fn last_tok(tt: & TokenTree) -> Token
+fn last_tok(tt: &TokenTree) -> Token
 {
-    match * tt
+    match *tt
     {
         TokenTree::Token(ref t, _) => t.clone(),
-        TokenTree::Delimited(delim_span, _, delim, _) => Token { kind: delim.as_open_token_kind(), span: delim_span.close, },
+        TokenTree::Delimited(delim_span, _, delim, _) => Token { kind: delim.as_open_token_kind(), span: delim_span.close },
     }
 }
 
 impl MacroArgParser
 {
-    fn new () -> MacroArgParser
+    fn new() -> MacroArgParser
     {
         MacroArgParser
         {
-            buf: String:: new (),
+            buf: String::new(),
             is_meta_var: false,
-            last_tok: Token { kind: TokenKind::Eof, span: DUMMY_SP, },
-            start_tok: Token { kind: TokenKind::Eof, span: DUMMY_SP, },
+            last_tok: Token { kind: TokenKind::Eof, span: DUMMY_SP },
+            start_tok: Token { kind: TokenKind::Eof, span: DUMMY_SP },
             result: vec![],
         }
     }
 
-    fn set_last_tok( & mut self, tok: & TokenTree) { self.last_tok = last_tok(tok); }
+    fn set_last_tok(&mut self, tok: &TokenTree)
+    {
+        self.last_tok = last_tok(tok);
+    }
 
-    fn add_separator( & mut self)
+    fn add_separator(&mut self)
     {
         let prefix = if self.need_space_prefix() { " ".to_owned() } else { "".to_owned() };
-        self.result.push(ParsedMacroArg { kind: MacroArgKind::Separator(self.buf.clone(), prefix), });
+        self.result.push(ParsedMacroArg { kind: MacroArgKind::Separator(self.buf.clone(), prefix) });
         self.buf.clear();
     }
 
-    fn add_other( & mut self)
+    fn add_other(&mut self)
     {
         let prefix = if self.need_space_prefix() { " ".to_owned() } else { "".to_owned() };
-        self.result.push(ParsedMacroArg { kind: MacroArgKind::Other(self.buf.clone(), prefix), });
+        self.result.push(ParsedMacroArg { kind: MacroArgKind::Other(self.buf.clone(), prefix) });
         self.buf.clear();
     }
 
-    fn add_meta_variable( & mut self, iter: & mut TokenStreamIter<'_>) -> Option < () >
+    fn add_meta_variable(&mut self, iter: &mut TokenStreamIter<'_>) -> Option<()>
     {
         match iter.next()
         {
-            Some( & TokenTree::Token(Token { kind: TokenKind::Ident(name, _),.. }, _,)) =>
+            Some(&TokenTree::Token(Token { kind: TokenKind::Ident(name, _), .. }, _)) =>
             {
-                self.result.push(ParsedMacroArg { kind: MacroArgKind::MetaVariable(name, self.buf.clone()), });
+                self.result.push(ParsedMacroArg { kind: MacroArgKind::MetaVariable(name, self.buf.clone()) });
 
                 self.buf.clear();
                 self.is_meta_var = false;
@@ -641,61 +774,97 @@ impl MacroArgParser
         }
     }
 
-    fn add_delimited( & mut self, inner: Vec<ParsedMacroArg>, delim: Delimiter)
+    fn add_delimited(&mut self, inner: Vec<ParsedMacroArg>, delim: Delimiter)
     {
-        self.result.push(ParsedMacroArg { kind: MacroArgKind::Delimited(delim, inner), });
+        self.result.push(ParsedMacroArg { kind: MacroArgKind::Delimited(delim, inner) });
     }
 
     // $($foo: expr),?
-    fn add_repeat( & mut self, inner: Vec<ParsedMacroArg>, delim: Delimiter, iter: & mut TokenStreamIter<'_>,) -> Option < () >
+    fn add_repeat(&mut self, inner: Vec<ParsedMacroArg>, delim: Delimiter, iter: &mut TokenStreamIter<'_>) -> Option<()>
     {
-        let mut buffer = String:: new ();
+        let mut buffer = String::new();
         let mut first = true;
 
         // Parse '*', '+' or '?.
         for tok in iter
         {
-            self.set_last_tok( & tok);
-            if first { first = false; }
+            self.set_last_tok(&tok);
+            if first
+            {
+                first = false;
+            }
 
             match tok
             {
-                TokenTree::Token(Token { kind: TokenKind::Plus,.. }, _,)
-                | TokenTree::Token(Token { kind: TokenKind::Question,.. }, _,)
-                | TokenTree::Token(Token { kind: TokenKind::Star,.. }, _,) => { break ; }
-                TokenTree::Token(ref t, _) => { buffer.push_str( & pprust::token_to_string(t)); }
+                TokenTree::Token(Token { kind: TokenKind::Plus, .. }, _)
+                | TokenTree::Token(Token { kind: TokenKind::Question, .. }, _)
+                | TokenTree::Token(Token { kind: TokenKind::Star, .. }, _) =>
+                {
+                    break;
+                }
+                TokenTree::Token(ref t, _) =>
+                {
+                    buffer.push_str(&pprust::token_to_string(t));
+                }
                 _ => return None,
             }
         }
 
         // There could be some random stuff between ')' and '*', '+' or '?'.
-        let another = if buffer.trim().is_empty() { None }
-        else { Some(Box::new (ParsedMacroArg { kind: MacroArgKind::Other(buffer, "".to_owned()), })) };
+        let another = if buffer.trim().is_empty() { None } else { Some(Box::new(ParsedMacroArg { kind: MacroArgKind::Other(buffer, "".to_owned()) })) };
 
-        self.result.push(ParsedMacroArg { kind: MacroArgKind::Repeat(delim, inner, another, self.last_tok), });
+        self.result.push(ParsedMacroArg { kind: MacroArgKind::Repeat(delim, inner, another, self.last_tok) });
         Some(())
     }
 
-    fn update_buffer( & mut self, t: Token)
+    fn update_buffer(&mut self, t: Token)
     {
-        if self.buf.is_empty() { self.start_tok = t; }
+        if self.buf.is_empty()
+        {
+            self.start_tok = t;
+        }
         else
         {
-            let needs_space = match next_space( & self.last_tok.kind) { SpaceState::Ident => ident_like( & t), SpaceState::Punctuation => ! ident_like( & t), SpaceState::Always => true, SpaceState::Never => false, };
-            if force_space_before( & t.kind) || needs_space { self.buf.push(' '); }
+            let needs_space = match next_space(&self.last_tok.kind)
+            {
+                SpaceState::Ident => ident_like(&t),
+                SpaceState::Punctuation => !ident_like(&t),
+                SpaceState::Always => true,
+                SpaceState::Never => false,
+            };
+            if force_space_before(&t.kind) || needs_space
+            {
+                self.buf.push(' ');
+            }
         }
 
-        self.buf.push_str( & pprust::token_to_string( & t));
+        self.buf.push_str(&pprust::token_to_string(&t));
     }
 
-    fn need_space_prefix( & self) -> bool
+    fn need_space_prefix(&self) -> bool
     {
-        if self.result.is_empty() { return false; }
+        if self.result.is_empty()
+        {
+            return false;
+        }
 
         let last_arg = self.result.last().unwrap();
-        if let MacroArgKind::MetaVariable(..) = last_arg.kind { if ident_like( & self.start_tok) { return true; } if self.start_tok.kind == TokenKind::Colon { return true; } }
+        if let MacroArgKind::MetaVariable(..) = last_arg.kind
+        {
+            if ident_like(&self.start_tok)
+            {
+                return true;
+            }
+            if self.start_tok.kind == TokenKind::Colon
+            {
+                return true;
+            }
+        }
 
-        if force_space_before( & self.start_tok.kind) { return true; }
+        if force_space_before(&self.start_tok.kind)
+        {
+            return true;
+        }
 
         false
     }
@@ -709,44 +878,73 @@ impl MacroArgParser
         {
             match tok
             {
-                & TokenTree::Token(Token { kind: TokenKind::Dollar, span, }, _,) =>
+                &TokenTree::Token(Token { kind: TokenKind::Dollar, span }, _) =>
                 {
                     // We always want to add a separator before meta variables.
-                    if ! self.buf.is_empty() { self.add_separator(); }
+                    if !self.buf.is_empty()
+                    {
+                        self.add_separator();
+                    }
 
                     // Start keeping the name of this metavariable in the buffer.
                     self.is_meta_var = true;
-                    self.start_tok = Token { kind: TokenKind::Dollar, span, };
+                    self.start_tok = Token { kind: TokenKind::Dollar, span };
                 }
-                TokenTree::Token(Token { kind: TokenKind::Colon,.. }, _,) if self.is_meta_var => { self.add_meta_variable( & mut iter)?; }
-                & TokenTree::Token(t, _) => self.update_buffer(t),
-                & TokenTree::Delimited(_dspan, _spacing, delimited, ref tts) =>
+                TokenTree::Token(Token { kind: TokenKind::Colon, .. }, _) if self.is_meta_var =>
                 {
-                    if ! self.buf.is_empty() { if next_space( & self.last_tok.kind) == SpaceState::Always { self.add_separator(); } else { self.add_other(); } }
+                    self.add_meta_variable(&mut iter)?;
+                }
+                &TokenTree::Token(t, _) => self.update_buffer(t),
+                &TokenTree::Delimited(_dspan, _spacing, delimited, ref tts) =>
+                {
+                    if !self.buf.is_empty()
+                    {
+                        if next_space(&self.last_tok.kind) == SpaceState::Always
+                        {
+                            self.add_separator();
+                        }
+                        else
+                        {
+                            self.add_other();
+                        }
+                    }
 
                     // Parse the stuff inside delimiters.
-                    let parser = MacroArgParser:: new ();
+                    let parser = MacroArgParser::new();
                     let delimited_arg = parser.parse(tts.clone())?;
 
-                    if self.is_meta_var { self.add_repeat(delimited_arg, delimited, & mut iter)?; self.is_meta_var = false; }
-                    else { self.add_delimited(delimited_arg, delimited); }
+                    if self.is_meta_var
+                    {
+                        self.add_repeat(delimited_arg, delimited, &mut iter)?;
+                        self.is_meta_var = false;
+                    }
+                    else
+                    {
+                        self.add_delimited(delimited_arg, delimited);
+                    }
                 }
             }
 
-            self.set_last_tok( & tok);
+            self.set_last_tok(&tok);
         }
 
         // We are left with some stuff in the buffer. Since there is nothing
         // left to separate, add this as `Other`.
-        if ! self.buf.is_empty() { self.add_other(); }
+        if !self.buf.is_empty()
+        {
+            self.add_other();
+        }
 
         Some(self.result)
     }
 }
 
-fn wrap_macro_args(context: & RewriteContext<'_>, args: & [ParsedMacroArg], shape: Shape,) -> RewriteResult { wrap_macro_args_inner(context, args, shape, false).or_else( | _ | wrap_macro_args_inner(context, args, shape, true)) }
+fn wrap_macro_args(context: &RewriteContext<'_>, args: &[ParsedMacroArg], shape: Shape) -> RewriteResult
+{
+    wrap_macro_args_inner(context, args, shape, false).or_else(|_| wrap_macro_args_inner(context, args, shape, true))
+}
 
-fn wrap_macro_args_inner(context: & RewriteContext<'_>, args: & [ParsedMacroArg], shape: Shape, use_multiple_lines: bool ,) -> RewriteResult
+fn wrap_macro_args_inner(context: &RewriteContext<'_>, args: &[ParsedMacroArg], shape: Shape, use_multiple_lines: bool) -> RewriteResult
 {
     let mut result = String::with_capacity(128);
     let mut iter = args.iter().peekable();
@@ -754,44 +952,56 @@ fn wrap_macro_args_inner(context: & RewriteContext<'_>, args: & [ParsedMacroArg]
 
     while let Some(arg) = iter.next()
     {
-        result.push_str( & arg.rewrite(context, shape, use_multiple_lines)?);
+        result.push_str(&arg.rewrite(context, shape, use_multiple_lines)?);
 
-        if use_multiple_lines
-        && (arg.kind.ends_with_space() || iter.peek().map_or(false, | a | a.kind.has_meta_var()))
+        if use_multiple_lines && (arg.kind.ends_with_space() || iter.peek().map_or(false, |a| a.kind.has_meta_var()))
         {
-            if arg.kind.ends_with_space() { result.pop(); }
-            result.push_str( & indent_str);
+            if arg.kind.ends_with_space()
+            {
+                result.pop();
+            }
+            result.push_str(&indent_str);
         }
         else if let Some(next_arg) = iter.peek()
         {
-            let space_before_dollar =
-            ! arg.kind.ends_with_space() && next_arg.kind.starts_with_dollar();
+            let space_before_dollar = !arg.kind.ends_with_space() && next_arg.kind.starts_with_dollar();
             let space_before_brace = next_arg.kind.starts_with_brace();
-            if space_before_dollar || space_before_brace { result.push(' '); }
+            if space_before_dollar || space_before_brace
+            {
+                result.push(' ');
+            }
         }
     }
 
-    if ! use_multiple_lines && result.len() >= shape.width { Err(RewriteError::Unknown) } else { Ok(result) }
+    if !use_multiple_lines && result.len() >= shape.width { Err(RewriteError::Unknown) } else { Ok(result) }
 }
 
 // This is a bit sketchy. The token rules probably need tweaking, but it works
 // for some common cases. I hope the basic logic is sufficient. Note that the
 // meaning of some tokens is a bit different here from usual Rust, e.g., `*`
 // and `(`/`)` have special meaning.
-fn format_macro_args(context: & RewriteContext<'_>, token_stream: TokenStream, shape: Shape,) -> RewriteResult
+fn format_macro_args(context: &RewriteContext<'_>, token_stream: TokenStream, shape: Shape) -> RewriteResult
 {
-    let span = span_for_token_stream( & token_stream);
-    if ! context.config.format_macro_matchers()
+    let span = span_for_token_stream(&token_stream);
+    if !context.config.format_macro_matchers()
     {
-        return Ok(match span { Some(span) => context.snippet(span).to_owned(), None => String::new (), });
+        return Ok
+        (
+            match span
+        {
+            Some(span) => context.snippet(span).to_owned(),
+            None => String::new(),
+        }
+        );
     }
-    let parsed_args = MacroArgParser:: new ()
-   .parse(token_stream)
-   .macro_error(MacroErrorKind::ParseFailure, span.unwrap())?;
-    wrap_macro_args(context, & parsed_args, shape)
+    let parsed_args = MacroArgParser::new().parse(token_stream).macro_error(MacroErrorKind::ParseFailure, span.unwrap())?;
+    wrap_macro_args(context, &parsed_args, shape)
 }
 
-fn span_for_token_stream(token_stream: & TokenStream) -> Option<Span> { token_stream.iter().next().map( | tt | tt.span()) }
+fn span_for_token_stream(token_stream: &TokenStream) -> Option<Span>
+{
+    token_stream.iter().next().map(|tt| tt.span())
+}
 
 // We should insert a space if the next token is a:
 #[derive(Copy, Clone, PartialEq)]
@@ -803,7 +1013,7 @@ enum SpaceState
     Always,
 }
 
-fn force_space_before(tok: & TokenKind) -> bool
+fn force_space_before(tok: &TokenKind) -> bool
 {
     debug!("tok: force_space_before {:?}", tok);
 
@@ -850,9 +1060,12 @@ fn force_space_before(tok: & TokenKind) -> bool
     }
 }
 
-fn ident_like(tok: & Token) -> bool { matches ! (tok.kind, TokenKind::Ident(..) | TokenKind::Literal(..) | TokenKind::Lifetime(..)) }
+fn ident_like(tok: &Token) -> bool
+{
+    matches!(tok.kind, TokenKind::Ident(..) | TokenKind::Literal(..) | TokenKind::Lifetime(..))
+}
 
-fn next_space(tok: & TokenKind) -> SpaceState
+fn next_space(tok: &TokenKind) -> SpaceState
 {
     debug!("next_space: {:?}", tok);
 
@@ -881,7 +1094,7 @@ fn next_space(tok: & TokenKind) -> SpaceState
         | TokenKind::OpenInvisible(_)
         | TokenKind::CloseInvisible(_) => SpaceState::Never,
 
-        TokenKind::Literal(..) | TokenKind::Ident(..) | TokenKind::Lifetime(..) => { SpaceState::Ident }
+        TokenKind::Literal(..) | TokenKind::Ident(..) | TokenKind::Lifetime(..) => SpaceState::Ident,
 
         _ => SpaceState::Always,
     }
@@ -890,9 +1103,9 @@ fn next_space(tok: & TokenKind) -> SpaceState
 /// Tries to convert a macro use into a short hand try expression. Returns `None`
 /// when the macro is not an instance of `try!` (or parsing the inner expression
 /// failed).
-pub (crate) fn convert_try_mac(mac: & ast::MacCall, context: & RewriteContext<'_>,) -> Option<ast::Expr>
+pub(crate) fn convert_try_mac(mac: &ast::MacCall, context: &RewriteContext<'_>) -> Option<ast::Expr>
 {
-    let path = & pprust::path_to_string( & mac.path);
+    let path = &pprust::path_to_string(&mac.path);
     if path == "try" || path == "r#try"
     {
         let ts = mac.args.tokens.clone();
@@ -900,123 +1113,183 @@ pub (crate) fn convert_try_mac(mac: & ast::MacCall, context: & RewriteContext<'_
         Some
         (
             ast::Expr
-            {
-                id: ast::NodeId::root(), // dummy value
-                kind: ast::ExprKind::Try(parse_expr(context, ts)?),
-                span: mac.span(), // incorrect span, but shouldn't matter too much
-                attrs: ast::AttrVec:: new (),
-                tokens: None,
-            }
+        {
+            id: ast::NodeId::root(), // dummy value
+            kind: ast::ExprKind::Try(parse_expr(context, ts)?),
+            span: mac.span(), // incorrect span, but shouldn't matter too much
+            attrs: ast::AttrVec::new(),
+            tokens: None,
+        }
         )
     }
-    else { None }
+    else
+    {
+        None
+    }
 }
 
-pub (crate) fn macro_style(mac: & ast::MacCall, context: & RewriteContext<'_>) -> Delimiter
+pub(crate) fn macro_style(mac: &ast::MacCall, context: &RewriteContext<'_>) -> Delimiter
 {
     let snippet = context.snippet(mac.span());
     let paren_pos = snippet.find_uncommented("(").unwrap_or(usize::MAX);
     let bracket_pos = snippet.find_uncommented("[").unwrap_or(usize::MAX);
     let brace_pos = snippet.find_uncommented("{").unwrap_or(usize::MAX);
 
-    if paren_pos < bracket_pos && paren_pos < brace_pos { Delimiter::Parenthesis }
-    else if bracket_pos < brace_pos { Delimiter::Bracket } else { Delimiter::Brace }
+    if paren_pos < bracket_pos && paren_pos < brace_pos
+    {
+        Delimiter::Parenthesis
+    }
+    else if bracket_pos < brace_pos
+    {
+        Delimiter::Bracket
+    }
+    else
+    {
+        Delimiter::Brace
+    }
 }
 
 // A very simple parser that just parses a macros 2.0 definition into its branches.
 // Currently we do not attempt to parse any further than that.
-struct MacroParser<'a> { iter: TokenStreamIter<'a>, }
-
-impl <'a> MacroParser<'a>
+struct MacroParser
+<'a>
 {
-    const fn new (iter: TokenStreamIter<'a>) -> Self { Self { iter } }
+    iter: TokenStreamIter<'a>,
+}
+
+impl<'a> MacroParser<'a>
+{
+    const fn new(iter: TokenStreamIter<'a>) -> Self
+    {
+        Self { iter }
+    }
 
     // (`(` ... `)` `=>` `{` ... `}`)*
-    fn parse( & mut self) -> Option<Macro>
+    fn parse(&mut self) -> Option<Macro>
     {
         let mut branches = vec![];
-        while self.iter.peek().is_some() { branches.push(self.parse_branch()?); }
+        while self.iter.peek().is_some()
+        {
+            branches.push(self.parse_branch()?);
+        }
 
         Some(Macro { branches })
     }
 
     // `(` ... `)` `=>` `{` ... `}`
-    fn parse_branch( & mut self) -> Option<MacroBranch>
+    fn parse_branch(&mut self) -> Option<MacroBranch>
     {
         let tok = self.iter.next()?;
-        let (lo, args_paren_kind) = match tok { TokenTree::Token(..) => return None, & TokenTree::Delimited(delimited_span, _, d, _) => (delimited_span.open.lo(), d), };
-        let args = TokenStream:: new (vec ! [tok.clone()]);
-        match self.iter.next()? { TokenTree::Token(Token { kind: TokenKind::FatArrow,.. }, _,) => {} _ => return None, }
+        let (lo, args_paren_kind) = match tok
+        {
+            TokenTree::Token(..) => return None,
+            &TokenTree::Delimited(delimited_span, _, d, _) => (delimited_span.open.lo(), d),
+        };
+        let args = TokenStream::new(vec![tok.clone()]);
+        match self.iter.next()?
+        {
+            TokenTree::Token(Token { kind: TokenKind::FatArrow, .. }, _) =>
+            {}
+            _ => return None,
+        }
         let (mut hi, body, whole_body, body_delim) = match self.iter.next()?
         {
             TokenTree::Token(..) => return None,
             &TokenTree::Delimited(delimited_span, _, d, _) =>
             {
                 let data = delimited_span.entire().data();
-                (data.hi, Span::new (data.lo + BytePos(1), data.hi - BytePos(1), data.ctxt, data.parent,), delimited_span.entire(), d)
+                (data.hi, Span::new(data.lo + BytePos(1), data.hi - BytePos(1), data.ctxt, data.parent), delimited_span.entire(), d)
             }
         };
-        if let Some(TokenTree::Token(Token { kind: TokenKind::Semi, span, }, _,)) = self.iter.peek()
-        { hi = span.hi(); self.iter.next(); }
-        Some(MacroBranch { span: mk_sp(lo, hi), args_paren_kind, args, body, whole_body, body_delim, })
+        if let Some(TokenTree::Token(Token { kind: TokenKind::Semi, span }, _)) = self.iter.peek()
+        {
+            hi = span.hi();
+            self.iter.next();
+        }
+        Some(MacroBranch { span: mk_sp(lo, hi), args_paren_kind, args, body, whole_body, body_delim })
     }
 }
 
 // A parsed macros 2.0 macro definition.
-struct Macro { branches: Vec<MacroBranch>, }
+struct Macro
+{
+    branches: Vec<MacroBranch>,
+}
 
 // FIXME: it would be more efficient to use references to the token streams
 // rather than clone them, if we can make the borrowing work out.
-struct MacroBranch { span: Span, args_paren_kind: Delimiter, args: TokenStream, body: Span, whole_body: Span, body_delim: Delimiter, }
+struct MacroBranch
+{
+    span: Span,
+    args_paren_kind: Delimiter,
+    args: TokenStream,
+    body: Span,
+    whole_body: Span,
+    body_delim: Delimiter,
+}
 
 fn indent_macro_body(orig: &str, indent: Indent, config: &Config) -> String
 {
-    let lines: Vec<&str> = orig.lines().collect();
-    if lines.is_empty()
+    let mut raw_lines: Vec<&str> = orig.lines().collect();
+    while let Some(first) = raw_lines.first()
+    {
+        if first.trim().is_empty()
+        {
+            raw_lines.remove(0);
+        }
+        else
+        {
+            break;
+        }
+    }
+    while let Some(last) = raw_lines.last()
+    {
+        if last.trim().is_empty()
+        {
+            raw_lines.pop();
+        }
+        else
+        {
+            break;
+        }
+    }
+    if raw_lines.is_empty()
     {
         return String::new();
     }
-    let min_indent = lines
-        .iter()
-        .filter(|l| !l.trim().is_empty())
-        .map(|l| l.chars().take_while(|c| c.is_whitespace()).count())
-        .min()
-        .unwrap_or(0);
+    let min_indent = raw_lines.iter().filter(|l| !l.trim().is_empty()).map(|l| l.chars().take_while(|c| c.is_whitespace()).count()).min().unwrap_or(0);
 
     let indent_str = indent.to_string(config);
-    lines
+    raw_lines
         .iter()
-        .map(|line| {
+        .map
+        (
+            |line|
+        {
             if line.trim().is_empty()
             {
                 String::new()
             }
             else
             {
-                let stripped = if line.len() >= min_indent
-                {
-                    &line[min_indent..]
-                }
-                else
-                {
-                    line.trim_start()
-                };
+                let stripped = if line.len() >= min_indent { line[min_indent..].trim_end() } else { line.trim() };
                 format!("{indent_str}{stripped}")
             }
-        })
+        }
+        )
         .collect::<Vec<_>>()
         .join("\n")
 }
 
 impl MacroBranch
 {
-    fn rewrite( & self, context: & RewriteContext<'_>, shape: Shape, multi_branch_style: bool ,) -> RewriteResult
+    fn rewrite(&self, context: &RewriteContext<'_>, shape: Shape, multi_branch_style: bool) -> RewriteResult
     {
         // Only attempt to format function-like macros.
         if self.args_paren_kind != Delimiter::Parenthesis
         {
             // FIXME(#1539): implement for non-sugared macros.
-            return Err(RewriteError::MacroFailure { kind: MacroErrorKind::Unknown, span: self.span, });
+            return Err(RewriteError::MacroFailure { kind: MacroErrorKind::Unknown, span: self.span });
         }
 
         let old_body = context.snippet(self.body).trim();
@@ -1031,9 +1304,12 @@ impl MacroBranch
                 // 6 = " => {{"
             }
         }
-        let mut result = format_macro_args(context, self.args.clone(), shape.sub_width(prefix_width, self.span)?,)?;
+        let mut result = format_macro_args(context, self.args.clone(), shape.sub_width(prefix_width, self.span)?)?;
 
-        if multi_branch_style { result += " =>"; }
+        if multi_branch_style
+        {
+            result += " =>";
+        }
 
         let (open_delim, close_delim) = match self.body_delim
         {
@@ -1058,12 +1334,15 @@ impl MacroBranch
                 let new_width = config.max_width().saturating_sub(body_indent.width());
                 config.set().max_width(new_width);
 
-                let opt_snippet = crate::format_snippet(&body_str, &config, true)
-                    .or_else(|| {
-                        let new_width = new_width + config.tab_spaces();
-                        config.set().max_width(new_width);
-                        crate::format_code_block(&body_str, &config, true)
-                    });
+                let opt_snippet = crate::format_snippet(&body_str, &config, true).or_else
+                (
+                    ||
+                {
+                    let new_width = new_width + config.tab_spaces();
+                    config.set().max_width(new_width);
+                    crate::format_code_block(&body_str, &config, true)
+                }
+                );
 
                 if let Some(new_body_snippet) = opt_snippet
                 {
@@ -1072,17 +1351,16 @@ impl MacroBranch
                         let indent_str = body_indent.to_string(&config);
                         let mut new_body = LineClasses::new(new_body_snippet.snippet.trim_end())
                             .enumerate()
-                            .fold(
-                                (String::new(), true),
-                                |(mut s, need_indent), (i, (kind, ref l))| {
-                                    if !is_empty_line(l)
-                                        && need_indent
-                                        && !new_body_snippet.is_line_non_formatted(i + 1)
-                                    {
-                                        s += &indent_str;
-                                    }
-                                    (s + l + "\n", indent_next_line(kind, l, &config))
-                                },
+                            .fold
+                            (
+                                (String::new(), true), |(mut s, need_indent), (i, (kind, ref l))|
+                            {
+                                if !is_empty_line(l) && need_indent && !new_body_snippet.is_line_non_formatted(i + 1)
+                                {
+                                    s += &indent_str;
+                                }
+                                (s + l + "\n", indent_next_line(kind, l, &config))
+                            }
                             )
                             .0;
 
@@ -1116,7 +1394,9 @@ impl MacroBranch
                 result += close_delim;
                 return Ok(result);
             }
-            if !trimmed.contains('\n') && !raw_whole_body.contains('\n') && result.len() + 1 + open_delim.len() + trimmed.len() + close_delim.len() + 2 <= shape.width
+            if !trimmed.contains('\n')
+                && !raw_whole_body.contains('\n')
+                && result.len() + 1 + open_delim.len() + trimmed.len() + close_delim.len() + 2 <= shape.width
             {
                 result += " ";
                 result += open_delim;
@@ -1147,7 +1427,7 @@ impl MacroBranch
 
         let indent_str = shape.indent.to_string_with_newline(context.config);
         let nested_indent = shape.indent.block_indent(context.config);
-        let formatted_inner = indent_macro_body(raw_inner_body.trim(), nested_indent, context.config);
+        let formatted_inner = indent_macro_body(raw_inner_body, nested_indent, context.config);
 
         result += &indent_str;
         result += open_delim;
@@ -1183,36 +1463,33 @@ impl MacroBranch
 ///     [pub] static ref NAME_N: TYPE_N = EXPR_N;
 /// }
 /// ```
-fn format_lazy_static(context: & RewriteContext<'_>, shape: Shape, ts: TokenStream, span: Span, macro_name: & str,) -> RewriteResult
+fn format_lazy_static(context: &RewriteContext<'_>, shape: Shape, ts: TokenStream, span: Span, macro_name: &str) -> RewriteResult
 {
     let mut result = String::with_capacity(1024);
-    let nested_shape = shape
-   .block_indent(context.config.tab_spaces())
-   .with_max_width(context.config);
+    let nested_shape = shape.block_indent(context.config.tab_spaces()).with_max_width(context.config);
 
     result.push_str(macro_name);
-    result.push_str( & shape.indent.to_string_with_newline(context.config));
+    result.push_str(&shape.indent.to_string_with_newline(context.config));
     result.push_str("{");
-    result.push_str( & nested_shape.indent.to_string_with_newline(context.config));
+    result.push_str(&nested_shape.indent.to_string_with_newline(context.config));
 
-    let parsed_elems =
-    parse_lazy_static(context, ts).macro_error(MacroErrorKind::ParseFailure, span)?;
+    let parsed_elems = parse_lazy_static(context, ts).macro_error(MacroErrorKind::ParseFailure, span)?;
     let last = parsed_elems.len() - 1;
     for (i, (vis, id, ty, expr)) in parsed_elems.iter().enumerate()
     {
         // Rewrite as a static item.
         let vis = crate::utils::format_visibility(context, vis);
         let mut stmt = String::with_capacity(128);
-        stmt.push_str( & format ! ("{}static ref {}: {} =", vis, id, ty.rewrite_result(context, nested_shape)?));
-        result.push_str
-        (
-            & rewrite_assign_rhs(context, stmt, & * expr, & RhsAssignKind::Expr( & expr.kind, expr.span), nested_shape.sub_width(1, expr.span)?,)?
-        );
+        stmt.push_str(&format!("{}static ref {}: {} =", vis, id, ty.rewrite_result(context, nested_shape)?));
+        result.push_str(&rewrite_assign_rhs(context, stmt, &*expr, &RhsAssignKind::Expr(&expr.kind, expr.span), nested_shape.sub_width(1, expr.span)?)?);
         result.push(';');
-        if i != last { result.push_str( & nested_shape.indent.to_string_with_newline(context.config)); }
+        if i != last
+        {
+            result.push_str(&nested_shape.indent.to_string_with_newline(context.config));
+        }
     }
 
-    result.push_str( & shape.indent.to_string_with_newline(context.config));
+    result.push_str(&shape.indent.to_string_with_newline(context.config));
     result.push('}');
 
     Ok(result)
@@ -1220,16 +1497,15 @@ fn format_lazy_static(context: & RewriteContext<'_>, shape: Shape, ts: TokenStre
 
 fn rewrite_macro_with_items
 (
-    context: & RewriteContext<'_>,
-    items: & [MacroArg],
-    macro_name: & str,
+    context: &RewriteContext<'_>,
+    items: &[MacroArg],
+    macro_name: &str,
     shape: Shape,
     style: Delimiter,
     _original_style: Delimiter,
     position: MacroPosition,
     span: Span,
-)
--> RewriteResult
+) -> RewriteResult
 {
     let (opener, closer) = match style
     {
@@ -1239,7 +1515,11 @@ fn rewrite_macro_with_items
         _ => return Err(RewriteError::Unknown),
     };
     let open_sep = if matches!(style, Delimiter::Brace) { shape.indent.to_string_with_newline(context.config) } else { "".into() };
-    let trailing_semicolon = match style { Delimiter::Parenthesis | Delimiter::Bracket if position == MacroPosition::Item => ";", _ => "", };
+    let trailing_semicolon = match style
+    {
+        Delimiter::Parenthesis | Delimiter::Bracket if position == MacroPosition::Item => ";",
+        _ => "",
+    };
 
     let mut visitor = FmtVisitor::from_context(context);
     visitor.block_indent = shape.indent.block_indent(context.config);
@@ -1247,28 +1527,30 @@ fn rewrite_macro_with_items
     // The current opener may be different from the original opener. This can happen
     // if our macro is a forced bracket macro originally written with non-bracket
     // delimiters. We need to use the original opener to locate the span after it.
-    visitor.last_pos = context
-   .snippet_provider
-   .span_after(span, opener);
+    visitor.last_pos = context.snippet_provider.span_after(span, opener);
     for item in items
     {
-        let item = match item { MacroArg::Item(item) => item, _ => return Err(RewriteError::Unknown), };
+        let item = match item
+        {
+            MacroArg::Item(item) => item,
+            _ => return Err(RewriteError::Unknown),
+        };
         visitor.visit_item(item);
     }
 
     let mut result = String::with_capacity(256);
     result.push_str(macro_name);
-    result.push_str( & open_sep);
+    result.push_str(&open_sep);
     result.push_str(opener);
-    result.push_str( & visitor.block_indent.to_string_with_newline(context.config));
+    result.push_str(&visitor.block_indent.to_string_with_newline(context.config));
     result.push_str(visitor.buffer.trim());
-    result.push_str( & shape.indent.to_string_with_newline(context.config));
+    result.push_str(&shape.indent.to_string_with_newline(context.config));
     result.push_str(closer);
     result.push_str(trailing_semicolon);
     Ok(result)
 }
 
-fn format_cfg_select(context: & RewriteContext<'_>, shape: Shape, span: Span, name: & str, delim_token: Delimiter, ts: TokenStream,) -> RewriteResult
+fn format_cfg_select(context: &RewriteContext<'_>, shape: Shape, span: Span, name: &str, delim_token: Delimiter, ts: TokenStream) -> RewriteResult
 {
     let mut rewrite = String::with_capacity((span.hi() - span.lo()).to_usize() * 2);
     rewrite.push_str(name);
@@ -1278,13 +1560,18 @@ fn format_cfg_select(context: & RewriteContext<'_>, shape: Shape, span: Span, na
         Delimiter::Brace => ("{", "}"),
         Delimiter::Bracket => ("[", "]"),
         Delimiter::Parenthesis => ("(", ")"),
-        Delimiter::Invisible(_) => { unreachable ! ("cfg_select! macro will always have outer delimiters"); }
+        Delimiter::Invisible(_) =>
+        {
+            unreachable!("cfg_select! macro will always have outer delimiters");
+        }
     };
 
-    if matches!(delim_token, Delimiter::Brace) { rewrite.push(' '); };
+    if matches!(delim_token, Delimiter::Brace)
+    {
+        rewrite.push(' ');
+    };
 
-    let arms =
-    parse_cfg_select_arms(context.psess, ts).macro_error(MacroErrorKind::ParseFailure, span)?;
+    let arms = parse_cfg_select_arms(context.psess, ts).macro_error(MacroErrorKind::ParseFailure, span)?;
 
     if arms.is_empty()
     {
@@ -1293,13 +1580,16 @@ fn format_cfg_select(context: & RewriteContext<'_>, shape: Shape, span: Span, na
 
         // NOTE(ytmimi) reusing `format_empty_struct_or_tuple` since
         // it handles proper indentation and recovering comments
-        crate::items::format_empty_struct_or_tuple(context, mk_sp(lo, hi), shape.indent, & mut rewrite, opening_delim, closing_delim,);
+        crate::items::format_empty_struct_or_tuple(context, mk_sp(lo, hi), shape.indent, &mut rewrite, opening_delim, closing_delim);
         return Ok(rewrite);
     }
-    else { rewrite.push_str(opening_delim); }
+    else
+    {
+        rewrite.push_str(opening_delim);
+    }
 
     let nested_shape = shape.block_indent(context.config.tab_spaces());
-    rewrite.push_str( & nested_shape.indent.to_string_with_newline(context.config));
+    rewrite.push_str(&nested_shape.indent.to_string_with_newline(context.config));
 
     let last_arm = arms.last();
 
@@ -1315,17 +1605,17 @@ fn format_cfg_select(context: & RewriteContext<'_>, shape: Shape, span: Span, na
         arms.iter(),
         closing_delim,
         "}",
-        | arm | arm.span().lo(),
-        | arm | arm.span().hi(),
-        | arm |
+        |arm| arm.span().lo(),
+        |arm| arm.span().hi(),
+        |arm|
         {
-            let predicate_str = match & arm.predicate
+            let predicate_str = match &arm.predicate
             {
                 CfgSelectFormatPredicate::Wildcard(_t) => Cow::Borrowed("_"),
-                CfgSelectFormatPredicate::Cfg(meta_item_inner) => { Cow::Owned(meta_item_inner.rewrite_result(context, nested_shape)?) }
+                CfgSelectFormatPredicate::Cfg(meta_item_inner) => Cow::Owned(meta_item_inner.rewrite_result(context, nested_shape)?),
             };
 
-            crate::matches::rewrite_match_body(context, & arm.expr, & predicate_str, nested_shape, false, arm.arrow.span, last_arm.is_some_and( | la | la == arm),)
+            crate::matches::rewrite_match_body(context, &arm.expr, &predicate_str, nested_shape, false, arm.arrow.span, last_arm.is_some_and(|la| la == arm))
         },
         // Start Span after the opening delimiter. For example,
         // ```
@@ -1345,17 +1635,14 @@ fn format_cfg_select(context: & RewriteContext<'_>, shape: Shape, span: Span, na
         span.hi(),
         false,
     );
-    let arms_vec: Vec < _ > = items.collect();
+    let arms_vec: Vec<_> = items.collect();
 
     // We will add/remove commas inside `arm.rewrite()`, and hence no separator here.
-    let fmt = ListFormatting:: new (nested_shape, context.config)
-   .separator("")
-   .align_comments(false)
-   .preserve_newline(true);
+    let fmt = ListFormatting::new(nested_shape, context.config).separator("").align_comments(false).preserve_newline(true);
 
-    rewrite.push_str( & write_list( & arms_vec, & fmt)?);
+    rewrite.push_str(&write_list(&arms_vec, &fmt)?);
     rewrite.push('\n');
-    rewrite.push_str( & shape.indent.to_string(context.config));
+    rewrite.push_str(&shape.indent.to_string(context.config));
     rewrite.push_str(closing_delim);
 
     Ok(rewrite)

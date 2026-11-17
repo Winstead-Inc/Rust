@@ -1,8 +1,10 @@
 // rustfmt-normalize_comments: true
 // rustfmt-condense_wildcard_suffixes: true
 
-fn main() {
-    match x {
+fn main()
+{
+    match x
+    {
         Butt(..) => "hah",
         Tup(_) => "nah",
         Quad(_, _, x, _) => " also no rewrite",

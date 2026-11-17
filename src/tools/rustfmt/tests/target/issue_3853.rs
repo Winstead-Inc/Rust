@@ -1,36 +1,48 @@
-fn by_ref_with_block_before_ident() {
-    if let Some(ref /*def*/ state) = foo {
+fn by_ref_with_block_before_ident()
+{
+    if let Some(ref /*def*/ state) = foo
+    {
         println!("asdfasdfasdf");
     }
 }
 
-fn mut_block_before_ident() {
-    if let Some(mut /*def*/ state) = foo {
+fn mut_block_before_ident()
+{
+    if let Some(mut /*def*/ state) = foo
+    {
         println!("123");
     }
 }
 
-fn ref_and_mut_blocks_before_ident() {
-    if let Some(ref /*abc*/ mut /*def*/ state) = foo {
+fn ref_and_mut_blocks_before_ident()
+{
+    if let Some(ref /*abc*/ mut /*def*/ state) = foo
+    {
         println!("deefefefefefwea");
     }
 }
 
-fn sub_pattern() {
+fn sub_pattern()
+{
     let foo @ /*foo*/ bar(f) = 42;
 }
 
-fn no_prefix_block_before_ident() {
-    if let Some(/*def*/ state) = foo {
+fn no_prefix_block_before_ident()
+{
+    if let Some(/*def*/ state) = foo
+    {
         println!("129387123123");
     }
 }
 
-fn issue_3853() {
-    if let Some(ref /*mut*/ state) = foo {}
+fn issue_3853()
+{
+    if let Some(ref /*mut*/ state) = foo
+    {}
 }
 
-fn double_slash_comment_between_lhs_and_rhs() {
+fn double_slash_comment_between_lhs_and_rhs()
+{
     if let Some(e) =
         // self.foo.bar(e, tx)
         packet.transaction.state.committed
@@ -40,8 +52,10 @@ fn double_slash_comment_between_lhs_and_rhs() {
     }
 }
 
-fn block_comment_between_lhs_and_rhs() {
-    if let Some(ref /*def*/ mut /*abc*/ state) = /*abc*/ foo {
+fn block_comment_between_lhs_and_rhs()
+{
+    if let Some(ref /*def*/ mut /*abc*/ state) = /*abc*/ foo
+    {
         println!("asdfasdfasdf");
     }
 }

@@ -1,7 +1,9 @@
-fn main() {
+fn main()
+{
     7
 }
 
-fn main() {
+fn main()
+{
     7
 }

@@ -1,13 +1,19 @@
 #![feature(unsafe_fields)]
 
-struct Foo {
+struct Foo
+{
     unsafe field: (),
 }
 
-enum Bar {
-    Variant { unsafe field: () },
+enum Bar
+{
+    Variant
+    {
+        unsafe field: ()
+    },
 }
 
-union Baz {
+union Baz
+{
     unsafe field: (),
 }

@@ -1,18 +1,19 @@
 // rustfmt-file_lines: [{"file":"tests/source/file-lines-6.rs","range":[9,10]}]
 
-struct A {
-    t: i64,
-}
+struct A { t: i64, }
 
-mod foo {
-    fn bar() {
+mod foo
+{
+    fn bar()
+    {
         // test
         let i = 12;
-                                 // test
+        // test
     }
 
-    fn baz() {
-///
-        let j = 15;     
+    fn baz()
+    {
+        ///
+        let j = 15;
     }
 }

@@ -1,4 +1,5 @@
-trait Bar {
+trait Bar
+{
     type X<'a>
     where
         Self: 'a;

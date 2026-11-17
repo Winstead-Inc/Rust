@@ -1,6 +1,7 @@
 // rustfmt-wrap_comments: true
 // Test attributes and doc comments are preserved.
-#![doc(
+#![doc
+(
     html_logo_url = "https://www.rust-lang.org/logos/rust-logo-128x128-blk-v2.png",
     html_favicon_url = "https://doc.rust-lang.org/favicon.ico",
     html_root_url = "https://doc.rust-lang.org/nightly/",
@@ -27,7 +28,8 @@
 /// Blah blah blah.
 
 /// Blah blah blah.
-impl Bar {
+impl Bar
+{
     /// Blah blah blooo.
     /// Blah blah blooo.
     /// Blah blah blooo.
@@ -43,7 +45,8 @@ impl Bar {
     /// Blah blah bing.
     /// Blah blah bing.
     /// Blah blah bing.
-    pub fn f2(self) {
+    pub fn f2(self)
+    {
         (foo, bar)
     }
 
@@ -55,8 +58,7 @@ impl Bar {
     #[attrib1]
     /// Blah blah bing.
     #[attrib2]
-    // Another comment that needs rewrite because it's tooooooooooooooooooooooooooooooo
-    // loooooooooooong.
+    // Another comment that needs rewrite because it's tooooooooooooooooooooooooooooooo loooooooooooong.
     /// Blah blah bing.
     fn f4(self) -> Cat {}
 
@@ -66,7 +68,8 @@ impl Bar {
 }
 
 // #984
-struct Foo {
+struct Foo
+{
     #[derive(Clone, PartialEq, Debug, Deserialize, Serialize)]
     foo: usize,
 }
@@ -74,21 +77,14 @@ struct Foo {
 // #1668
 
 /// Default path (*nix)
-#[cfg(all(
-    unix,
-    not(target_os = "macos"),
-    not(target_os = "ios"),
-    not(target_os = "android")
-))]
-fn foo() {
+#[cfg(all(unix, not(target_os = "macos"), not(target_os = "ios"), not(target_os = "android")))]
+fn foo()
+{
     #[cfg(target_os = "freertos")]
-    match port_id {
-        'a' | 'A' => GpioPort {
-            port_address: GPIO_A,
-        },
-        'b' | 'B' => GpioPort {
-            port_address: GPIO_B,
-        },
+    match port_id
+    {
+        'a' | 'A' => GpioPort { port_address: GPIO_A },
+        'b' | 'B' => GpioPort { port_address: GPIO_B },
         _ => panic!(),
     }
 
@@ -100,17 +96,22 @@ fn foo() {
 #[test]
 #[should_panic(expected = "(")]
 #[should_panic(expected = /* ( */ "(")]
-#[should_panic(/* ((((( */expected /* ((((( */= /* ((((( */ "("/* ((((( */)]
-#[should_panic(
-    /* (((((((( *//*
+#[should_panic(/* ((((( */ expected/* ((((( */ = /* ((((( */ "("/* ((((( */)]
+#
+[
+    should_panic
+    (
+        /* (((((((( */ /*
     (((((((((()(((((((( */
-    expected = "("
-    // ((((((((
-)]
+        expected = "("
+        // ((((((((
+    )
+]
 fn foo() {}
 
 // #1799
-fn issue_1799() {
+fn issue_1799()
+{
     #[allow(unreachable_code)] // https://github.com/rust-lang/rust/issues/43336
     Some(Err(error));
 
@@ -120,23 +121,25 @@ fn issue_1799() {
 }
 
 // Formatting inner attributes
-fn inner_attributes() {
+fn inner_attributes()
+{
     #![this_is_an_inner_attribute(foo)]
-
     foo();
 }
 
-impl InnerAttributes() {
+impl InnerAttributes()
+{
     #![this_is_an_inner_attribute(foo)]
-
     fn foo() {}
 }
 
-mod InnerAttributes {
+mod InnerAttributes
+{
     #![this_is_an_inner_attribute(foo)]
 }
 
-fn attributes_on_statements() {
+fn attributes_on_statements()
+{
     // Local
     #[attr(on(local))]
     let x = 3;
@@ -159,40 +162,22 @@ fn attributes_on_statements() {
 }
 
 // Large derives
-#[derive(
-    Add, Sub, Mul, Div, Clone, Copy, Eq, PartialEq, Ord, PartialOrd, Debug, Hash, Serialize, Mul,
-)]
+#[derive(Add, Sub, Mul, Div, Clone, Copy, Eq, PartialEq, Ord, PartialOrd, Debug, Hash, Serialize, Mul)]
 
 /// Foo bar baz
 
-#[derive(
-    Add,
-    Sub,
-    Mul,
-    Div,
-    Clone,
-    Copy,
-    Eq,
-    PartialEq,
-    Ord,
-    PartialOrd,
-    Debug,
-    Hash,
-    Serialize,
-    Deserialize,
-)]
+#[derive(Add, Sub, Mul, Div, Clone, Copy, Eq, PartialEq, Ord, PartialOrd, Debug, Hash, Serialize, Deserialize)]
 pub struct HP(pub u8);
 
 // Long `#[doc = "..."]`
-struct A {
+struct A
+{
     #[doc = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"]
     b: i32,
 }
 
 // #2647
-#[cfg(
-    feature = "this_line_is_101_characters_long_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-)]
+#[cfg(feature = "this_line_is_101_characters_long_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")]
 pub fn foo() {}
 
 // path attrs
@@ -200,30 +185,33 @@ pub fn foo() {}
 #[clippy::bar(a, b, c)]
 pub fn foo() {}
 
-mod issue_2620 {
+mod issue_2620
+{
     #[derive(Debug, StructOpt)]
     #[structopt(about = "Display information about the character on FF Logs")]
-    pub struct Params {
+    pub struct Params
+    {
         #[structopt(help = "The server the character is on")]
         server: String,
         #[structopt(help = "The character's first name")]
         first_name: String,
         #[structopt(help = "The character's last name")]
         last_name: String,
-        #[structopt(
-            short = "j",
-            long = "job",
-            help = "The job to look at",
-            parse(try_from_str)
-        )]
+        #[structopt(short = "j", long = "job", help = "The job to look at", parse(try_from_str))]
         job: Option<Job>,
     }
 }
 
 // #2969
-#[cfg(not(all(
+#[cfg
+(
+    not
+(
+    all
+(
     feature = "std",
-    any(
+    any
+    (
         target_os = "linux",
         target_os = "android",
         target_os = "netbsd",
@@ -242,26 +230,32 @@ mod issue_2620 {
         all(target_arch = "wasm32", feature = "stdweb"),
         all(target_arch = "wasm32", feature = "wasm-bindgen"),
     )
-)))]
+)
+)
+)]
 type Os = NoSource;
 
 // #3313
-fn stmt_expr_attributes() {
+fn stmt_expr_attributes()
+{
     let foo;
     #[must_use]
     foo = false;
 }
 
 // #3509
-fn issue3509() {
-    match MyEnum {
+fn issue3509()
+{
+    match MyEnum
+    {
         MyEnum::Option1 if cfg!(target_os = "windows") =>
         #[cfg(target_os = "windows")]
         {
             1
         }
     }
-    match MyEnum {
+    match MyEnum
+    {
         MyEnum::Option1 if cfg!(target_os = "windows") =>
         {
             #[cfg(target_os = "windows")]

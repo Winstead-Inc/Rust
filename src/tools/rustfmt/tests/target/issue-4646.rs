@@ -1,18 +1,21 @@
-trait Foo {
+trait Foo
+{
     fn bar(&self)
     // where
     //     Self: Bar
     ;
 }
 
-trait Foo {
+trait Foo
+{
     fn bar(&self)
     // where
     //     Self: Bar
     ;
 }
 
-trait Foo {
+trait Foo
+{
     fn bar(&self)
     // where
     //     Self: Bar

@@ -2,15 +2,18 @@
 
 struct Struct {}
 
-trait Trait {
+trait Trait
+{
     type Type;
 }
 
-impl Trait for Struct {
+impl Trait for Struct
+{
     type Type = Self;
 }
 
-fn main() {
+fn main()
+{
     // keep the qualified path details
     let _ = <Struct as Trait>::Type {};
 }

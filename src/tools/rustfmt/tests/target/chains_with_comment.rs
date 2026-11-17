@@ -1,6 +1,7 @@
 // Chains with comment.
 
-fn main() {
+fn main()
+{
     let x = y // comment
         .z;
 
@@ -21,25 +22,13 @@ fn main() {
         // Remove nodes that are not dirty
         .filter(|&(unit, _)| dirties.contains(&unit))
         // Retain only dirty dependencies of the ones that are dirty
-        .map(|(k, deps)| {
-            (
-                k.clone(),
-                deps.iter()
-                    .cloned()
-                    .filter(|d| dirties.contains(&d))
-                    .collect(),
-            )
-        });
+        .map(|(k, deps)| { (k.clone(), deps.iter().cloned().filter(|d| dirties.contains(&d)).collect()) });
 
     let y = expr /* comment */
         .kaas()?
         // comment
         .test();
-    let loooooooooooooooooooooooooooooooooooooooooong = does_this?
-        .look?
-        .good?
-        .should_we_break?
-        .after_the_first_question_mark?;
+    let loooooooooooooooooooooooooooooooooooooooooong = does_this?.look?.good?.should_we_break?.after_the_first_question_mark?;
     let zzzz = expr? // comment after parent
         // comment 0
         .another??? // comment 1
@@ -57,12 +46,8 @@ fn main() {
         .0
         .x;
 
-    parameterized(f, substs, def_id, Ns::Value, &[], |tcx| {
-        tcx.lookup_item_type(def_id).generics
-    })?;
-    fooooooooooooooooooooooooooo()?
-        .bar()?
-        .baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaz()?;
+    parameterized(f, substs, def_id, Ns::Value, &[], |tcx| tcx.lookup_item_type(def_id).generics)?;
+    fooooooooooooooooooooooooooo()?.bar()?.baaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaz()?;
 
     // #2559
     App::new("cargo-cache")
@@ -70,7 +55,8 @@ fn main() {
         .bin_name("cargo")
         .about("Manage cargo cache")
         .author("matthiaskrgr")
-        .subcommand(
+        .subcommand
+        (
             SubCommand::with_name("cache")
                 .version(crate_version!())
                 .bin_name("cargo-cache")
@@ -84,16 +70,16 @@ fn main() {
                 .arg(&dry_run)
                 .arg(&auto_clean)
                 .arg(&auto_clean_expensive),
-        ) // subcommand
+        )
+        // subcommand
         .arg(&list_dirs);
 }
 
 // #2177
-impl Foo {
-    fn dirty_rev_dep_graph(
-        &self,
-        dirties: &HashSet<UnitKey>,
-    ) -> HashMap<UnitKey, HashSet<UnitKey>> {
+impl Foo
+{
+    fn dirty_rev_dep_graph(&self, dirties: &HashSet<UnitKey>) -> HashMap<UnitKey, HashSet<UnitKey>>
+    {
         let dirties = self.transitive_dirty_units(dirties);
         trace!("transitive_dirty_units: {:?}", dirties);
 
@@ -102,20 +88,13 @@ impl Foo {
             // Remove nodes that are not dirty
             .filter(|&(unit, _)| dirties.contains(&unit))
             // Retain only dirty dependencies of the ones that are dirty
-            .map(|(k, deps)| {
-                (
-                    k.clone(),
-                    deps.iter()
-                        .cloned()
-                        .filter(|d| dirties.contains(&d))
-                        .collect(),
-                )
-            })
+            .map(|(k, deps)| (k.clone(), deps.iter().cloned().filter(|d| dirties.contains(&d)).collect()))
     }
 }
 
 // #2907
-fn foo() {
+fn foo()
+{
     let x = foo
         .bar??? // comment
         .baz;

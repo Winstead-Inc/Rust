@@ -1,4 +1,5 @@
-struct S<const C: usize>
+struct S
+<const C: usize>
 where
     [(); { num_slots!(C) }]:, {
     /* An asterisk-based, or a double-slash-prefixed, comment here is

@@ -1,7 +1,1 @@
-fn f() -> Box<
-    dyn FnMut() -> Thing<
-        WithType = LongItemName,
-        Error = LONGLONGLONGLONGLONGONGEvenLongerErrorNameLongerLonger,
-    >,
-> {
-}
+fn f() -> Box<dyn FnMut() -> Thing<WithType = LongItemName, Error = LONGLONGLONGLONGLONGONGEvenLongerErrorNameLongerLonger>> {}

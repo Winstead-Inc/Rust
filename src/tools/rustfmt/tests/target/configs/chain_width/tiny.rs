@@ -2,13 +2,16 @@
 
 struct Fluent {}
 
-impl Fluent {
-    fn blorp(&self) -> &Self {
+impl Fluent
+{
+    fn blorp(&self) -> &Self
+    {
         self
     }
 }
 
-fn main() {
+fn main()
+{
     let test = Fluent {};
 
     // should not be wrapped

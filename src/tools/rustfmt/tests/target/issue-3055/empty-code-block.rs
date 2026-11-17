@@ -13,6 +13,7 @@
 ///
 /// ```compile_fail
 /// ```
-fn main() {
+fn main()
+{
     println!("Hello, world!");
 }

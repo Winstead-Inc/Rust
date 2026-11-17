@@ -1,6 +1,7 @@
 // rustfmt-control_brace_style: AlwaysNextLine
 
-fn main() {
+fn main()
+{
     loop
     {
         ();

@@ -17,7 +17,8 @@ pub enum Bar {}
 #[derive(Eq, PartialEq, Debug, Copy, Clone)]
 pub enum FooBar {}
 
-mod foo {
+mod foo
+{
     #[bar]
     #[derive(Eq, PartialEq)]
     #[foo]
@@ -27,14 +28,16 @@ mod foo {
     pub enum Foo {}
 }
 
-mod bar {
+mod bar
+{
     #[derive(Eq, PartialEq, Debug)]
     #[foobar]
     #[derive(Copy, Clone)]
     pub enum Bar {}
 }
 
-mod foobar {
+mod foobar
+{
     #[derive(Eq, PartialEq, Debug, Copy, Clone)]
     pub enum FooBar {}
 }

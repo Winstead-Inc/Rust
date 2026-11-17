@@ -46,10 +46,7 @@ static FOO: i32 = 42;
 #[used]
 #[export_name = "FOO"]
 #[cfg(not(miri))] // inline comment
-#[deprecated(
-    since = "5.2",
-    note = "FOO was rarely used. Users should instead use BAR"
-)]
+#[deprecated(since = "5.2", note = "FOO was rarely used. Users should instead use BAR")]
 static FOO: i32 = 42;
 
 #[cfg(not(miri))] // inline comment
@@ -62,13 +59,15 @@ const BAR: i32 = 42;
 #[cfg(not(miri))] // inline comment
 #[no_mangle]
 #[link_section = ".example_section"]
-fn foo(bar: usize) {
+fn foo(bar: usize)
+{
     #[cfg(not(miri))] // inline comment
     println!("hello world!");
 }
 
 #[cfg(not(miri))] // inline comment
-mod foo {}
+mod foo
+{}
 
 #[cfg(not(miri))] // inline comment
 extern "C" {
@@ -85,7 +84,8 @@ extern "C" {
 }
 
 #[cfg(not(miri))] // inline comment
-pub extern "C" fn callable_from_c(x: i32) -> bool {
+pub extern "C" fn callable_from_c(x: i32) -> bool
+{
     x % 3 == 0
 }
 
@@ -98,19 +98,24 @@ type Foo = Bar<u8>;
 #[no_mangle]
 #[cfg(not(miri))] // inline comment
 #[non_exhaustive] // inline comment
-enum Foo {
+enum Foo
+{
     Bar,
     Baz,
 }
 
 #[no_mangle]
 #[cfg(not(miri))] /* inline comment */
-struct Foo<A> {
+struct Foo
+<A>
+{
     x: A,
 }
 
 #[cfg(not(miri))] // inline comment
-union Foo<A, B> {
+union Foo
+<A, B>
+{
     x: A,
     y: B,
 }
@@ -125,11 +130,13 @@ trait Foo = Bar + Quux;
 impl Foo {}
 
 #[cfg(not(miri))] // inline comment
-macro_rules! bar {
+macro_rules! bar
+{
     (3) => {};
 }
 
-mod nested {
+mod nested
+{
     #[cfg(not(miri))] // inline comment
     // between attribute and use
     use foo;
@@ -156,16 +163,19 @@ mod nested {
     const FOO: i32 = 42;
 
     #[cfg(not(miri))] // inline comment
-    fn foo(bar: usize) {
+    fn foo(bar: usize)
+    {
         #[cfg(not(miri))] // inline comment
         println!("hello world!");
     }
 
     #[cfg(not(miri))] // inline comment
-    mod foo {}
+    mod foo
+    {}
 
     #[cfg(not(miri))] // inline comment
-    mod foo {}
+    mod foo
+    {}
 
     #[cfg(not(miri))] // inline comment
     extern "C" {
@@ -182,7 +192,8 @@ mod nested {
     }
 
     #[cfg(not(miri))] // inline comment
-    pub extern "C" fn callable_from_c(x: i32) -> bool {
+    pub extern "C" fn callable_from_c(x: i32) -> bool
+    {
         x % 3 == 0
     }
 
@@ -191,7 +202,8 @@ mod nested {
 
     #[cfg(not(miri))] // inline comment
     #[non_exhaustive] // inline comment
-    enum Foo {
+    enum Foo
+    {
         // comment
         #[attribute_1]
         #[attribute_2] // comment
@@ -207,12 +219,16 @@ mod nested {
     }
 
     #[cfg(not(miri))] // inline comment
-    struct Foo<A> {
+    struct Foo
+    <A>
+    {
         x: A,
     }
 
     #[cfg(not(miri))] // inline comment
-    union Foo<A, B> {
+    union Foo
+    <A, B>
+    {
         #[attribute_1]
         #[attribute_2] /* comment */
         #[attribute_3]
@@ -223,7 +239,8 @@ mod nested {
 
     #[cfg(not(miri))] // inline comment
     #[allow(missing_docs)]
-    trait Foo {
+    trait Foo
+    {
         #[must_use] /* comment
                      * that wrappes to
                      * the next line */
@@ -239,7 +256,8 @@ mod nested {
     impl Foo {}
 
     #[cfg(not(miri))] // inline comment
-    macro_rules! bar {
+    macro_rules! bar
+    {
         (3) => {};
     }
 }

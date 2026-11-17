@@ -1,19 +1,22 @@
-impl Struct {
+impl Struct
+{
     /// Documentation for `foo`
     #[rustfmt::skip] // comment on why use a skip here
-    pub fn foo(&self) {}
+    pub fn foo( & self) {}
 }
 
-impl Struct {
+impl Struct
+{
     /// Documentation for `foo`
     #[rustfmt::skip] // comment on why use a skip here
-    pub fn foo(&self) {}
+    pub fn foo( & self) {}
 }
 
 /// Documentation for `Struct`
 #[rustfmt::skip] // comment
-impl Struct {
+impl Struct
+{
     /// Documentation for `foo`
-       #[rustfmt::skip] // comment on why use a skip here
-    pub fn foo(&self) {}
+   #[rustfmt::skip] // comment on why use a skip here
+    pub fn foo( & self) {}
 }

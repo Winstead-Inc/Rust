@@ -64,7 +64,8 @@ where
     }
 }
 
-struct C<T>
+struct C
+<T>
 where
     #[cfg = a] T: TraitA,
     #[cfg = b] T: TraitB,
@@ -72,7 +73,8 @@ where
     _t: PhantomData<T>,
 }
 
-union D<T>
+union D
+<T>
 where
     #[cfg = a] T: TraitA,
     #[cfg = b] T: TraitB,

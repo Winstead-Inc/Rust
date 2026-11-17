@@ -3,114 +3,114 @@
 
 // Combining openings and closings. See rust-lang/fmt-rfcs#61.
 
-fn main() {
+fn main()
+{
     // Call
-    foo(bar(
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,
-        bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb,
-    ));
+    foo(bar(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb));
 
     // Mac
-    foo(foo!(
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,
-        bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb,
-    ));
+    foo(foo!(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb,));
 
     // MethodCall
-    foo(x.foo::<Bar, Baz>(
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,
-        bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb,
-    ));
+    foo(x.foo::<Bar, Baz>(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb));
 
     // Block
-    foo!({
-        foo();
-        bar();
-    });
+    foo!({ foo(); bar(); });
 
     // Closure
-    foo(|x| {
-        let y = x + 1;
-        y
-    });
+    foo(|x| { let y = x + 1; y });
 
     // Match
-    foo(match opt {
+    foo
+    (
+        match opt
+    {
         Some(x) => x,
         None => y,
-    });
+    }
+    );
 
     // Struct
-    foo(Bar {
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,
-        bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb,
-    });
+    foo(Bar { aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb });
 
     // If
-    foo!(if x {
+    foo!
+    (
+        if x
+    {
         foo();
-    } else {
+    }
+    else
+    {
         bar();
-    });
+    }
+    );
 
     // IfLet
-    foo!(if let Some(..) = x {
+    foo!
+    (
+        if let Some(..) = x
+    {
         foo();
-    } else {
+    }
+    else
+    {
         bar();
-    });
+    }
+    );
 
     // While
-    foo!(while x {
+    foo!
+    (
+        while x
+    {
         foo();
         bar();
-    });
+    }
+    );
 
     // WhileLet
-    foo!(while let Some(..) = x {
+    foo!
+    (
+        while let Some(..) = x
+    {
         foo();
         bar();
-    });
+    }
+    );
 
     // ForLoop
-    foo!(for x in y {
+    foo!
+    (
+        for x in y
+    {
         foo();
         bar();
-    });
+    }
+    );
 
     // Loop
-    foo!(loop {
+    foo!
+    (
+        loop
+    {
         foo();
         bar();
-    });
+    }
+    );
 
     // Tuple
-    foo((
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,
-        bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb,
-    ));
+    foo((aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb));
 
     // AddrOf
-    foo(&bar(
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,
-        bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb,
-    ));
+    foo(&bar(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb));
 
     // Unary
-    foo(!bar(
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,
-        bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb,
-    ));
+    foo(!bar(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb));
 
     // Try
-    foo(bar(
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,
-        bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb,
-    )?);
+    foo(bar(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb)?);
 
     // Cast
-    foo(Bar {
-        xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,
-        xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx,
-    } as i64);
+    foo(Bar { xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx, xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx } as i64);
 }

@@ -1,4 +1,5 @@
-fn main() {
+fn main()
+{
     for variable_in_a /* ... */ in 0..1 {
         for variable_in_b /* ... */ in 0..1 {
             for variable_in_c /* ... */ in 0..1 {

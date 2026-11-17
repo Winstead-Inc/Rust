@@ -1,14 +1,16 @@
 // rustfmt-edition: 2018
 #![feature(try_blocks)]
 
-fn main() -> Result<(), !> {
+fn main() -> Result<(), !>
+{
     let _x: Option<_> = try { 4 };
-
     try {}
 }
 
-fn baz() -> Option<i32> {
-    if (1 == 1) {
+fn baz() -> Option<i32>
+{
+    if (1 == 1)
+    {
         return try { 5 };
     }
 
@@ -17,19 +19,12 @@ fn baz() -> Option<i32> {
         // try blocks are great
     };
 
-    let y: Option<i32> = try { 6 }; // comment
+    let y: Option<i32> = try { 6 };
+    // comment
 
-    let x: Option<i32> = try {
-        baz()?;
-        baz()?;
-        baz()?;
-        7
-    };
+    let x: Option<i32> = try { baz()?; baz()?; baz()?; 7 };
 
-    let _ = overflowed_expr(x, try {
-        foo()?;
-        bar()?;
-    });
+    let _ = overflowed_expr(x, try { foo()?; bar()?; });
 
     return None;
 }

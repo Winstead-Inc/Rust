@@ -3,9 +3,10 @@
 
 /// A Doc comment
 #[AnAttribute]
-pub struct Foo {
+pub struct Foo
+{
     #[rustfmt::skip]
-    f :   SomeType, // Comment beside a field
+    f: SomeType, // Comment beside a field
     f: SomeType, // Comment beside a field
     // Comment on a field
     #[AnAttribute]
@@ -16,33 +17,34 @@ pub struct Foo {
 }
 
 // Destructuring
-fn foo() {
+fn foo()
+{
     S { x: 5, .. };
     Struct { .. } = Struct { a: 1, b: 4 };
     Struct { a, .. } = Struct { a: 1, b: 2, c: 3 };
     TupleStruct(a, .., b) = TupleStruct(1, 2);
     TupleStruct(..) = TupleStruct(3, 4);
-    TupleStruct(
-        aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,
-        ..,
-        bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb,
-    ) = TupleStruct(1, 2);
+    TupleStruct(aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa, .., bbbbbbbbbbbbbbbbbbbbbbbbbbbbbb) = TupleStruct(1, 2);
 }
 
 // #1095
-struct S<T /* comment */> {
+struct S
+<T /* comment */>
+{
     t: T,
 }
 
 // #1029
-pub struct Foo {
+pub struct Foo
+{
     #[doc(hidden)]
     // This will NOT get deleted!
     bar: String, // hi
 }
 
 // #1029
-struct X {
+struct X
+{
     // `x` is an important number.
     #[allow(unused)] // TODO: use
     x: u32,
@@ -50,7 +52,9 @@ struct X {
 
 // #410
 #[allow(missing_docs)]
-pub struct Writebatch<K: Key> {
+pub struct Writebatch
+<K: Key>
+{
     #[allow(dead_code)] // only used for holding the internal pointer
     writebatch: RawWritebatch,
     marker: PhantomData<K>,
@@ -60,19 +64,10 @@ struct Bar;
 
 struct NewType(Type, OtherType);
 
-struct NewInt<T: Copy>(
-    pub i32,
-    SomeType, // inline comment
-    T,        // sup
-);
+struct NewInt<T: Copy>(pub i32, SomeType /* inline comment */, T /* sup */);
 
-struct Qux<
-    'a,
-    N: Clone + 'a,
-    E: Clone + 'a,
-    G: Labeller<'a, N, E> + GraphWalk<'a, N, E>,
-    W: Write + Copy,
->(
+struct Qux<'a, N: Clone + 'a, E: Clone + 'a, G: Labeller<'a, N, E> + GraphWalk<'a, N, E>, W: Write + Copy>
+(
     AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA, // Comment
     BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,
     #[AnAttr]
@@ -82,28 +77,26 @@ struct Qux<
     pub W,
 );
 
-struct Tuple(
-    // Comment 1
-    AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,
-    // Comment 2
-    BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB,
-);
+struct Tuple(/* Comment 1 */ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA, /* Comment 2 */ BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB);
 
 // With a where-clause and generics.
-pub struct Foo<'a, Y: Baz>
+pub struct Foo
+<'a, Y: Baz>
 where
     X: Whatever,
 {
     f: SomeType, // Comment beside a field
 }
 
-struct Baz {
+struct Baz
+{
     a: A, // Comment A
     b: B, // Comment B
     c: C, // Comment C
 }
 
-struct Baz {
+struct Baz
+{
     a: A, // Comment A
 
     b: B, // Comment B
@@ -111,16 +104,16 @@ struct Baz {
     c: C, // Comment C
 }
 
-struct Baz {
+struct Baz
+{
     a: A,
-
     b: B,
     c: C,
-
     d: D,
 }
 
-struct Baz {
+struct Baz
+{
     // Comment A
     a: A,
 
@@ -131,24 +124,32 @@ struct Baz {
 }
 
 // Will this be a one-liner?
-struct Tuple(
+struct Tuple
+(
     A, // Comment
     B,
 );
 
-pub struct State<F: FnMut() -> time::Timespec> {
+pub struct State
+<F: FnMut() -> time::Timespec>
+{
     now: F,
 }
 
-pub struct State<F: FnMut() -> ()> {
+pub struct State
+<F: FnMut() -> ()>
+{
     now: F,
 }
 
-pub struct State<F: FnMut()> {
+pub struct State
+<F: FnMut()>
+{
     now: F,
 }
 
-struct Palette {
+struct Palette
+{
     /// A map of indices in the palette to a count of pixels in approximately
     /// that color
     foo: i32,
@@ -156,20 +157,19 @@ struct Palette {
 
 // Splitting a single line comment into a block previously had a misalignment
 // when the field had attributes
-struct FieldsWithAttributes {
+struct FieldsWithAttributes
+{
     // Pre Comment
-    #[rustfmt::skip] pub host:String, /* Post comment BBBBBBBBBBBBBB BBBBBBBBBBBBBBBB
-                                       * BBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBBB BBBBBBBBBBB */
+    #[rustfmt::skip] pub host: String, // Post comment BBBBBBBBBBBBBB BBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBBB BBBBBBBBBBB
     // Another pre comment
     #[attr1]
     #[attr2]
-    pub id: usize, /* CCCCCCCCCCCCCCCCCCC CCCCCCCCCCCCCCCCCCC CCCCCCCCCCCCCCCC
-                    * CCCCCCCCCCCCCCCCCC CCCCCCCCCCCCCC CCCCCCCCCCCC */
+    pub id: usize, // CCCCCCCCCCCCCCCCCCC CCCCCCCCCCCCCCCCCCC CCCCCCCCCCCCCCCC CCCCCCCCCCCCCCCCCC CCCCCCCCCCCCCC CCCCCCCCCCCC
 }
 
-struct Deep {
-    deeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep:
-        node::Handle<IdRef<'id, Node<K, V>>, Type, NodeType>,
+struct Deep
+{
+    deeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep: node::Handle<IdRef<'id, Node<K, V>>, Type, NodeType>,
 }
 
 struct Foo<T>(T);
@@ -177,35 +177,18 @@ struct Foo<T>(T)
 where
     T: Copy,
     T: Eq;
-struct Foo<T>(
-    TTTTTTTTTTTTTTTTT,
-    UUUUUUUUUUUUUUUUUUUUUUUU,
-    TTTTTTTTTTTTTTTTTTT,
-    UUUUUUUUUUUUUUUUUUU,
-);
-struct Foo<T>(
-    TTTTTTTTTTTTTTTTTT,
-    UUUUUUUUUUUUUUUUUUUUUUUU,
-    TTTTTTTTTTTTTTTTTTT,
-)
+struct Foo<T>(TTTTTTTTTTTTTTTTT, UUUUUUUUUUUUUUUUUUUUUUUU, TTTTTTTTTTTTTTTTTTT, UUUUUUUUUUUUUUUUUUU);
+struct Foo<T>(TTTTTTTTTTTTTTTTTT, UUUUUUUUUUUUUUUUUUUUUUUU, TTTTTTTTTTTTTTTTTTT)
 where
     T: PartialEq;
-struct Foo<T>(
-    TTTTTTTTTTTTTTTTT,
-    UUUUUUUUUUUUUUUUUUUUUUUU,
-    TTTTTTTTTTTTTTTTTTTTT,
-)
+struct Foo<T>(TTTTTTTTTTTTTTTTT, UUUUUUUUUUUUUUUUUUUUUUUU, TTTTTTTTTTTTTTTTTTTTT)
 where
     T: PartialEq;
-struct Foo<T>(
-    TTTTTTTTTTTTTTTTT,
-    UUUUUUUUUUUUUUUUUUUUUUUU,
-    TTTTTTTTTTTTTTTTTTT,
-    UUUUUUUUUUUUUUUUUUU,
-)
+struct Foo<T>(TTTTTTTTTTTTTTTTT, UUUUUUUUUUUUUUUUUUUUUUUU, TTTTTTTTTTTTTTTTTTT, UUUUUUUUUUUUUUUUUUU)
 where
     T: PartialEq;
-struct Foo<T>(
+struct Foo<T>
+(
     TTTTTTTTTTTTTTTTT,        // Foo
     UUUUUUUUUUUUUUUUUUUUUUUU, // Bar
     // Baz
@@ -214,8 +197,10 @@ struct Foo<T>(
     UUUUUUUUUUUUUUUUUUU,
 );
 
-mod m {
-    struct X<T>
+mod m
+{
+    struct X
+    <T>
     where
         T: Sized,
     {
@@ -223,47 +208,55 @@ mod m {
     }
 }
 
-struct Foo<T>(
+struct Foo<T>
+(
     TTTTTTTTTTTTTTTTTTT,
     /// Qux
     UUUUUUUUUUUUUUUUUUU,
 );
 
-struct Issue677 {
+struct Issue677
+{
     pub ptr: *const libc::c_void,
     pub trace: fn(obj: *const libc::c_void, tracer: *mut JSTracer),
 }
 
 struct Foo {}
+
 struct Foo {}
+
 struct Foo {
     // comment
 }
+
 struct Foo {
     // trailing space ->
 }
+
 struct Foo {
     // comment
 }
+
 struct Foo(
     // comment
 );
 
-struct LongStruct {
+struct LongStruct
+{
     a: A,
-    the_quick_brown_fox_jumps_over_the_lazy_dog:
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,
+    the_quick_brown_fox_jumps_over_the_lazy_dog: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,
 }
 
-struct Deep {
-    deeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep:
-        node::Handle<IdRef<'id, Node<Key, Value>>, Type, NodeType>,
+struct Deep
+{
+    deeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep: node::Handle<IdRef<'id, Node<Key, Value>>, Type, NodeType>,
 }
 
 struct Foo<C = ()>(String);
 
 // #1364
-fn foo() {
+fn foo()
+{
     convex_shape.set_point(0, &Vector2f { x: 400.0, y: 100.0 });
     convex_shape.set_point(1, &Vector2f { x: 500.0, y: 70.0 });
     convex_shape.set_point(2, &Vector2f { x: 450.0, y: 100.0 });
@@ -271,15 +264,16 @@ fn foo() {
 }
 
 // Vertical alignment
-struct Foo {
+struct Foo
+{
     aaaaa: u32, // a
 
     b: u32,  // b
     cc: u32, // cc
 
     xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: u32, // 1
-    yy: u32,  // comment2
-    zzz: u32, // comment3
+    yy: u32,                                                                               // comment2
+    zzz: u32,                                                                              // comment3
 
     aaaaaa: u32, // comment4
     bb: u32,     // comment5
@@ -293,28 +287,28 @@ struct Foo {
                    */
     b: u32, // hi
 
-    do_not_push_this_comment1: u32, // comment1
+    do_not_push_this_comment1: u32,                                                       // comment1
     xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: u32, // 2
-    please_do_not_push_this_comment3: u32, // comment3
+    please_do_not_push_this_comment3: u32,                                                // comment3
 
     do_not_push_this_comment1: u32, // comment1
     // separate
     xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: u32, // 2
-    please_do_not_push_this_comment3: u32, // comment3
+    please_do_not_push_this_comment3: u32,                                                // comment3
 
-    do_not_push_this_comment1: u32, // comment1
+    do_not_push_this_comment1: u32,                                                       // comment1
     xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: u32, // 2
     // separate
     please_do_not_push_this_comment3: u32, // comment3
 }
 
 // structs with long identifier
-struct Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong
-{}
-struct Looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong
-{}
-struct Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong
-{}
+struct Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong {}
+
+struct Looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong {}
+
+struct Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong {}
+
 struct Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong
 {
     x: i32,
@@ -322,16 +316,17 @@ struct Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo
 
 // structs with visibility, do not duplicate visibility (#2110).
 pub(self) struct Foo {}
+
 pub(super) struct Foo {}
+
 pub(crate) struct Foo {}
+
 pub(self) struct Foo();
 pub(super) struct Foo();
 pub(crate) struct Foo();
 
 // #2125
-pub struct ReadinessCheckRegistry(
-    Mutex<HashMap<Arc<String>, Box<Fn() -> ReadinessCheck + Sync + Send>>>,
-);
+pub struct ReadinessCheckRegistry(Mutex<HashMap<Arc<String>, Box<Fn() -> ReadinessCheck + Sync + Send>>>);
 
 // #2144 unit struct with generics
 struct MyBox<T: ?Sized>;
@@ -341,7 +336,8 @@ where
     S: Clone;
 
 // #2208
-struct Test {
+struct Test
+{
     /// foo
     #[serde(default)]
     pub join: Vec<String>,

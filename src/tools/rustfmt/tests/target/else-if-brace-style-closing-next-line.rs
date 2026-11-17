@@ -1,6 +1,7 @@
 // rustfmt-control_brace_style: ClosingNextLine
 
-fn main() {
+fn main()
+{
     if false {
         ();
         ();

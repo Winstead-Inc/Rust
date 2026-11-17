@@ -12,8 +12,10 @@ where
 {
     type Output = BoxedSelectStatement<'a, Select::SqlTypeForSelect, From, DB>;
 
-    fn internal_into_boxed(self) -> Self::Output {
-        BoxedSelectStatement::new(
+    fn internal_into_boxed(self) -> Self::Output
+    {
+        BoxedSelectStatement::new
+        (
             Box::new(self.select),
             self.from,
             Box::new(self.distinct),
@@ -26,47 +28,32 @@ where
 }
 
 // #1369
+impl<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName> Foo for Bar
+{
+    fn foo() {}
+}
+impl Foo<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName> for Bar
+{
+    fn foo() {}
+}
+impl<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
+    Foo<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName> for Bar
+{
+    fn foo() {}
+}
 impl<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName> Foo
-    for Bar
+    for Bar<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
 {
     fn foo() {}
 }
 impl Foo<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
-    for Bar
+    for Bar<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
 {
     fn foo() {}
 }
 impl<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
     Foo<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
-    for Bar
-{
-    fn foo() {}
-}
-impl<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName> Foo
-    for Bar<
-        ExcessivelyLongGenericName,
-        ExcessivelyLongGenericName,
-        AnotherExcessivelyLongGenericName,
-    >
-{
-    fn foo() {}
-}
-impl Foo<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
-    for Bar<
-        ExcessivelyLongGenericName,
-        ExcessivelyLongGenericName,
-        AnotherExcessivelyLongGenericName,
-    >
-{
-    fn foo() {}
-}
-impl<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
-    Foo<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
-    for Bar<
-        ExcessivelyLongGenericName,
-        ExcessivelyLongGenericName,
-        AnotherExcessivelyLongGenericName,
-    >
+    for Bar<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
 {
     fn foo() {}
 }

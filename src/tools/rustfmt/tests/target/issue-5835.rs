@@ -3,6 +3,7 @@
 /// .   a
 pub fn foo() {}
 
-pub fn main() {
+pub fn main()
+{
     // .   a
 }

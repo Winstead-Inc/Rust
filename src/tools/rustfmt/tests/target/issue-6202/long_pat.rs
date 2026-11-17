@@ -3,8 +3,10 @@
 // rustfmt-style_edition: 2027
 // rustfmt-edition: 2024
 
-impl EarlyLintPass for NeedlessContinue {
-    fn check_expr(&mut self, cx: &EarlyContext<'_>, expr: &Expr) {
+impl EarlyLintPass for NeedlessContinue
+{
+    fn check_expr(&mut self, cx: &EarlyContext<'_>, expr: &Expr)
+    {
         if let ExprKind::Loop(body, label, ..)
         | ExprKind::While(_, body, label)
         | ExprKind::ForLoop { body, label, .. } = &expr.kind

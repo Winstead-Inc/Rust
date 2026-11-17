@@ -3,9 +3,10 @@
 
 /// A Doc comment
 #[AnAttribute]
-pub union Foo {
+pub union Foo
+{
     #[rustfmt::skip]
-    f :   SomeType, // Comment beside a field
+    f: SomeType, // Comment beside a field
     f: SomeType, // Comment beside a field
     // Comment on a field
     #[AnAttribute]
@@ -16,14 +17,16 @@ pub union Foo {
 }
 
 // #1029
-pub union Foo {
+pub union Foo
+{
     #[doc(hidden)]
     // This will NOT get deleted!
     bar: String, // hi
 }
 
 // #1029
-union X {
+union X
+{
     // `x` is an important number.
     #[allow(unused)] // TODO: use
     x: u32,
@@ -31,27 +34,32 @@ union X {
 
 // #410
 #[allow(missing_docs)]
-pub union Writebatch<K: Key> {
+pub union Writebatch
+<K: Key>
+{
     #[allow(dead_code)] // only used for holding the internal pointer
     writebatch: RawWritebatch,
     marker: PhantomData<K>,
 }
 
 // With a where-clause and generics.
-pub union Foo<'a, Y: Baz>
+pub union Foo
+<'a, Y: Baz>
 where
     X: Whatever,
 {
     f: SomeType, // Comment beside a field
 }
 
-union Baz {
+union Baz
+{
     a: A, // Comment A
     b: B, // Comment B
     c: C, // Comment C
 }
 
-union Baz {
+union Baz
+{
     a: A, // Comment A
 
     b: B, // Comment B
@@ -59,16 +67,16 @@ union Baz {
     c: C, // Comment C
 }
 
-union Baz {
+union Baz
+{
     a: A,
-
     b: B,
     c: C,
-
     d: D,
 }
 
-union Baz {
+union Baz
+{
     // Comment A
     a: A,
 
@@ -78,19 +86,26 @@ union Baz {
     c: C,
 }
 
-pub union State<F: FnMut() -> time::Timespec> {
+pub union State
+<F: FnMut() -> time::Timespec>
+{
     now: F,
 }
 
-pub union State<F: FnMut() -> ()> {
+pub union State
+<F: FnMut() -> ()>
+{
     now: F,
 }
 
-pub union State<F: FnMut()> {
+pub union State
+<F: FnMut()>
+{
     now: F,
 }
 
-union Palette {
+union Palette
+{
     /// A map of indices in the palette to a count of pixels in approximately
     /// that color
     foo: i32,
@@ -98,24 +113,25 @@ union Palette {
 
 // Splitting a single line comment into a block previously had a misalignment
 // when the field had attributes
-union FieldsWithAttributes {
+union FieldsWithAttributes
+{
     // Pre Comment
-    #[rustfmt::skip] pub host:String, /* Post comment BBBBBBBBBBBBBB BBBBBBBBBBBBBBBB
-                                       * BBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBBB BBBBBBBBBBB */
+    #[rustfmt::skip] pub host: String, // Post comment BBBBBBBBBBBBBB BBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBB BBBBBBBBBBBBBBBBB BBBBBBBBBBB
     // Another pre comment
     #[attr1]
     #[attr2]
-    pub id: usize, /* CCCCCCCCCCCCCCCCCCC CCCCCCCCCCCCCCCCCCC CCCCCCCCCCCCCCCC
-                    * CCCCCCCCCCCCCCCCCC CCCCCCCCCCCCCC CCCCCCCCCCCC */
+    pub id: usize, // CCCCCCCCCCCCCCCCCCC CCCCCCCCCCCCCCCCCCC CCCCCCCCCCCCCCCC CCCCCCCCCCCCCCCCCC CCCCCCCCCCCCCC CCCCCCCCCCCC
 }
 
-union Deep {
-    deeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep:
-        node::Handle<IdRef<'id, Node<K, V>>, Type, NodeType>,
+union Deep
+{
+    deeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep: node::Handle<IdRef<'id, Node<K, V>>, Type, NodeType>,
 }
 
-mod m {
-    union X<T>
+mod m
+{
+    union X
+    <T>
     where
         T: Sized,
     {
@@ -123,7 +139,8 @@ mod m {
     }
 }
 
-union Issue677 {
+union Issue677
+{
     pub ptr: *const libc::c_void,
     pub trace: fn(obj: *const libc::c_void, tracer: *mut JSTracer),
 }
@@ -140,19 +157,20 @@ union Foo {
     // comment
 }
 
-union LongUnion {
+union LongUnion
+{
     a: A,
-    the_quick_brown_fox_jumps_over_the_lazy_dog:
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,
+    the_quick_brown_fox_jumps_over_the_lazy_dog: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,
 }
 
-union Deep {
-    deeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep:
-        node::Handle<IdRef<'id, Node<Key, Value>>, Type, NodeType>,
+union Deep
+{
+    deeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeep: node::Handle<IdRef<'id, Node<Key, Value>>, Type, NodeType>,
 }
 
 // #1364
-fn foo() {
+fn foo()
+{
     convex_shape.set_point(0, &Vector2f { x: 400.0, y: 100.0 });
     convex_shape.set_point(1, &Vector2f { x: 500.0, y: 70.0 });
     convex_shape.set_point(2, &Vector2f { x: 450.0, y: 100.0 });
@@ -160,15 +178,16 @@ fn foo() {
 }
 
 // Vertical alignment
-union Foo {
+union Foo
+{
     aaaaa: u32, // a
 
     b: u32,  // b
     cc: u32, // cc
 
     xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: u32, // 1
-    yy: u32,  // comment2
-    zzz: u32, // comment3
+    yy: u32,                                                                               // comment2
+    zzz: u32,                                                                              // comment3
 
     aaaaaa: u32, // comment4
     bb: u32,     // comment5
@@ -182,16 +201,16 @@ union Foo {
                    */
     b: u32, // hi
 
-    do_not_push_this_comment1: u32, // comment1
+    do_not_push_this_comment1: u32,                                                       // comment1
     xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: u32, // 2
-    please_do_not_push_this_comment3: u32, // comment3
+    please_do_not_push_this_comment3: u32,                                                // comment3
 
     do_not_push_this_comment1: u32, // comment1
     // separate
     xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: u32, // 2
-    please_do_not_push_this_comment3: u32, // comment3
+    please_do_not_push_this_comment3: u32,                                                // comment3
 
-    do_not_push_this_comment1: u32, // comment1
+    do_not_push_this_comment1: u32,                                                       // comment1
     xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx: u32, // 2
     // separate
     please_do_not_push_this_comment3: u32, // comment3

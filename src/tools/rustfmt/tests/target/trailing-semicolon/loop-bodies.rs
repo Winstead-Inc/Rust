@@ -1,36 +1,45 @@
 // rustfmt-edition: 2024
 // rustfmt-style_edition: 2027
 
-macro_rules! dummy {
+macro_rules! dummy
+{
     () => {};
 }
 
-fn main() {
-    for x in [1] {
+fn main()
+{
+    for x in [1]
+    {
         println!();
     }
 
-    while false {
+    while false
+    {
         println!();
     }
 
-    while let Some('x') = None {
+    while let Some('x') = None
+    {
         println!();
     }
 
-    loop {
+    loop
+    {
         println!();
     }
 
-    loop {
+    loop
+    {
         dummy! {}
     }
 
-    loop {
+    loop
+    {
         dummy!();
     }
 
-    loop {
+    loop
+    {
         dummy![];
     }
 }

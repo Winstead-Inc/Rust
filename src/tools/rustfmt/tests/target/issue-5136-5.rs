@@ -3,4 +3,6 @@
 // contained in `--file-lines`.
 // Note: It's important for the bug to repro that there is no newline at the
 // end of the comment
-fn f(){} // what
+fn f() {}
+
+// what

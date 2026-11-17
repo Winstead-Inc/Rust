@@ -19,16 +19,16 @@ use a::{
     ab::aba as x,
 };
 
+use a::{aa, ad::ada};
+
 #[cfg(test)]
 use a::{ab, ac::aca};
+use b;
+
 #[cfg(test)]
 use b::{
     ba, bb,
     bc::bca::{bcaa, bcab},
-};
-use {
-    a::{aa, ad::ada},
-    b,
 };
 
 pub use {
@@ -77,8 +77,17 @@ use a::{
 };
 use {a::ad::ada, b as x};
 
+use b::{d, e, r};
+use b::{
+    f::g,
+    h::{i, j}, /* After b::h group */
+};
+use b::{
+    /* Before b::l group */ l::{self, m, n::o, p::*},
+    q,
+};
+// After b::r
 use b::q::{self /* After b::q::self */};
-use b::r; // After b::r
 use b::s::{
     a,
     b, // After b::s::b
@@ -96,14 +105,6 @@ use b::v::{
     b,
 };
 use b::{
-    c, d, e,
+    c,
     u::{a, b},
-};
-use b::{
-    f::g,
-    h::{i, j}, /* After b::h group */
-};
-use b::{
-    /* Before b::l group */ l::{self, m, n::o, p::*},
-    q,
 };

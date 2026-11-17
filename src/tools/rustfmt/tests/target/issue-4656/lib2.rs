@@ -1,3 +1,4 @@
-its_a_macro! {
+its_a_macro!
+{
     // Contents
 }

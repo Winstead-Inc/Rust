@@ -7,7 +7,8 @@ where
     A: B, // comment3
     C: D, // comment4
 // interlinear3
-= E; // comment5
+= E;
+// comment5
 
 type Foo
 // comment6
@@ -25,7 +26,8 @@ where
     // comment11
     // interlinear8
     F: G, // comment12
-    H: I; // comment13
+    H: I;
+// comment13
 
 type Foo // comment14
     // interlinear9
@@ -36,4 +38,5 @@ where
     // comment16
     // interlinear11
     F: G, // comment17
-    H: I; // comment18
+    H: I;
+// comment18

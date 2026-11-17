@@ -1,9 +1,11 @@
 // #2953
 
-macro_rules! demo {
+macro_rules! demo
+{
     ($a:ident <- $b:expr) => {};
 }
 
-fn main() {
+fn main()
+{
     demo!(i <- 0);
 }

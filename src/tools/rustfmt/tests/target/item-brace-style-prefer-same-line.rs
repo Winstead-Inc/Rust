@@ -1,11 +1,13 @@
 // rustfmt-brace_style: PreferSameLine
 
 mod M {
-    enum A {
+    enum A
+    {
         A,
     }
 
-    struct B {
+    struct B
+    {
         b: i32,
     }
 
@@ -19,7 +21,8 @@ mod M {
         A,
     }
 
-    struct B<T>
+    struct B
+    <T>
     where
         T: Copy, {
         b: i32,
@@ -29,7 +32,8 @@ mod M {
     where
         T: Copy, {}
 
-    struct D<T>
+    struct D
+    <T>
     where
         T: Copy, {}
 }

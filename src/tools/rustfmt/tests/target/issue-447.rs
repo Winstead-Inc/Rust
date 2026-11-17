@@ -1,6 +1,7 @@
 // rustfmt-normalize_comments: true
 
-fn main() {
+fn main()
+{
     if
     // shouldn't be dropped
     // shouldn't be dropped

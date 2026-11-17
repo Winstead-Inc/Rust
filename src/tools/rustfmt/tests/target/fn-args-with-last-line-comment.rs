@@ -1,7 +1,9 @@
 // #1587
-pub trait X {
+pub trait X
+{
     fn a(&self) -> &'static str;
-    fn bcd(
+    fn bcd
+    (
         &self,
         c: &str,         // comment on this arg
         d: u16,          // comment on this arg
@@ -10,7 +12,8 @@ pub trait X {
 }
 
 // #1595
-fn foo(
+fn foo
+(
     arg1: LongTypeName,
     arg2: LongTypeName,
     arg3: LongTypeName,
@@ -19,6 +22,7 @@ fn foo(
     arg6: LongTypeName,
     arg7: LongTypeName,
     //arg8: LongTypeName,
-) {
+)
+{
     // do stuff
 }

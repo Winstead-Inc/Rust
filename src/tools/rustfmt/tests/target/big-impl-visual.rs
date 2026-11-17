@@ -13,53 +13,48 @@ impl<'a, Select, From, Distinct, Where, Order, Limit, Offset, Groupby, DB> Inter
 {
     type Output = BoxedSelectStatement<'a, Select::SqlTypeForSelect, From, DB>;
 
-    fn internal_into_boxed(self) -> Self::Output {
-        BoxedSelectStatement::new(Box::new(self.select),
+    fn internal_into_boxed(self) -> Self::Output
+    {
+        BoxedSelectStatement::new
+        (
+                                  Box::new(self.select),
                                   self.from,
                                   Box::new(self.distinct),
                                   self.where_clause.into(),
                                   Box::new(self.order),
                                   Box::new(self.limit),
-                                  Box::new(self.offset))
+                                  Box::new(self.offset)
+        )
     }
 }
 
 // #1369
+impl<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName> Foo for Bar
+{
+    fn foo() {}
+}
+impl Foo<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName> for Bar
+{
+    fn foo() {}
+}
+impl<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
+    Foo<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName> for Bar
+{
+    fn foo() {}
+}
 impl<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName> Foo
-    for Bar
+    for Bar<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
 {
     fn foo() {}
 }
 impl Foo<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
-    for Bar
+    for Bar<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
 {
     fn foo() {}
 }
 impl<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
     Foo<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
-    for Bar
-{
-    fn foo() {}
-}
-impl<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName> Foo
-    for Bar<ExcessivelyLongGenericName,
-            ExcessivelyLongGenericName,
-            AnotherExcessivelyLongGenericName>
-{
-    fn foo() {}
-}
-impl Foo<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
-    for Bar<ExcessivelyLongGenericName,
-            ExcessivelyLongGenericName,
-            AnotherExcessivelyLongGenericName>
-{
-    fn foo() {}
-}
-impl<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
-    Foo<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
-    for Bar<ExcessivelyLongGenericName,
-            ExcessivelyLongGenericName,
-            AnotherExcessivelyLongGenericName>
+    for Bar<ExcessivelyLongGenericName, ExcessivelyLongGenericName, AnotherExcessivelyLongGenericName>
 {
     fn foo() {}
 }

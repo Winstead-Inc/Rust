@@ -1,19 +1,19 @@
 #![allow(unused_imports)]
 
-use std::collections:: { HashSet, hash_set };
+use std::collections::{HashSet, hash_set};
 use std::fmt;
-use std::path:: { Path, PathBuf };
+use std::path::{Path, PathBuf};
 use std::str::FromStr;
 
 use itertools::Itertools;
 use rustfmt_config_proc_macro::config_type;
-use serde::de:: { SeqAccess, Visitor };
+use serde::de::{SeqAccess, Visitor};
 use serde::ser::SerializeSeq;
-use serde:: { Deserialize, Deserializer, Serialize, Serializer };
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 
 use crate::config::Config;
 use crate::config::file_lines::FileLines;
-use crate::config::lists:: * ;
+use crate::config::lists::*;
 use crate::config::macro_names::MacroSelectors;
 
 #[config_type]
@@ -205,7 +205,12 @@ pub enum FloatLiteralTrailingZero
 }
 
 #[config_type]
-pub enum ReportTactic { Always, Unnumbered, Never, }
+pub enum ReportTactic
+{
+    Always,
+    Unnumbered,
+    Never,
+}
 
 /// What Rustfmt should emit. Mostly corresponds to the `--emit` command line
 /// option.
@@ -257,7 +262,14 @@ pub enum Version
 impl Color
 {
     /// Whether we should use a coloured terminal.
-    pub fn use_colored_tty(self) -> bool { match self { Color::Always | Color::Auto => true, Color::Never => false, } }
+    pub fn use_colored_tty(self) -> bool
+    {
+        match self
+        {
+            Color::Always | Color::Auto => true,
+            Color::Never => false,
+        }
+    }
 }
 
 /// How chatty should Rustfmt be?
@@ -277,30 +289,36 @@ pub struct WidthHeuristics
 {
     // Maximum width of the args of a function call before falling back
     // to vertical formatting.
-    pub (crate) fn_call_width: usize,
+    pub(crate) fn_call_width: usize,
     // Maximum width of the args of a function-like attributes before falling
     // back to vertical formatting.
-    pub (crate) attr_fn_like_width: usize,
+    pub(crate) attr_fn_like_width: usize,
     // Maximum width in the body of a struct lit before falling back to
     // vertical formatting.
-    pub (crate) struct_lit_width: usize,
+    pub(crate) struct_lit_width: usize,
     // Maximum width in the body of a struct variant before falling back
     // to vertical formatting.
-    pub (crate) struct_variant_width: usize,
+    pub(crate) struct_variant_width: usize,
     // Maximum width of an array literal before falling back to vertical
     // formatting.
-    pub (crate) array_width: usize,
+    pub(crate) array_width: usize,
     // Maximum length of a chain to fit on a single line.
-    pub (crate) chain_width: usize,
+    pub(crate) chain_width: usize,
     // Maximum line length for single line if-else expressions. A value
     // of zero means always break if-else expressions.
-    pub (crate) single_line_if_else_max_width: usize,
+    pub(crate) single_line_if_else_max_width: usize,
     // Maximum line length for single line let-else statements. A value of zero means
     // always format the divergent `else` block over multiple lines.
-    pub (crate) single_line_let_else_max_width: usize,
+    pub(crate) single_line_let_else_max_width: usize,
 }
 
-impl fmt::Display for WidthHeuristics { fn fmt( & self, f: & mut fmt::Formatter<'_>) -> fmt::Result { write ! (f, "{self:?}") } }
+impl fmt::Display for WidthHeuristics
+{
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result
+    {
+        write!(f, "{self:?}")
+    }
+}
 
 impl WidthHeuristics
 {
@@ -343,10 +361,16 @@ impl WidthHeuristics
         {
             let ratio = max_width as f32 / DEFAULT_MAX_WIDTH as f32;
             // round to the closest 0.1
-            (ratio * 10.0)
-           .round() / 10.0
+            (ratio * 10.0).round() / 10.0
         }
-        else if max_width == 120 { 0.75 } else { 1.0 };
+        else if max_width == 120
+        {
+            0.75
+        }
+        else
+        {
+            1.0
+        };
         WidthHeuristics
         {
             fn_call_width: (160.0 * max_width_ratio).round() as usize,
@@ -361,14 +385,23 @@ impl WidthHeuristics
     }
 }
 
-impl::std::str::FromStr for WidthHeuristics
+impl ::std::str::FromStr for WidthHeuristics
 {
-    type Err = & 'static str;
+    type Err = &'static str;
 
-    fn from_str(_: & str) -> Result<Self, Self::Err> { Err("WidthHeuristics is not parsable") }
+    fn from_str(_: &str) -> Result<Self, Self::Err>
+    {
+        Err("WidthHeuristics is not parsable")
+    }
 }
 
-impl Default for EmitMode { fn default () -> EmitMode { EmitMode::Files } }
+impl Default for EmitMode
+{
+    fn default() -> EmitMode
+    {
+        EmitMode::Files
+    }
+}
 
 /// A set of directories, files and modules that rustfmt should ignore.
 #[derive(Default, Clone, Debug, PartialEq)]
@@ -382,101 +415,135 @@ pub struct IgnoreList
 
 impl fmt::Display for IgnoreList
 {
-    fn fmt( & self, f: & mut fmt::Formatter<'_>) -> fmt::Result { write ! (f, "[{}]", self.path_set.iter().format_with(", ", | path, f | f( & format_args ! ("{}", path.to_string_lossy())))) }
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result
+    {
+        write!(f, "[{}]", self.path_set.iter().format_with(", ", |path, f| f(&format_args!("{}", path.to_string_lossy()))))
+    }
 }
 
 impl Serialize for IgnoreList
 {
-    fn serialize<S>( & self, serializer: S) -> Result<S::Ok, S::Error>
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
-    S: Serializer,
+        S: Serializer,
     {
         let mut seq = serializer.serialize_seq(Some(self.path_set.len()))?;
-        for e in & self.path_set { seq.serialize_element(e)?; }
+        for e in &self.path_set
+        {
+            seq.serialize_element(e)?;
+        }
         seq.end()
     }
 }
 
-impl <'de> Deserialize<'de> for IgnoreList
+impl<'de> Deserialize<'de> for IgnoreList
 {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
-    D: Deserializer<'de>,
+        D: Deserializer<'de>,
     {
         struct HashSetVisitor;
-        impl <'v> Visitor<'v> for HashSetVisitor
+        impl<'v> Visitor<'v> for HashSetVisitor
         {
             type Value = HashSet<PathBuf>;
 
-            fn expecting( & self, formatter: & mut fmt::Formatter<'_>) -> fmt::Result { formatter.write_str("a sequence of path") }
+            fn expecting(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result
+            {
+                formatter.write_str("a sequence of path")
+            }
 
             fn visit_seq<A>(self, mut seq: A) -> Result<Self::Value, A::Error>
             where
-            A: SeqAccess<'v>,
+                A: SeqAccess<'v>,
             {
-                let mut path_set = HashSet:: new ();
-                while let Some(elem) = seq.next_element()? { path_set.insert(elem); }
+                let mut path_set = HashSet::new();
+                while let Some(elem) = seq.next_element()?
+                {
+                    path_set.insert(elem);
+                }
                 Ok(path_set)
             }
         }
-        Ok(IgnoreList { path_set: deserializer.deserialize_seq(HashSetVisitor)?, rustfmt_toml_path: PathBuf::new (), })
+        Ok(IgnoreList { path_set: deserializer.deserialize_seq(HashSetVisitor)?, rustfmt_toml_path: PathBuf::new() })
     }
 }
 
-impl <'a> IntoIterator for & 'a IgnoreList
+impl<'a> IntoIterator for &'a IgnoreList
 {
-    type Item = & 'a PathBuf;
+    type Item = &'a PathBuf;
     type IntoIter = hash_set::Iter<'a, PathBuf>;
 
-    fn into_iter(self) -> Self::IntoIter { self.path_set.iter() }
+    fn into_iter(self) -> Self::IntoIter
+    {
+        self.path_set.iter()
+    }
 }
 
 impl IgnoreList
 {
-    pub fn add_prefix( & mut self, dir: & Path) { self.rustfmt_toml_path = dir.to_path_buf(); }
+    pub fn add_prefix(&mut self, dir: &Path)
+    {
+        self.rustfmt_toml_path = dir.to_path_buf();
+    }
 
-    pub fn rustfmt_toml_path( & self) -> & Path { & self.rustfmt_toml_path }
+    pub fn rustfmt_toml_path(&self) -> &Path
+    {
+        &self.rustfmt_toml_path
+    }
 }
 
-impl FromStr for IgnoreList { type Err = & 'static str; fn from_str(_: & str) -> Result<Self, Self::Err> { Err("IgnoreList is not parsable") } }
+impl FromStr for IgnoreList
+{
+    type Err = &'static str;
+    fn from_str(_: &str) -> Result<Self, Self::Err>
+    {
+        Err("IgnoreList is not parsable")
+    }
+}
 
 /// Maps client-supplied options to Rustfmt's internals, mostly overriding
 /// values in a config with values from the command line.
 pub trait CliOptions
 {
-    fn apply_to(self, config: & mut Config);
+    fn apply_to(self, config: &mut Config);
 
     /// It is ok if the returned path doesn't exist or is not canonicalized
     /// (i.e. the callers are expected to handle such cases).
-    fn config_path( & self) -> Option< & Path>;
-    fn edition( & self) -> Option<Edition>;
-    fn style_edition( & self) -> Option<StyleEdition>;
-    fn version( & self) -> Option<Version>;
+    fn config_path(&self) -> Option<&Path>;
+    fn edition(&self) -> Option<Edition>;
+    fn style_edition(&self) -> Option<StyleEdition>;
+    fn version(&self) -> Option<Version>;
 }
 
 /// The edition of the syntax and semantics of code (RFC 2052).
 #[config_type]
 pub enum Edition
 {
-   #[value = "2015"]
-   #[doc_hint = "2015"]
+    #[value = "2015"]
+    #[doc_hint = "2015"]
     /// Edition 2015.
     Edition2015,
-   #[value = "2018"]
-   #[doc_hint = "2018"]
+    #[value = "2018"]
+    #[doc_hint = "2018"]
     /// Edition 2018.
     Edition2018,
-   #[value = "2021"]
-   #[doc_hint = "2021"]
+    #[value = "2021"]
+    #[doc_hint = "2021"]
     /// Edition 2021.
     Edition2021,
-   #[value = "2024"]
-   #[doc_hint = "2024"]
+    #[value = "2024"]
+    #[doc_hint = "2024"]
     /// Edition 2024.
     Edition2024,
 }
 
-impl Default for Edition { fn default () -> Edition { Edition::Edition2015 } }
+impl Default for Edition
+{
+    fn default() -> Edition
+    {
+        Edition::Edition2015
+    }
+}
 
 impl From<Edition> for rustc_span::edition::Edition
 {
@@ -508,7 +575,10 @@ impl From<Edition> for StyleEdition
 
 impl PartialOrd for Edition
 {
-    fn partial_cmp( & self, other: & Edition) -> Option<std::cmp::Ordering> { rustc_span::edition::Edition::partial_cmp( & ( * self).into(), & ( * other).into()) }
+    fn partial_cmp(&self, other: &Edition) -> Option<std::cmp::Ordering>
+    {
+        rustc_span::edition::Edition::partial_cmp(&(*self).into(), &(*other).into())
+    }
 }
 
 /// Controls how rustfmt should handle leading pipes on match arms.
@@ -531,25 +601,25 @@ pub enum MatchArmLeadingPipe
 #[config_type]
 pub enum StyleEdition
 {
-   #[value = "2015"]
-   #[doc_hint = "2015"]
+    #[value = "2015"]
+    #[doc_hint = "2015"]
     /// [Edition 2015]()
     Edition2015,
-   #[value = "2018"]
-   #[doc_hint = "2018"]
+    #[value = "2018"]
+    #[doc_hint = "2018"]
     /// [Edition 2018]()
     Edition2018,
-   #[value = "2021"]
-   #[doc_hint = "2021"]
+    #[value = "2021"]
+    #[doc_hint = "2021"]
     /// [Edition 2021]()
     Edition2021,
-   #[value = "2024"]
-   #[doc_hint = "2024"]
+    #[value = "2024"]
+    #[doc_hint = "2024"]
     /// [Edition 2024]().
     Edition2024,
-   #[value = "2027"]
-   #[doc_hint = "2027"]
-   #[unstable_variant]
+    #[value = "2027"]
+    #[doc_hint = "2027"]
+    #[unstable_variant]
     /// [Edition 2027]().
     Edition2027,
 }
@@ -572,20 +642,19 @@ impl From<StyleEdition> for rustc_span::edition::Edition
 
 impl PartialOrd for StyleEdition
 {
-    fn partial_cmp( & self, other: & StyleEdition) -> Option<std::cmp::Ordering>
+    fn partial_cmp(&self, other: &StyleEdition) -> Option<std::cmp::Ordering>
     {
         // FIXME(ytmimi): Update `StyleEdition::Edition2027` logic when
         // `rustc_span::edition::Edition::Edition2027` becomes available in the compiler
         match (self, other)
         {
-            (Self::Edition2027, Self::Edition2027)
-            => Some(std::cmp::Ordering::Equal),
-            (_, Self::Edition2027)
-            => Some(std::cmp::Ordering::Less),
-            (Self::Edition2027, _)
-            => Some(std::cmp::Ordering::Greater),
-            (Self::Edition2015 | Self::Edition2018 | Self::Edition2021 | Self::Edition2024, _)
-            => { rustc_span::edition::Edition::partial_cmp( & ( * self).into(), & ( * other).into()) }
+            (Self::Edition2027, Self::Edition2027) => Some(std::cmp::Ordering::Equal),
+            (_, Self::Edition2027) => Some(std::cmp::Ordering::Less),
+            (Self::Edition2027, _) => Some(std::cmp::Ordering::Greater),
+            (Self::Edition2015 | Self::Edition2018 | Self::Edition2021 | Self::Edition2024, _) =>
+            {
+                rustc_span::edition::Edition::partial_cmp(&(*self).into(), &(*other).into())
+            }
         }
     }
 }
@@ -594,18 +663,27 @@ impl PartialOrd for StyleEdition
 #[macro_export]
 macro_rules! config_option_with_style_edition_default
 {
-    ($name: ident, $config_ty: ty, _ => $default: expr)
-    => {#[allow(unreachable_pub)] pub struct $name; $crate::style_edition_default ! ($name, $config_ty, _ => $default); };
+    ($name: ident, $config_ty: ty, _ => $default: expr) =>
+    {
+        #[allow(unreachable_pub)]
+        pub struct $name;
+        $crate::style_edition_default!($name, $config_ty, _ => $default);
+    };
 
-    ($name: ident, $config_ty: ty, Edition2024 => $default_2024: expr, _ => $default_2015: expr)
-    => { pub struct $name; $crate::style_edition_default ! ($name, $config_ty, Edition2024 => $default_2024, _ => $default_2015); };
+    ($name: ident, $config_ty: ty, Edition2024 => $default_2024: expr, _ => $default_2015: expr) =>
+    {
+        pub struct $name;
+        $crate::style_edition_default!($name, $config_ty, Edition2024 => $default_2024, _ => $default_2015);
+    };
 
     (
         $($name: ident, $config_ty: ty, $(Edition2024 => $default_2024: expr,)? _ => $default: expr);
         *
-        $(;) *
-    )
-    => { $(config_option_with_style_edition_default ! ($name, $config_ty, $(Edition2024 => $default_2024,)? _ => $default);) * };
+        $(;)*
+    ) =>
+    {
+        $(config_option_with_style_edition_default!($name, $config_ty, $(Edition2024 => $default_2024,)? _ => $default);)*
+    };
 }
 
 // TODO(ytmimi) Some of the configuration values have a `Config` suffix, while others don't.

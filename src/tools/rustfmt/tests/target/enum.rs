@@ -2,7 +2,8 @@
 // Enums test
 
 #[atrr]
-pub enum Test {
+pub enum Test
+{
     A,
     B(u32, A /* comment */, SomeType),
     /// Doc comment
@@ -21,15 +22,18 @@ enum EmptyWithComment {
 }
 
 // C-style enum
-enum Bar {
+enum Bar
+{
     A = 1,
     #[someAttr(test)]
     B = 2, // comment
     C,
 }
 
-enum LongVariants {
-    First(
+enum LongVariants
+{
+    First
+    (
         LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONG, // comment
         VARIANT,
     ),
@@ -37,54 +41,60 @@ enum LongVariants {
     Second,
 }
 
-enum StructLikeVariants {
+enum StructLikeVariants
+{
     Normal(u32, String),
-    StructLike {
+    StructLike
+    {
         x: i32, // Test comment
         // Pre-comment
         #[Attr50]
         y: SomeType, // Another Comment
     },
-    SL {
+
+    SL
+    {
         a: A,
     },
 }
 
-enum X {
-    CreateWebGLPaintTask(
-        Size2D<i32>,
-        GLContextAttributes,
-        IpcSender<Result<(IpcSender<CanvasMsg>, usize), String>>,
-    ), // This is a post comment
+enum X
+{
+    CreateWebGLPaintTask(Size2D<i32>, GLContextAttributes, IpcSender<Result<(IpcSender<CanvasMsg>, usize), String>>), // This is a post comment
 }
 
-pub enum EnumWithAttributes {
-    //This is a pre comment
-    // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-    TupleVar(usize, usize, usize), /* AAAA AAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAA
-                                    * AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA */
+pub enum EnumWithAttributes
+{
+    //This is a pre comment AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    TupleVar(usize, usize, usize), // AAAA AAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
     // Pre Comment
     #[rustfmt::skip]
-    SkippedItem(String,String,), // Post-comment
+    SkippedItem(String, String,), // Post-comment
     #[another_attr]
     #[attr2]
-    ItemStruct {
+    ItemStruct
+    {
         x: usize,
         y: usize,
-    }, /* Comment AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA */
+    },
+
+    // Comment AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
     // And another
-    ForcedPreflight, /* AAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-                      * AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA */
+    ForcedPreflight, // AAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 }
 
-pub enum SingleTuple {
-    // Pre Comment AAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-    // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-    Match(usize, usize, String), /* Post-comment AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA */
+pub enum SingleTuple
+{
+    // Pre Comment AAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+    Match(usize, usize, String), // Post-comment AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 }
 
-pub enum SingleStruct {
-    Match { name: String, loc: usize }, // Post-comment
+pub enum SingleStruct
+{
+    Match
+    {
+        name: String, loc: usize
+    }, // Post-comment
 }
 
 pub enum GenericEnum<I, T>
@@ -92,44 +102,37 @@ where
     I: Iterator<Item = T>,
 {
     // Pre Comment
-    Left { list: I, root: T },  // Post-comment
-    Right { list: I, root: T }, // Post Comment
+    Left
+    {
+        list: I, root: T
+    },
+    // Post-comment
+    Right
+    {
+        list: I, root: T
+    }, // Post Comment
 }
 
 enum EmptyWithComment {
     // Some comment
 }
 
-enum TestFormatFails {
+enum TestFormatFails
+{
     AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,
 }
 
-fn nested_enum_test() {
-    if true {
-        enum TestEnum {
-            One(
-                usize,
-                usize,
-                usize,
-                usize,
-                usize,
-                usize,
-                usize,
-                usize,
-                usize,
-                usize,
-                usize,
-                usize,
-                usize,
-                usize,
-                usize,
-                usize,
-            ), /* AAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAA
-                * AAAAAAAAAAAAAAAAAAAAAA */
-            Two, /* AAAAAAAAAAAAAAAAAA  AAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-                  * AAAAAAAAAAAAAAAAAA */
+fn nested_enum_test()
+{
+    if true
+    {
+        enum TestEnum
+        {
+            One(usize, usize, usize, usize, usize, usize, usize, usize, usize, usize, usize, usize, usize, usize, usize, usize), /* AAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAA */
+            Two, // AAAAAAAAAAAAAAAAAA  AAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA AAAAAAAAAAAAAAAAAA
         }
-        enum TestNestedFormatFail {
+        enum TestNestedFormatFail
+        {
             AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,
         }
     }
@@ -140,7 +143,8 @@ pub struct EmptyWithComment {
 }
 
 // #1115
-pub enum Bencoding<'i> {
+pub enum Bencoding<'i>
+{
     Str(&'i [u8]),
     Int(i64),
     List(Vec<Bencoding<'i>>),
@@ -152,66 +156,67 @@ pub enum Bencoding<'i> {
 }
 
 // #1261
-pub enum CoreResourceMsg {
-    SetCookieForUrl(
-        ServoUrl,
-        #[serde(
-            deserialize_with = "::hyper_serde::deserialize",
-            serialize_with = "::hyper_serde::serialize"
-        )]
-        Cookie,
-        CookieSource,
-    ),
+pub enum CoreResourceMsg
+{
+    SetCookieForUrl(ServoUrl, #[serde(deserialize_with = "::hyper_serde::deserialize", serialize_with = "::hyper_serde::serialize")] Cookie, CookieSource),
 }
 
-enum Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong
-{}
-enum Looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong
-{}
-enum Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong
-{}
+enum Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong {}
+
+enum Looooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong {}
+
+enum Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong {}
+
 enum Loooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooong
 {
     Foo,
 }
 
 // #1046
-pub enum Entry<'a, K: 'a, V: 'a> {
+pub enum Entry<'a, K: 'a, V: 'a>
+{
     Vacant(#[stable(feature = "rust1", since = "1.0.0")] VacantEntry<'a, K, V>),
     Occupied(#[stable(feature = "rust1", since = "1.0.0")] OccupiedEntry<'a, K, V>),
 }
 
 // #2081
-pub enum ForegroundColor {
-    CYAN =
-        (winapi::FOREGROUND_INTENSITY | winapi::FOREGROUND_GREEN | winapi::FOREGROUND_BLUE) as u16,
+pub enum ForegroundColor
+{
+    CYAN = (winapi::FOREGROUND_INTENSITY | winapi::FOREGROUND_GREEN | winapi::FOREGROUND_BLUE) as u16,
 }
 
 // #2098
-pub enum E<'a> {
+pub enum E<'a>
+{
     V(<std::slice::Iter<'a, Xxxxxxxxxxxxxx> as Iterator>::Item),
 }
 
 // #1809
-enum State {
-    TryRecv {
+enum State
+{
+    TryRecv
+    {
         pos: usize,
         lap: u8,
         closed_count: usize,
     },
-    Subscribe {
+    Subscribe
+    {
         pos: usize,
     },
-    IsReady {
+    IsReady
+    {
         pos: usize,
         ready: bool,
     },
-    Unsubscribe {
+    Unsubscribe
+    {
         pos: usize,
         lap: u8,
         id_woken: usize,
     },
-    FinalTryRecv {
+    FinalTryRecv
+    {
         pos: usize,
         id_woken: usize,
     },
@@ -221,27 +226,29 @@ enum State {
 
 // #2190
 #[derive(Debug, Fail)]
-enum AnError {
-    #[fail(
-        display = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
-    )]
-    UnexpectedSingleToken { token: syn::Token },
+enum AnError
+{
+    #[fail(display = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")]
+    UnexpectedSingleToken
+    {
+        token: syn::Token
+    },
 }
 
 // #2193
-enum WidthOf101 {
+enum WidthOf101
+{
     #[fail(display = ".....................................................")]
     Io(::std::io::Error),
     #[fail(display = ".....................................................")]
     Ioo(::std::io::Error),
     Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx(::std::io::Error),
-    Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx(
-        ::std::io::Error,
-    ),
+    Xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx(::std::io::Error),
 }
 
 // #2389
-pub enum QlError {
+pub enum QlError
+{
     #[fail(display = "Parsing error: {}", 0)]
     LexError(parser::lexer::LexError),
     #[fail(display = "Parsing error: {:?}", 0)]
@@ -254,36 +261,34 @@ pub enum QlError {
     #[fail(display = "Translation error: from {} to {}", 0, 1)]
     TranslationError(String, String),
     // (kind, input, expected)
-    #[fail(
-        display = "aaaaaaaaaaaaCould not find {}: Found: {}, expected: {:?}",
-        0, 1, 2
-    )]
+    #[fail(display = "aaaaaaaaaaaaCould not find {}: Found: {}, expected: {:?}", 0, 1, 2)]
     ResolveError(&'static str, String, Option<String>),
 }
 
 // #2594
 enum Foo {}
+
 enum Bar {}
 
 // #3562
-enum PublishedFileVisibility {
-    Public =
-        sys::ERemoteStoragePublishedFileVisibility_k_ERemoteStoragePublishedFileVisibilityPublic,
+enum PublishedFileVisibility
+{
+    Public = sys::ERemoteStoragePublishedFileVisibility_k_ERemoteStoragePublishedFileVisibilityPublic,
     FriendsOnly = sys::ERemoteStoragePublishedFileVisibility_k_ERemoteStoragePublishedFileVisibilityFriendsOnly,
-    Private =
-        sys::ERemoteStoragePublishedFileVisibility_k_ERemoteStoragePublishedFileVisibilityPrivate,
+    Private = sys::ERemoteStoragePublishedFileVisibility_k_ERemoteStoragePublishedFileVisibilityPrivate,
 }
 
 // #3771
 //#![feature(arbitrary_enum_discriminant)]
 #[repr(u32)]
-pub enum E {
-    A {
-        a: u32,
+pub enum E
+{
+    A
+    {
+        a: u32
     } = 0x100,
-    B {
-        field1: u32,
-        field2: u8,
-        field3: m::M,
+    B
+    {
+        field1: u32, field2: u8, field3: m::M
     } = 0x300, // comment
 }

@@ -1,5 +1,6 @@
 // rustfmt-remove_nested_parens: true
 
-fn main() {
+fn main()
+{
     (foo());
 }

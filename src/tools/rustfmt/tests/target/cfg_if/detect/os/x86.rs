@@ -11,7 +11,8 @@ use crate::detect::{bit, cache, Feature};
 
 /// Performs run-time feature detection.
 #[inline]
-pub fn check_for(x: Feature) -> bool {
+pub fn check_for(x: Feature) -> bool
+{
     cache::test(x as u32, detect_features)
 }
 
@@ -31,7 +32,8 @@ pub fn check_for(x: Feature) -> bool {
 /// [intel64_ref]: http://www.intel.de/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-software-developer-instruction-set-reference-manual-325383.pdf
 /// [amd64_ref]: http://support.amd.com/TechDocs/24594.pdf
 #[allow(clippy::similar_names)]
-fn detect_features() -> cache::Initializer {
+fn detect_features() -> cache::Initializer
+{
     let mut value = cache::Initializer::default();
 
     // 0. EAX = 0: Basic Information:
@@ -40,64 +42,58 @@ fn detect_features() -> cache::Initializer {
     // 0x8000_0000]. - The vendor ID is stored in 12 u8 ascii chars,
     // returned in EBX, EDX, and   ECX (in that order):
     let (max_basic_leaf, vendor_id) = unsafe {
-        let CpuidResult {
-            eax: max_basic_leaf,
-            ebx,
-            ecx,
-            edx,
-        } = __cpuid(0);
-        let vendor_id: [[u8; 4]; 3] = [
-            mem::transmute(ebx),
-            mem::transmute(edx),
-            mem::transmute(ecx),
-        ];
+        let CpuidResult { eax: max_basic_leaf, ebx, ecx, edx } = __cpuid(0);
+        let vendor_id: [[u8; 4]; 3] = [mem::transmute(ebx), mem::transmute(edx), mem::transmute(ecx)];
         let vendor_id: [u8; 12] = mem::transmute(vendor_id);
         (max_basic_leaf, vendor_id)
     };
 
-    if max_basic_leaf < 1 {
+    if max_basic_leaf < 1
+    {
         // Earlier Intel 486, CPUID not implemented
         return value;
     }
 
     // EAX = 1, ECX = 0: Queries "Processor Info and Feature Bits";
     // Contains information about most x86 features.
-    let CpuidResult {
-        ecx: proc_info_ecx,
-        edx: proc_info_edx,
-        ..
-    } = __cpuid(0x0000_0001_u32);
+    let CpuidResult { ecx: proc_info_ecx, edx: proc_info_edx, .. } = __cpuid(0x0000_0001_u32);
 
     // EAX = 7, ECX = 0: Queries "Extended Features";
     // Contains information about bmi,bmi2, and avx2 support.
-    let (extended_features_ebx, extended_features_ecx) = if max_basic_leaf >= 7 {
+    let (extended_features_ebx, extended_features_ecx) = if max_basic_leaf >= 7
+    {
         let CpuidResult { ebx, ecx, .. } = __cpuid(0x0000_0007_u32);
         (ebx, ecx)
-    } else {
-        (0, 0) // CPUID does not support "Extended Features"
+    }
+    else
+    {
+        (0, 0)
+        // CPUID does not support "Extended Features"
     };
 
     // EAX = 0x8000_0000, ECX = 0: Get Highest Extended Function Supported
     // - EAX returns the max leaf value for extended information, that is,
     // `cpuid` calls in range [0x8000_0000; u32::MAX]:
-    let CpuidResult {
-        eax: extended_max_basic_leaf,
-        ..
-    } = __cpuid(0x8000_0000_u32);
+    let CpuidResult { eax: extended_max_basic_leaf, .. } = __cpuid(0x8000_0000_u32);
 
     // EAX = 0x8000_0001, ECX=0: Queries "Extended Processor Info and Feature
     // Bits"
-    let extended_proc_info_ecx = if extended_max_basic_leaf >= 1 {
+    let extended_proc_info_ecx = if extended_max_basic_leaf >= 1
+    {
         let CpuidResult { ecx, .. } = __cpuid(0x8000_0001_u32);
         ecx
-    } else {
+    }
+    else
+    {
         0
     };
 
     {
         // borrows value till the end of this scope:
-        let mut enable = |r, rb, f| {
-            if bit::test(r as usize, rb) {
+        let mut enable = |r, rb, f|
+        {
+            if bit::test(r as usize, rb)
+            {
                 value.set(f as u32);
             }
         };
@@ -127,7 +123,8 @@ fn detect_features() -> cache::Initializer {
 
         // `XSAVE` and `AVX` support:
         let cpu_xsave = bit::test(proc_info_ecx as usize, 26);
-        if cpu_xsave {
+        if cpu_xsave
+        {
             // 0. Here the CPU supports `XSAVE`.
 
             // 1. Detect `OSXSAVE`, that is, whether the OS is AVX enabled and
@@ -141,7 +138,8 @@ fn detect_features() -> cache::Initializer {
             // [mozilla_sse_cpp]: https://hg.mozilla.org/mozilla-central/file/64bab5cbb9b6/mozglue/build/SSE.cpp#l190
             let cpu_osxsave = bit::test(proc_info_ecx as usize, 27);
 
-            if cpu_osxsave {
+            if cpu_osxsave
+            {
                 // 2. The OS must have signaled the CPU that it supports saving and
                 // restoring the:
                 //
@@ -161,7 +159,8 @@ fn detect_features() -> cache::Initializer {
 
                 // Only if the OS and the CPU support saving/restoring the AVX
                 // registers we enable `xsave` support:
-                if os_avx_support {
+                if os_avx_support
+                {
                     // See "13.3 ENABLING THE XSAVE FEATURE SET AND XSAVE-ENABLED
                     // FEATURES" in the "Intel® 64 and IA-32 Architectures Software
                     // Developer’s Manual, Volume 1: Basic Architecture":
@@ -177,11 +176,9 @@ fn detect_features() -> cache::Initializer {
                     // For `xsaveopt`, `xsavec`, and `xsaves` we need to query:
                     // Processor Extended State Enumeration Sub-leaf (EAX = 0DH,
                     // ECX = 1):
-                    if max_basic_leaf >= 0xd {
-                        let CpuidResult {
-                            eax: proc_extended_state1_eax,
-                            ..
-                        } = __cpuid_count(0xd_u32, 1);
+                    if max_basic_leaf >= 0xd
+                    {
+                        let CpuidResult { eax: proc_extended_state1_eax, .. } = __cpuid_count(0xd_u32, 1);
                         enable(proc_extended_state1_eax, 0, Feature::xsaveopt);
                         enable(proc_extended_state1_eax, 1, Feature::xsavec);
                         enable(proc_extended_state1_eax, 3, Feature::xsaves);
@@ -196,7 +193,8 @@ fn detect_features() -> cache::Initializer {
 
                     // For AVX-512 the OS also needs to support saving/restoring
                     // the extended state, only then we enable AVX-512 support:
-                    if os_avx512_support {
+                    if os_avx512_support
+                    {
                         enable(extended_features_ebx, 16, Feature::avx512f);
                         enable(extended_features_ebx, 17, Feature::avx512dq);
                         enable(extended_features_ebx, 21, Feature::avx512_ifma);
@@ -230,7 +228,8 @@ fn detect_features() -> cache::Initializer {
         // Related AMD CPUID specification is https://www.amd.com/system/files/TechDocs/25481.pdf.
         // Related Hygon kernel patch can be found on
         // http://lkml.kernel.org/r/5ce86123a7b9dad925ac583d88d2f921040e859b.1538583282.git.puwen@hygon.cn
-        if vendor_id == *b"AuthenticAMD" || vendor_id == *b"HygonGenuine" {
+        if vendor_id == *b"AuthenticAMD" || vendor_id == *b"HygonGenuine"
+        {
             // These features are available on AMD arch CPUs:
             enable(extended_proc_info_ecx, 6, Feature::sse4a);
             enable(extended_proc_info_ecx, 21, Feature::tbm);
@@ -241,11 +240,13 @@ fn detect_features() -> cache::Initializer {
 }
 
 #[cfg(test)]
-mod tests {
+mod tests
+{
     extern crate cupid;
 
     #[test]
-    fn dump() {
+    fn dump()
+    {
         println!("aes: {:?}", is_x86_feature_detected!("aes"));
         println!("pclmulqdq: {:?}", is_x86_feature_detected!("pclmulqdq"));
         println!("rdrand: {:?}", is_x86_feature_detected!("rdrand"));
@@ -270,10 +271,7 @@ mod tests {
         println!("avx512vl {:?}", is_x86_feature_detected!("avx512vl"));
         println!("avx512_ifma {:?}", is_x86_feature_detected!("avx512ifma"));
         println!("avx512_vbmi {:?}", is_x86_feature_detected!("avx512vbmi"));
-        println!(
-            "avx512_vpopcntdq {:?}",
-            is_x86_feature_detected!("avx512vpopcntdq")
-        );
+        println!("avx512_vpopcntdq {:?}", is_x86_feature_detected!("avx512vpopcntdq"));
         println!("fma: {:?}", is_x86_feature_detected!("fma"));
         println!("abm: {:?}", is_x86_feature_detected!("abm"));
         println!("bmi: {:?}", is_x86_feature_detected!("bmi1"));
@@ -292,13 +290,11 @@ mod tests {
     }
 
     #[test]
-    fn compare_with_cupid() {
+    fn compare_with_cupid()
+    {
         let information = cupid::master().unwrap();
         assert_eq!(is_x86_feature_detected!("aes"), information.aesni());
-        assert_eq!(
-            is_x86_feature_detected!("pclmulqdq"),
-            information.pclmulqdq()
-        );
+        assert_eq!(is_x86_feature_detected!("pclmulqdq"), information.pclmulqdq());
         assert_eq!(is_x86_feature_detected!("rdrand"), information.rdrand());
         assert_eq!(is_x86_feature_detected!("rdseed"), information.rdseed());
         assert_eq!(is_x86_feature_detected!("tsc"), information.tsc());
@@ -319,18 +315,9 @@ mod tests {
         assert_eq!(is_x86_feature_detected!("avx512bw"), information.avx512bw());
         assert_eq!(is_x86_feature_detected!("avx512dq"), information.avx512dq());
         assert_eq!(is_x86_feature_detected!("avx512vl"), information.avx512vl());
-        assert_eq!(
-            is_x86_feature_detected!("avx512ifma"),
-            information.avx512_ifma()
-        );
-        assert_eq!(
-            is_x86_feature_detected!("avx512vbmi"),
-            information.avx512_vbmi()
-        );
-        assert_eq!(
-            is_x86_feature_detected!("avx512vpopcntdq"),
-            information.avx512_vpopcntdq()
-        );
+        assert_eq!(is_x86_feature_detected!("avx512ifma"), information.avx512_ifma());
+        assert_eq!(is_x86_feature_detected!("avx512vbmi"), information.avx512_vbmi());
+        assert_eq!(is_x86_feature_detected!("avx512vpopcntdq"), information.avx512_vpopcntdq());
         assert_eq!(is_x86_feature_detected!("fma"), information.fma());
         assert_eq!(is_x86_feature_detected!("bmi1"), information.bmi1());
         assert_eq!(is_x86_feature_detected!("bmi2"), information.bmi2());
@@ -340,18 +327,9 @@ mod tests {
         assert_eq!(is_x86_feature_detected!("lzcnt"), information.lzcnt());
         assert_eq!(is_x86_feature_detected!("xsave"), information.xsave());
         assert_eq!(is_x86_feature_detected!("xsaveopt"), information.xsaveopt());
-        assert_eq!(
-            is_x86_feature_detected!("xsavec"),
-            information.xsavec_and_xrstor()
-        );
-        assert_eq!(
-            is_x86_feature_detected!("xsaves"),
-            information.xsaves_xrstors_and_ia32_xss()
-        );
-        assert_eq!(
-            is_x86_feature_detected!("cmpxchg16b"),
-            information.cmpxchg16b(),
-        );
+        assert_eq!(is_x86_feature_detected!("xsavec"), information.xsavec_and_xrstor());
+        assert_eq!(is_x86_feature_detected!("xsaves"), information.xsaves_xrstors_and_ia32_xss());
+        assert_eq!(is_x86_feature_detected!("cmpxchg16b"), information.cmpxchg16b(),);
         assert_eq!(is_x86_feature_detected!("adx"), information.adx(),);
         assert_eq!(is_x86_feature_detected!("rtm"), information.rtm(),);
     }

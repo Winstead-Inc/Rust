@@ -1,6 +1,8 @@
 // rustfmt-normalize_comments: true
-fn main() {
-    match x {
+fn main()
+{
+    match x
+    {
         S(true, .., true) => (),
         S(true, ..) => (),
         S(.., true) => (),
@@ -10,7 +12,8 @@ fn main() {
         S(/* .. */ .., true) => (),
     }
 
-    match y {
+    match y
+    {
         (true, .., true) => (),
         (true, ..) => (),
         (.., true) => (),

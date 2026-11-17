@@ -1,7 +1,8 @@
 // Test comments on functions are preserved.
 
 // Comment on foo.
-fn foo<F, G>(
+fn foo<F, G>
+(
     a: aaaaaaaaaaaaa, // A comment
     b: bbbbbbbbbbbbb, // a second comment
     c: ccccccccccccc,

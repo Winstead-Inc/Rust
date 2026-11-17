@@ -25,8 +25,18 @@ use bar::{
     e::f,
 };
 
+use b::{d, e, r};
+use b::{
+    f::g,
+    h::{i, j}, /* After b::h group */
+};
+use b::{
+    /* Before b::l group */ l::{self, m, n::o, p::*},
+    q,
+};
+// After b::r
+use b::c;
 use b::q::{self /* After b::q::self */};
-use b::r; // After b::r
 use b::s::{
     a,
     b, // After b::s::b
@@ -43,15 +53,6 @@ use b::v::{
     a,
     // Before b::v::b
     b,
-};
-use b::{c, d, e};
-use b::{
-    f::g,
-    h::{i, j}, /* After b::h group */
-};
-use b::{
-    /* Before b::l group */ l::{self, m, n::o, p::*},
-    q,
 };
 
 use c;

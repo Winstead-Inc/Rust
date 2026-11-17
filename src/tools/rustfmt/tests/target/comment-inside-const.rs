@@ -1,4 +1,5 @@
-fn issue982() {
+fn issue982()
+{
     const SOME_CONSTANT: u32 =
         // Explanation why SOME_CONSTANT needs FLAG_A to be set.
         FLAG_A |

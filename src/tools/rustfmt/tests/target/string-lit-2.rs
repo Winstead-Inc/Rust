@@ -1,11 +1,13 @@
-fn main() -> &'static str {
+fn main() -> &'static str
+{
     let too_many_lines = "Hello";
     let leave_me = "sssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss\
                     s
                     jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj";
 }
 
-fn issue_1237() {
+fn issue_1237()
+{
     let msg = "eedadn\n\
                drvtee\n\
                eandsr\n\

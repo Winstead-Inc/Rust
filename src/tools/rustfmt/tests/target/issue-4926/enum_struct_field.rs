@@ -3,39 +3,37 @@
 // rustfmt-imports_layout: HorizontalVertical
 
 #[derive(Default)]
-struct InnerStructA {
+struct InnerStructA
+{
     bbbbbbbbb: i32,
     cccccccc:  i32,
 }
 
-enum SomeEnumNamedD {
+enum SomeEnumNamedD
+{
     E(InnerStructA),
-    F {
+    F
+    {
         ggggggggggggggggggggggggg: bool,
         h:                         bool,
     },
 }
 
-impl SomeEnumNamedD {
-    fn f_variant() -> Self {
-        Self::F {
-            ggggggggggggggggggggggggg: true,
-            h:                         true,
-        }
+impl SomeEnumNamedD
+{
+    fn f_variant() -> Self
+    {
+        Self::F { ggggggggggggggggggggggggg: true, h: true }
     }
 }
 
-fn main() {
+fn main()
+{
     let kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk = SomeEnumNamedD::f_variant();
-    let something_we_care_about = matches!(
-        kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk,
-        SomeEnumNamedD::F {
-            ggggggggggggggggggggggggg: true,
-            ..
-        }
-    );
+    let something_we_care_about = matches!(kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk, SomeEnumNamedD::F { ggggggggggggggggggggggggg: true, .. });
 
-    if something_we_care_about {
+    if something_we_care_about
+    {
         println!("Yup it happened");
     }
 }

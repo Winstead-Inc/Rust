@@ -1,5 +1,7 @@
-macro_rules! foo {
-    () => {
+macro_rules! foo
+{
+    () =>
+    {
         // comment
         /*
 

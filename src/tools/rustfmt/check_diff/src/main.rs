@@ -1,14 +1,13 @@
 use std::io::Error;
 use std::process::ExitCode;
 
-use check_diff:: { Edition, StyleEdition, check_diff, clone_repositories_for_diff_check, compile_rustfmt, };
+use check_diff::{Edition, StyleEdition, check_diff, clone_repositories_for_diff_check, compile_rustfmt};
 use clap::Parser;
 use tempfile::tempdir;
-use tracing:: { error, info };
+use tracing::{error, info};
 
 /// A curated set of `rust-lang/*` and popular ecosystem repositories to compare `rustfmt`s against.
-const REPOS: & [ & str] = &
-[
+const REPOS: &[&str] = &[
     // `rust-lang/*` repositories.
     "https://github.com/rust-lang/cargo.git",
     "https://github.com/rust-lang/futures-rs.git",
@@ -51,17 +50,17 @@ struct CliInputs
     /// Name of the feature branch on the forked repo
     feature_branch: String,
     /// Rust language `edition` used to parse code. Possible values {2015, 2018, 2021, 2024}
-   #[arg(short , long , default_value = "2015")]
+    #[arg(short, long, default_value = "2015")]
     edition: Edition,
     /// rustfmt `style_edition` used when formatting code. Possible vales {2015, 2018, 2021, 2024}.
-    #[arg(short , long , default_value = "2021")]
+    #[arg(short, long, default_value = "2021")]
     style_edition: StyleEdition,
     /// Optional commit hash from the feature branch
-   #[arg(short , long)]
+    #[arg(short, long)]
     commit_hash: Option<String>,
     /// Optional comma separated list of rustfmt config options to
     /// pass when running the feature branch
-   #[arg(value_delimiter = ',', short , long , num_args = 1..)]
+    #[arg(value_delimiter = ',', short , long , num_args = 1..)]
     rustfmt_config: Option<Vec<String>>,
     /// How many threads should check for formatting diffs.
     // Choosing 16 as the default since that's a common multiple of available CPU cores.
@@ -71,9 +70,7 @@ struct CliInputs
 
 fn main() -> Result<ExitCode, Error>
 {
-    tracing_subscriber::fmt()
-   .with_env_filter(tracing_subscriber::EnvFilter::from_env("CHECK_DIFF_LOG"))
-   . init();
+    tracing_subscriber::fmt().with_env_filter(tracing_subscriber::EnvFilter::from_env("CHECK_DIFF_LOG")).init();
     let args = CliInputs::parse();
     let tmp_dir = tempdir()?;
     info!("Created tmp_dir {:?}", tmp_dir);
@@ -89,20 +86,32 @@ fn main() -> Result<ExitCode, Error>
         args.rustfmt_config.as_deref(),
     );
 
-    let check_diff_runners = match compilation_result { Ok(runner) => runner, Err(e) => { error ! ("Failed to compile rustfmt:\n{e:?}"); return Ok(ExitCode::FAILURE); } };
+    let check_diff_runners = match compilation_result
+    {
+        Ok(runner) => runner,
+        Err(e) =>
+        {
+            error!("Failed to compile rustfmt:\n{e:?}");
+            return Ok(ExitCode::FAILURE);
+        }
+    };
 
     // Clone all repositories we plan to check
     let repositories = clone_repositories_for_diff_check(REPOS);
 
     info!("Starting the Diff Check");
-    let errors = check_diff( & check_diff_runners, & repositories, args.worker_threads);
+    let errors = check_diff(&check_diff_runners, &repositories, args.worker_threads);
 
-    if errors.is_empty() { info ! ("No diff found 😊"); return Ok(ExitCode::SUCCESS); }
+    if errors.is_empty()
+    {
+        info!("No diff found 😊");
+        return Ok(ExitCode::SUCCESS);
+    }
 
     for (diff, file, repo) in errors.iter()
     {
         let repo_name = repo.name();
-        let relative_path = repo.relative_path( & file);
+        let relative_path = repo.relative_path(&file);
 
         error!("Diff found in '{0}' when formatting {0}/{1}\n{2}", repo_name, relative_path.display(), diff,);
     }

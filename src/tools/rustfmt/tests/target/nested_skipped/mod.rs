@@ -1,3 +1,4 @@
-fn ugly() {
+fn ugly()
+{
     92;
 }
