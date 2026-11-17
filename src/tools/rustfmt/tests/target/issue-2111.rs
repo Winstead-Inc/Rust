@@ -1,5 +1,6 @@
 // An import with single line comments.
-use super::{
+use super::
+{
     DelayChoice,
     Destinations,
     Holding,

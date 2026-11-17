@@ -1,6 +1,7 @@
 // rustfmt-group_imports: One
 // rustfmt-imports_granularity: Crate
-use super::{
+use super::
+{
     schema::{Context, Payload},
     update::convert_publish_payload,
 };

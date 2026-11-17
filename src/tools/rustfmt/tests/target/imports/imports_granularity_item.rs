@@ -15,30 +15,35 @@ use a::q::{self};
 use b::d;
 use b::e;
 use b::r;
-use b::{
+use b::
+{
     f::g,
     h::{i, j}, /* After b::h group */
 };
-use b::{
+use b::
+{
     /* Before b::l group */ l::{self, m, n::o, p::*},
     q,
 };
 // After b::r
 use b::c;
 use b::q::{self /* After b::q::self */};
-use b::s::{
+use b::s::
+{
     a,
     b, // After b::s::b
 };
 use b::t::{/* Before b::t::self */ self};
-use b::t::{
+use b::t::
+{
     // Before b::t::a
     a,
     b,
 };
 use b::u::a;
 use b::u::b;
-use b::v::{
+use b::v::
+{
     // Before b::v::a
     a,
     // Before b::v::b

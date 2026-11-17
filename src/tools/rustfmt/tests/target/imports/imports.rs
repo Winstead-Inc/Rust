@@ -7,7 +7,8 @@ use exceedingly::loooooooooooooooooooooooooooooooooooooooooooooooooooooooong::im
 use exceedingly::looooooooooooooooooooooooooooooooooooooooooooooooooooooooooong::import::path::{ItemA, ItemB};
 use rustc_ast::ast::{ItemDefaultImpl, ItemForeignMod, ItemImpl, ItemMac, ItemMod, ItemStatic};
 
-use list::{
+use list::
+{
     // Another item
     AnotherItem, // Another Comment
     // Last Item
@@ -73,9 +74,11 @@ use foo::issue_1356::*;
 use self::unix::{};
 
 // nested imports
-use foo::{
+use foo::
+{
     a, b,
-    bar::{
+    bar::
+    {
         baz,
         foo::{a, b, cxxxxxxxxxxxxx, yyyyyyyyyyyyyy, zzzzzzzzzzzzzzzz},
         qux, xxxxxxxxxxx, yyyyyyyyyyyyy, zzzzzzzzzzzzzzzz,
@@ -83,14 +86,16 @@ use foo::{
     boo, c,
 };
 
-use fooo::{
+use fooo::
+{
     baar::foobar::{xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx, yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy, zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz},
     bar,
     bar::*,
     x, y, z,
 };
 
-use exonum::{
+use exonum::
+{
     api::{Api, ApiError},
     blockchain::{self, BlockProof, Blockchain, Transaction, TransactionSet},
     crypto::{Hash, PublicKey},

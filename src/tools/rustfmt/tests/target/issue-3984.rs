@@ -1,5 +1,6 @@
 use a::{item /* comment */};
-use b::{
+use b::
+{
     a,
     // comment
     item,

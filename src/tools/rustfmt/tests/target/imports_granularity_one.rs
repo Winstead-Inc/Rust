@@ -1,7 +1,9 @@
 // rustfmt-imports_granularity: One
 
-use {
-    a::{
+use 
+{
+    a::
+    {
         aa::*,
         ab,
         ac::{aca, acb},
@@ -9,12 +11,14 @@ use {
     b,
 };
 
-use {
+use 
+{
     a::{self as x, aa, ab},
     b::ba,
 };
 
-use a::{
+use a::
+{
     aa::{aaa, *},
     ab::aba as x,
 };
@@ -26,49 +30,59 @@ use a::{ab, ac::aca};
 use b;
 
 #[cfg(test)]
-use b::{
+use b::
+{
     ba, bb,
     bc::bca::{bcaa, bcab},
 };
 
-pub use {
+pub use 
+{
     a::{aa, ae},
     b::{bb, bc::bca},
 };
-use {
+use 
+{
     a::{ab, ac, ad},
     b::ba,
 };
 
-use {
-    a::{
+use 
+{
+    a::
+    {
         aa::{aaa, *},
         ab,
         ac::{aca, acb},
     },
-    b::{
+    b::
+    {
         ba,
         bb::{self, bba},
     },
 };
 
-use {
+use 
+{
     crate::{a, b::ba},
     c::ca,
 };
 
-use {
+use 
+{
     super::{a, b::ba},
     c::ca,
 };
 
-use {
+use 
+{
     super::b,
     crate::a,
     c::{self, ca},
 };
 
-use a::{
+use a::
+{
     // some comment
     aa::{aaa, aab},
     ab,
@@ -78,33 +92,39 @@ use a::{
 use {a::ad::ada, b as x};
 
 use b::{d, e, r};
-use b::{
+use b::
+{
     f::g,
     h::{i, j}, /* After b::h group */
 };
-use b::{
+use b::
+{
     /* Before b::l group */ l::{self, m, n::o, p::*},
     q,
 };
 // After b::r
 use b::q::{self /* After b::q::self */};
-use b::s::{
+use b::s::
+{
     a,
     b, // After b::s::b
 };
 use b::t::{/* Before b::t::self */ self};
-use b::t::{
+use b::t::
+{
     // Before b::t::a
     a,
     b,
 };
-use b::v::{
+use b::v::
+{
     // Before b::v::a
     a,
     // Before b::v::b
     b,
 };
-use b::{
+use b::
+{
     c,
     u::{a, b},
 };

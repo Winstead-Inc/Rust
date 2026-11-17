@@ -2,10 +2,12 @@
 // rustfmt-imports_indent: Block
 // rustfmt-imports_layout: Vertical
 
-use std::{
+use std::
+{
     env,
     fs,
-    io::{
+    io::
+    {
         Read,
         Write,
     },

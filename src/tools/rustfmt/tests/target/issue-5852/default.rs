@@ -1,9 +1,11 @@
-use std::{
+use std::
+{
     fs,
     // (temporarily commented, we'll need this again in a second) io,
 };
 
-use foo::{
+use foo::
+{
     self, // this is important
 };
 
@@ -11,35 +13,42 @@ use foo::bar;
 
 use foo::bar;
 
-use foo::{
+use foo::
+{
     bar, // abc
 };
 
-use foo::{
+use foo::
+{
     bar,
     // abc
 };
 
-use foo::{
+use foo::
+{
     // 345
     bar,
 };
 
-use foo::{
+use foo::
+{
     self, // abc
 };
 
-use foo::{
+use foo::
+{
     self,
     // abc
 };
 
-use foo::{
+use foo::
+{
     // 345
     self,
 };
 
-use foo::{
+use foo::
+{
     self, // a
 };
 
@@ -47,48 +56,58 @@ use foo::{self /* a */};
 
 use foo::{self /* a */};
 
-use foo::{
+use foo::
+{
     // abc
-    abc::{
+    abc::
+    {
         xyz, // 123
     },
 };
 
-use foo::{
+use foo::
+{
     abc,
     // abc
     bar,
 };
 
-use foo::{
+use foo::
+{
     // abc
     abc,
     bar,
 };
 
-use foo::{
+use foo::
+{
     abc, // abc
     bar,
 };
 
-use foo::{
+use foo::
+{
     abc,
     // abc
     bar,
 };
 
-use foo::{
+use foo::
+{
     self,
     // abc
-    abc::{
+    abc::
+    {
         xyz, // 123
     },
 };
 
-use foo::{
+use foo::
+{
     self,
     // abc
-    abc::{
+    abc::
+    {
         // 123
         xyz,
     },

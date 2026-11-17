@@ -1,6 +1,7 @@
 // rustfmt-imports_granularity: Crate
 
-use foo::{
+use foo::
+{
     a, b, b as b2,
     b::{f, g, g as g2},
     c,

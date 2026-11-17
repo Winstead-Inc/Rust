@@ -9,7 +9,8 @@ use chrono::Utc;
 use juniper::{FieldError, FieldResult};
 use uuid::Uuid;
 
-use super::{
+use super::
+{
     schema::{Context, Payload},
     update::convert_publish_payload,
 };
